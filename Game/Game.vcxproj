@@ -95,17 +95,25 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Source\log.cpp" />
+    <ClCompile Include="Source\Physics.cpp" />
+    <ClCompile Include="Source\Window.cpp" />
+    <ClInclude Include="Source\App.h" />
+    <ClInclude Include="Source\Globals.h" />
+    <ClInclude Include="Source\Module.h" />
+    <ClInclude Include="Source\p2List.h" />
+    <ClInclude Include="Source\Physics.h" />
     <ClInclude Include="Source\Queue.h" />
     <ClInclude Include="Source\Defs.h" />
     <ClInclude Include="Source\List.h" />
-    <ClInclude Include="Source\Log.h" />
-    <ClCompile Include="Source\Log.cpp" />
+    <ClCompile Include="Source\App.cpp" />
     <ClInclude Include="Source\Point.h" />
     <ClInclude Include="Source\SString.h" />
     <ClInclude Include="Source\DynArray.h" />
     <ClInclude Include="Source\External\PugiXml\src\pugiconfig.hpp" />
     <ClInclude Include="Source\External\PugiXml\src\pugixml.hpp" />
     <ClCompile Include="Source\External\PugiXml\src\pugixml.cpp" />
+    <ClInclude Include="Source\Window.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
