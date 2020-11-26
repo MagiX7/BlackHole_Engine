@@ -2,7 +2,6 @@
 
 #include "bhVec2.h"
 
-
 class bhBody
 {
 private:
@@ -35,6 +34,7 @@ public:
 	{
 		force += f;
 	}
+	
 
 	// ===================================================
 	//					Setters

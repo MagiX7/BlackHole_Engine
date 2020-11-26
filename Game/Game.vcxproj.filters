@@ -42,6 +42,8 @@
     <ClInclude Include="Source\p2List.h" />
     <ClInclude Include="Source\Physics.h" />
     <ClInclude Include="Source\Window.h" />
+    <ClInclude Include="Source\bhBody.h" />
+    <ClInclude Include="Source\bhVec2.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="External">
