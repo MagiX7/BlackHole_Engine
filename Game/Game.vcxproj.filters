@@ -10,6 +10,10 @@
     <ClCompile Include="Source\log.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Main.cpp" />
+    <ClCompile Include="Source\Render.cpp" />
+    <ClCompile Include="Source\Input.cpp" />
+    <ClCompile Include="Source\Audio.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Defs.h">
@@ -39,11 +43,16 @@
     <ClInclude Include="Source\App.h" />
     <ClInclude Include="Source\Globals.h" />
     <ClInclude Include="Source\Module.h" />
-    <ClInclude Include="Source\p2List.h" />
     <ClInclude Include="Source\Physics.h" />
     <ClInclude Include="Source\Window.h" />
     <ClInclude Include="Source\bhBody.h" />
     <ClInclude Include="Source\bhVec2.h" />
+    <ClInclude Include="Source\Render.h" />
+    <ClInclude Include="Source\Input.h" />
+    <ClInclude Include="Source\Audio.h" />
+    <ClInclude Include="Source\p2List.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="External">

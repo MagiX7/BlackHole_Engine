@@ -5,6 +5,8 @@
 #include "SDL/include/SDL.h"
 
 class App;
+class SDL_Window;
+class SDL_Surface;
 
 class Window : public Module
 {

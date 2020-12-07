@@ -3,10 +3,10 @@
 App::App()
 {
 	window = new Window(this);
-	//input = new ModuleInput(this);
-	//audio = new ModuleAudio(this, true);
+	input = new Input(this);
+	audio = new Audio(this);
 	//scene_intro = new ModuleSceneIntro(this);
-	//renderer3D = new ModuleRenderer3D(this);
+	render = new Render(this);
 	//camera = new ModuleCamera3D(this);
 
 	// The order of calls is very important!
@@ -15,13 +15,15 @@ App::App()
 
 	// Main Modules
 	AddModule(window);
-	/*AddModule(renderer3D);
-	AddModule(camera);
 	AddModule(input);
-	AddModule(audio);*/
+	AddModule(audio);
+	//AddModule(camera);
 
 	// Scenes
 	//AddModule(scene_intro);
+
+
+	AddModule(render);
 }
 
 App::~App()

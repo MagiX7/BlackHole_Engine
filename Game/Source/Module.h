@@ -4,7 +4,7 @@ class App;
 
 class Module
 {
-private:
+protected:
 	bool enabled;
 
 public:

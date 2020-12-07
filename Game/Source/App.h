@@ -5,20 +5,20 @@
 //#include "Timer.h"
 #include "Module.h"
 #include "Window.h"
-//#include "Input.h"
-//#include "Audio.h"
+#include "Input.h"
+#include "Audio.h"
 //#include "SceneIntro.h"
-//#include "Renderer3D.h"
+#include "Render.h"
 //#include "Camera3D.h"
 
 class App
 {
 public:
 	Window* window;
-	//Input* input;
-	//Audio* audio;
+	Input* input;
+	Audio* audio;
 	//SceneIntro* scene_intro;
-	//Renderer3D* renderer3D;
+	Render* render;
 	//Camera3D* camera;
 
 private:
