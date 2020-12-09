@@ -2,6 +2,8 @@
 
 App::App()
 {
+	PERF_START(pTimer);
+
 	window = new Window(this);
 	input = new Input(this);
 	audio = new Audio(this);
@@ -29,6 +31,10 @@ App::App()
 
 
 	AddModule(render);
+
+	cappedMs = 1000 / 60;
+
+	PERF_PEEK(pTimer);
 }
 
 App::~App()
@@ -44,6 +50,8 @@ App::~App()
 
 bool App::Init()
 {
+	PERF_START(pTimer);
+
 	bool ret = true;
 
 	// Call Init() in all modules
@@ -65,6 +73,8 @@ bool App::Init()
 		item = item->next;
 	}
 
+	PERF_PEEK(pTimer);
+
 	return ret;
 }
 
@@ -72,16 +82,42 @@ bool App::Init()
 // ---------------------------------------------
 void App::PrepareUpdate()
 {
+	frameCount++;
+	lastSecFrameCount++;
+
+	// Calculate the differential time since last frame
+	dt = frameTime.ReadSec();
+	frameTime.Start();
 }
 
 // ---------------------------------------------
 void App::FinishUpdate()
 {
+	if (lastSecFrameTime.Read() > 1000)
+	{
+		lastSecFrameTime.Start();
+		prevLastSecFrameCount = lastSecFrameCount;
+		lastSecFrameCount = 0;
+	}
+
+	float averageFps = float(frameCount) / startupTime.ReadSec();
+	float secondsSinceStartup = startupTime.ReadSec();
+	uint lastFrameMs = frameTime.Read();
+	uint framesOnLastUpdate = prevLastSecFrameCount;
+
+	static char title[256];
+	sprintf_s(title, 256, "FPS: %i / Avg. FPS: %.2f / Last-frame MS: %02u ",
+		framesOnLastUpdate, averageFps, lastFrameMs);
+
+	PERF_START(pTimer);
+	SDL_Delay(cappedMs);
 }
 
 // Call PreUpdate, Update and PostUpdate on all modules
 update_status App::Update()
 {
+	PERF_START(pTimer);
+
 	update_status ret = update_status::UPDATE_CONTINUE;
 	PrepareUpdate();
 

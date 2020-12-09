@@ -5,35 +5,68 @@
 
 PhysicsEngine::PhysicsEngine(App* app, bool start_enabled) : Module(app, start_enabled)
 {
+	gravity = bhVec2(0, -9.8f);
+	aeroDrag = 0.3f;
+	aeroLift = 0.3f;
+	hydroDrag = 0.3f;
 }
 
 PhysicsEngine::~PhysicsEngine()
 {
 }
 
-float PhysicsEngine::Gravity()
+bhVec2 PhysicsEngine::Gravity()
 {
-	return -9.8f;
+	return gravity;
 }
 
-float PhysicsEngine::AeroDrag()
+bhVec2 PhysicsEngine::AeroDrag(bhBody* b)
 {
-	return 0.0f;
+	float density = b->GetBodyMass() /*b->*/;
+
+	bhVec2 dragForce;
+
+	float x = aeroDrag /* Area*/ * ((density * (b->GetLinearVelocity().x * b->GetLinearVelocity().x)) / 2);
+	float y = aeroDrag /* Area*/ * ((density * (b->GetLinearVelocity().y * b->GetLinearVelocity().y)) / 2);
+
+	dragForce = bhVec2(x, y);
+
+	return dragForce;
 }
 
-float PhysicsEngine::AeroLift()
+bhVec2 PhysicsEngine::AeroLift(bhBody* b)
 {
-	return 0.0f;
+	float density = b->GetBodyMass() /*volumen*/;
+
+	bhVec2 liftForce;
+
+	float x = (density * (b->GetLinearVelocity().x * b->GetLinearVelocity().x) / 2) * aeroLift; /*area*/
+	float y = (density * (b->GetLinearVelocity().y * b->GetLinearVelocity().y) / 2) * aeroLift; /*area*/
+
+	liftForce = bhVec2(x, y);
+
+	return liftForce;
 }
 
-float PhysicsEngine::HydroBuoy()
+bhVec2 PhysicsEngine::HydroBuoy(bhBody* b)
 {
-	return 0.0f;
+	bhVec2 hydroBuoyForce;
+
+	return hydroBuoyForce;
 }
 
-float PhysicsEngine::HydroDrag()
+bhVec2 PhysicsEngine::HydroDrag(bhBody* b)
 {
-	return 0.0f;
+	float density = b->GetBodyMass() /*b->*/;
+
+	bhVec2 hydroDragForce;
+
+	float x = hydroDrag /* Area*/ * ((density * (b->GetLinearVelocity().x * b->GetLinearVelocity().x)) / 2);
+	float y = hydroDrag /* Area*/ * ((density * (b->GetLinearVelocity().y * b->GetLinearVelocity().y)) / 2);
+
+	hydroDragForce = bhVec2(x, y);
+
+	return hydroDragForce;
 }
 
 void PhysicsEngine::Step(float dt)

@@ -2,7 +2,8 @@
 
 #include "p2List.h"
 #include "Globals.h"
-//#include "Timer.h"
+#include "Timer.h"
+#include "PerfTimer.h"
 #include "Module.h"
 #include "Window.h"
 #include "Input.h"
@@ -43,4 +44,16 @@ private:
 	void AddModule(Module* mod);
 	void PrepareUpdate();
 	void FinishUpdate();
+
+	PerfTimer pTimer;
+	uint frameCount = 0;
+
+	Timer startupTime;
+	Timer frameTime;
+	Timer lastSecFrameTime;
+	uint lastSecFrameCount = 0;
+	uint prevLastSecFrameCount = 0;
+	float dt = 0.0f;
+
+	int cappedMs = -1;
 };

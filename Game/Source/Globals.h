@@ -12,6 +12,9 @@ void log(const char file[], int line, const char* format, ...);
 #define RADTODEG 57.295779513082320876f
 #define HAVE_M_PI
 
+#define PERF_START(timer) timer.Start()
+#define PERF_PEEK(timer) LOG("%s took %f ms", __FUNCTION__, timer.ReadMs())
+
 // This is already on a library, but idk why we dont have it so i put it here :)
 #define M_PI    3.14159265358979323846264338327950288   /* pi */
 
