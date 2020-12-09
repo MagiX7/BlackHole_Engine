@@ -14,6 +14,9 @@
     <ClCompile Include="Source\Render.cpp" />
     <ClCompile Include="Source\Input.cpp" />
     <ClCompile Include="Source\Audio.cpp" />
+    <ClCompile Include="Source\Spaceship.cpp" />
+    <ClCompile Include="Source\Scene.cpp" />
+    <ClCompile Include="Source\Texture.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Defs.h">
@@ -53,6 +56,9 @@
     <ClInclude Include="Source\p2List.h">
       <Filter>Utils</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Spaceship.h" />
+    <ClInclude Include="Source\Scene.h" />
+    <ClInclude Include="Source\Texture.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="External">

@@ -50,4 +50,15 @@ public:
 		y *= a;
 	}
 
+	void operator*(bhVec2 a)
+	{
+		x = x * a.x;
+		y = y * a.y;
+	}
+
+	void operator*(float a)
+	{
+		x *= a;
+		y *= a;
+	}
 };

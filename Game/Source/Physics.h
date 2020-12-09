@@ -1,9 +1,11 @@
 #pragma once
 
-class PhysicsEngine
+#include "Module.h"
+
+class PhysicsEngine : public Module
 {
 public:
-	PhysicsEngine();
+	PhysicsEngine(App* app, bool start_enabled = true);
 	~PhysicsEngine();
 
 	float Gravity();
@@ -15,4 +17,9 @@ public:
 	void Step(float dt);
 
 	void Collisions();
+
+private:
+
+	void Integrator(float& x, float& v, float a, float dt);
+
 };

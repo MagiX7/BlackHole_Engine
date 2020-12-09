@@ -1,6 +1,9 @@
+#include "App.h"
+#include "Spaceship.h"
+
 #include "Physics.h"
 
-PhysicsEngine::PhysicsEngine()
+PhysicsEngine::PhysicsEngine(App* app, bool start_enabled) : Module(app, start_enabled)
 {
 }
 
@@ -35,8 +38,17 @@ float PhysicsEngine::HydroDrag()
 
 void PhysicsEngine::Step(float dt)
 {
+	Integrator(app->spaceship->GetPosition().x, app->spaceship->GetPosition().y, app->spaceship->GetAcceleration().x, dt);
+
 }
 
 void PhysicsEngine::Collisions()
 {
+}
+
+void PhysicsEngine::Integrator(float& x, float& v, float a, float dt)
+{
+	// Velocity-Verlet
+	x += v * dt + 0.5 * a * dt * dt;
+	v += a * dt;
 }

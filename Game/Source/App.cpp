@@ -5,8 +5,11 @@ App::App()
 	window = new Window(this);
 	input = new Input(this);
 	audio = new Audio(this);
-	//scene_intro = new ModuleSceneIntro(this);
+	scene = new Scene(this);
 	render = new Render(this);
+	tex = new Texture(this);
+	spaceship = new Spaceship(this);
+	physics = new PhysicsEngine(this);
 	//camera = new ModuleCamera3D(this);
 
 	// The order of calls is very important!
@@ -17,10 +20,12 @@ App::App()
 	AddModule(window);
 	AddModule(input);
 	AddModule(audio);
+	AddModule(tex);
+	AddModule(spaceship);
 	//AddModule(camera);
 
 	// Scenes
-	//AddModule(scene_intro);
+	AddModule(scene);
 
 
 	AddModule(render);
@@ -77,12 +82,12 @@ void App::FinishUpdate()
 // Call PreUpdate, Update and PostUpdate on all modules
 update_status App::Update()
 {
-	update_status ret = UPDATE_CONTINUE;
+	update_status ret = update_status::UPDATE_CONTINUE;
 	PrepareUpdate();
 
 	p2List_item<Module*>* item = list_modules.getFirst();
 
-	while (item != NULL && ret == UPDATE_CONTINUE)
+	while (item != NULL && ret == update_status::UPDATE_CONTINUE)
 	{
 		ret = item->data->PreUpdate();
 		item = item->next;
@@ -90,7 +95,7 @@ update_status App::Update()
 
 	item = list_modules.getFirst();
 
-	while (item != NULL && ret == UPDATE_CONTINUE)
+	while (item != NULL && ret == update_status::UPDATE_CONTINUE)
 	{
 		ret = item->data->Update();
 		item = item->next;
@@ -98,7 +103,7 @@ update_status App::Update()
 
 	item = list_modules.getFirst();
 
-	while (item != NULL && ret == UPDATE_CONTINUE)
+	while (item != NULL && ret == update_status::UPDATE_CONTINUE)
 	{
 		ret = item->data->PostUpdate();
 		item = item->next;

@@ -81,9 +81,10 @@ update_status Input::PreUpdate()
 	}
 
 	if(keyboard[SDL_SCANCODE_ESCAPE] == KEY_DOWN)
-		return UPDATE_STOP;
+		return update_status::UPDATE_STOP;
 
-	return UPDATE_CONTINUE;
+
+	return update_status::UPDATE_CONTINUE;
 }
 
 // Called before quitting
@@ -91,5 +92,6 @@ bool Input::CleanUp()
 {
 	LOG("Quitting SDL input event subsystem");
 	SDL_QuitSubSystem(SDL_INIT_EVENTS);
+
 	return true;
 }

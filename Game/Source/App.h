@@ -7,9 +7,11 @@
 #include "Window.h"
 #include "Input.h"
 #include "Audio.h"
-//#include "SceneIntro.h"
+#include "Scene.h"
 #include "Render.h"
-//#include "Camera3D.h"
+#include "Texture.h"
+#include "Spaceship.h"
+#include "Physics.h"
 
 class App
 {
@@ -17,9 +19,11 @@ public:
 	Window* window;
 	Input* input;
 	Audio* audio;
-	//SceneIntro* scene_intro;
+	Scene* scene;
 	Render* render;
-	//Camera3D* camera;
+	Texture* tex;
+	Spaceship* spaceship;
+	PhysicsEngine* physics;
 
 private:
 

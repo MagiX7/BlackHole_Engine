@@ -28,7 +28,7 @@ public:
 		angle = 0.0f;
 	}
 
-	~bhBody() {};
+	virtual ~bhBody() {};
 
 	inline void AddForce(bhVec2 f)
 	{
@@ -73,43 +73,43 @@ public:
 	// ===================================================
 
 	// Get the body position
-	inline bhVec2 GetPosition()const
+	inline bhVec2& GetPosition()
 	{
 		return position;
 	}
 	
 	// Get the body linear velocity
-	inline bhVec2 GetLinearVelocity() const
+	inline bhVec2& GetLinearVelocity()
 	{
 		return linearV;
 	}
 
 	// Get the body angular velocity
-	inline float GetAngularVelocity() const
+	inline float& GetAngularVelocity()
 	{
 		return angularV;
 	}
 
 	// Get the body acceleration
-	inline bhVec2 GetAcceleration() const
+	inline bhVec2& GetAcceleration()
 	{
 		return acceleration;
 	}
 
 	// Get body mass
-	inline float GetBodyMass() const
+	inline float& GetBodyMass()
 	{
 		return mass;
 	}
 
 	//Get gravity on the body;
-	inline float GetBodyGravity() const
+	inline float& GetBodyGravity()
 	{
 		return bodyGravity;
 	}
 
 	// Get the body angle
-	inline float GetBodyAngle() const
+	inline float& GetBodyAngle()
 	{
 		return angle;
 	}
