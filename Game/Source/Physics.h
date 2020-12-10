@@ -23,7 +23,7 @@ public:
 
 private:
 
-	void Integrator(float& x, float& v, float a, float dt);
+	void Integrator(bhVec2& x, bhVec2& v, bhVec2& a, float dt);
 
 	bhVec2 gravity;
 	float aeroDrag;

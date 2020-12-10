@@ -45,6 +45,14 @@ public:
 		x += v.x;
 		y += v.y;
 	}
+	
+	bhVec2 operator + (const bhVec2 v)
+	{
+		bhVec2 nv;
+		nv.x += v.x;
+		nv.y += v.y;
+		return nv;
+	}
 
 	// Vector substraction
 	void operator -= (const bhVec2 v)
@@ -68,7 +76,21 @@ public:
 
 	void operator*(float a)
 	{
-		x *= a;
-		y *= a;
+		x = x * a;
+		y = y * a;
+	}
+
+	void operator*(double a)
+	{
+		x = x * a;
+		y = y * a;
+	}
+
+	bhVec2 operator/(float a)
+	{
+		bhVec2 nv;
+		nv.x /= a;
+		nv.y /= a;
+		return nv;
 	}
 };
