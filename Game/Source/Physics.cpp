@@ -5,7 +5,7 @@
 
 PhysicsEngine::PhysicsEngine(App* app, bool start_enabled) : Module(app, start_enabled)
 {
-	gravity = bhVec2(0, -9.8f);
+	gravity = bhVec2(0, 250.0f);
 	aeroDrag = 0.3f;
 	aeroLift = 0.3f;
 	hydroDrag = 0.3f;
@@ -71,7 +71,7 @@ bhVec2 PhysicsEngine::HydroDrag(bhBody* b)
 
 void PhysicsEngine::Step(float dt)
 {
-	Integrator(app->spaceship->GetPosition().x, app->spaceship->GetPosition().y, app->spaceship->GetAcceleration().x, dt);
+	Integrator(app->spaceship->GetPosition(), app->spaceship->GetLinearVelocity(), app->spaceship->GetAcceleration() + gravity, dt);
 
 }
 
@@ -79,9 +79,17 @@ void PhysicsEngine::Collisions()
 {
 }
 
-void PhysicsEngine::Integrator(float& x, float& v, float a, float dt)
+void PhysicsEngine::Integrator(bhVec2& pos, bhVec2& v, bhVec2& a, float dt)
 {
+	// Calculate the total acceleration
+	//a.x -= gravity.x;
+	//a.y -= gravity.y;
+
 	// Velocity-Verlet
-	x += v * dt + 0.5 * a * dt * dt;
-	v += a * dt;
+	pos.x += v.x * dt + 0.5 * a.x * dt * dt;
+	pos.y += v.y * dt + 0.5 * a.y * dt * dt;
+
+	v.x += a.x * dt;
+	v.y += a.y * dt;
+
 }

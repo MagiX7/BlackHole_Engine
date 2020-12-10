@@ -7,7 +7,7 @@ class bhBody
 private:
 	bhVec2 position;
 	bhVec2 linearV;
-	float angularV;
+	bhVec2 angularV;
 	bhVec2 acceleration;
 	bhVec2 force;
 	float mass;
@@ -20,7 +20,7 @@ public:
 	{
 		position = bhVec2(0.0f, 0.0f);
 		linearV = bhVec2(0.0f, 0.0f);
-		angularV = 0.0f;
+		angularV = bhVec2(0.0f, 0.0f);
 		acceleration = bhVec2(0.0f, 0.0f);
 		force = bhVec2(0.0f, 0.0f);
 		mass = 0.0f;
@@ -33,12 +33,22 @@ public:
 	inline void AddForce(bhVec2 f)
 	{
 		force += f;
+		acceleration = force / mass;
 	}
 	
+	inline void AddMomentum(bhVec2 v)
+	{
+		linearV += v;
+	}
 
 	// ===================================================
 	//					Setters
 	// ===================================================
+
+	inline void SetMass(float m)
+	{
+		mass = m;
+	}
 
 	// Set body position 
 	inline void SetPosition(bhVec2 pos)
@@ -63,9 +73,9 @@ public:
 	}
 
 	// Set body angluar speed
-	inline void SetAngularVelocity(float v)
+	inline void SetAngularVelocity(bhVec2 v)
 	{
-		angularV = v;
+		angularV += v;
 	}
 	
 	// ===================================================
@@ -85,7 +95,7 @@ public:
 	}
 
 	// Get the body angular velocity
-	inline float& GetAngularVelocity()
+	inline bhVec2& GetAngularVelocity()
 	{
 		return angularV;
 	}

@@ -15,7 +15,8 @@ Spaceship::~Spaceship()
 bool Spaceship::Start()
 {
 	SetPosition(bhVec2(100, 100));
-	SetLinearVelocity(bhVec2(0.05f, 0));
+	SetLinearVelocity(bhVec2(0, 0));
+	SetMass(0.1);
 	
 	return true;
 }
@@ -29,6 +30,26 @@ update_status Spaceship::PreUpdate()
 
 update_status Spaceship::Update()
 {
+	if (app->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT)
+	{
+		AddMomentum(bhVec2(0, -10.0f));
+	}
+	
+	if (app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
+	{
+		AddMomentum(bhVec2(10, 0));
+	}
+	
+	if (app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
+	{
+		AddMomentum(bhVec2(-10, 0));
+	}
+
+	if (app->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT)
+	{
+		AddMomentum(bhVec2(0, -10));
+	}
+
 	app->physics->Step(0.016);
 
 	Draw();
