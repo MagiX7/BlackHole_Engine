@@ -39,7 +39,6 @@ update_status Spaceship::Update()
 void Spaceship::Draw()
 {
 	app->render->DrawCircle(GetPosition().x, GetPosition().y, 10, 255, 255, 255);
-
 }
 
 bool Spaceship::CleanUp()

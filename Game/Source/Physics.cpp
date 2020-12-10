@@ -77,6 +77,12 @@ void PhysicsEngine::Step(float dt)
 
 void PhysicsEngine::Collisions(bhBody* b, bhBody* b2)
 {
+	float y = b->GetPosition().y + (2 * b->GetBodyRadius());
+
+	if (y >= b2->GetPosition().y)
+	{
+		b->SetLinearVelocity(b->GetLinearVelocity().Negate());
+	}
 }
 
 void PhysicsEngine::Integrator(float& x, float& v, float a, float dt)

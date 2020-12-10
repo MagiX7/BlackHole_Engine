@@ -29,6 +29,16 @@ public:
 		v.y = -v.y;
 	}
 
+	// Negate a vector
+	bhVec2 Negate()
+	{
+		bhVec2 aux;
+		aux.x = -x;
+		aux.y = -y;
+		
+		return aux;
+	}
+
 	// Vector addition
 	void operator += (const bhVec2 v)
 	{

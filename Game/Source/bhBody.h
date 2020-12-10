@@ -7,6 +7,7 @@ class bhBody
 private:
 	bhVec2 position;
 	bhVec2 linearV;
+	float radius;
 	float angularV;
 	bhVec2 acceleration;
 	bhVec2 force;
@@ -67,6 +68,12 @@ public:
 	{
 		angularV = v;
 	}
+
+	// Set body radius
+	inline void SetRadius(float rad)
+	{
+		radius = rad;
+	}
 	
 	// ===================================================
 	//					Getters
@@ -112,5 +119,11 @@ public:
 	inline float& GetBodyAngle()
 	{
 		return angle;
+	}
+
+	// Get the body radius
+	inline float& GetBodyRadius()
+	{
+		return radius;
 	}
 };

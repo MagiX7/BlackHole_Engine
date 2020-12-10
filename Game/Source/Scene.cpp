@@ -16,6 +16,7 @@ bool Scene::Start()
 {
 	floor = new bhBody;
 	floor->SetPosition(bhVec2(0,718));
+	floor->SetRadius(10);
 
 	return true;
 }
@@ -27,6 +28,8 @@ update_status Scene::PreUpdate()
 
 update_status Scene::Update()
 {
+	app->physics->Collisions(app->spaceship, floor);
+
 	return update_status::UPDATE_CONTINUE;
 }
 
