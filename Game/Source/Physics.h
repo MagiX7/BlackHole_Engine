@@ -19,7 +19,7 @@ public:
 
 	void Step(float dt);
 
-	void Collisions();
+	void Collisions(bhBody* b, bhBody* b2);
 
 private:
 

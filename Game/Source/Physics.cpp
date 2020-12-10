@@ -75,7 +75,7 @@ void PhysicsEngine::Step(float dt)
 
 }
 
-void PhysicsEngine::Collisions()
+void PhysicsEngine::Collisions(bhBody* b, bhBody* b2)
 {
 }
 
