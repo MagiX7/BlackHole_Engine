@@ -96,4 +96,9 @@ public:
 		nv.y /= a;
 		return nv;
 	}
+	
+	bool operator< (bhVec2 v)
+	{
+		return x < v.x && y < v.y;
+	}
 };

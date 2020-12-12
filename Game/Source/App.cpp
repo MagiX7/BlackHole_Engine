@@ -109,8 +109,13 @@ void App::FinishUpdate()
 	sprintf_s(title, 256, "FPS: %i / Avg. FPS: %.2f / Last-frame MS: %02u ",
 		framesOnLastUpdate, averageFps, lastFrameMs);
 
-	PERF_START(pTimer);
-	SDL_Delay(cappedMs);
+	window->SetTitle(title);
+
+	if ((cappedMs > 0) && (lastFrameMs < cappedMs))
+	{
+		PERF_START(pTimer);
+		SDL_Delay(cappedMs);
+	}
 }
 
 // Call PreUpdate, Update and PostUpdate on all modules
@@ -133,7 +138,7 @@ update_status App::Update()
 
 	while (item != NULL && ret == update_status::UPDATE_CONTINUE)
 	{
-		ret = item->data->Update();
+		ret = item->data->Update(dt);
 		item = item->next;
 	}
 

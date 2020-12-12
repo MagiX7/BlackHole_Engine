@@ -46,13 +46,13 @@ private:
 	void FinishUpdate();
 
 	PerfTimer pTimer;
-	uint frameCount = 0;
+	uint64 frameCount = 0;
 
 	Timer startupTime;
 	Timer frameTime;
 	Timer lastSecFrameTime;
-	uint lastSecFrameCount = 0;
-	uint prevLastSecFrameCount = 0;
+	uint32 lastSecFrameCount = 0;
+	uint32 prevLastSecFrameCount = 0;
 	float dt = 0.0f;
 
 	int cappedMs = -1;

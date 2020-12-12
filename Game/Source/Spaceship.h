@@ -12,7 +12,7 @@ public:
 
 	bool Start();
 	update_status PreUpdate();
-	update_status Update();
+	update_status Update(float dt);
 	void Draw();
 	bool CleanUp();
 

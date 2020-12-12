@@ -29,7 +29,7 @@ update_status Scene::PreUpdate()
 	return update_status::UPDATE_CONTINUE;
 }
 
-update_status Scene::Update()
+update_status Scene::Update(float dt)
 {
 
 	return update_status::UPDATE_CONTINUE;

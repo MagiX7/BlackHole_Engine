@@ -8,6 +8,7 @@ class bhBody
 private:
 	bhVec2 position;
 	bhVec2 linearV;
+	bhVec2 maxLinearV;
 	float radius;
 	float angularV;
 	bhVec2 acceleration;
@@ -23,6 +24,7 @@ public:
 	{
 		position = bhVec2(0.0f, 0.0f);
 		linearV = bhVec2(0.0f, 0.0f);
+		maxLinearV = bhVec2(0.0f, 0.0f);
 		//angularV = bhVec2(0.0f, 0.0f);
 		acceleration = bhVec2(0.0f, 0.0f);
 		force = bhVec2(0.0f, 0.0f);
@@ -70,10 +72,16 @@ public:
 	{
 		linearV = v;
 	}
+
 	inline void SetLinearVelocity(float x, float y)
 	{
 		linearV.x = x;
 		linearV.y = y;
+	}
+
+	inline void SetMaxLinearVelocity(bhVec2 v)
+	{
+		maxLinearV = v;
 	}
 
 	// Set body angluar speed
@@ -102,6 +110,11 @@ public:
 	inline bhVec2& GetLinearVelocity()
 	{
 		return linearV;
+	}
+
+	inline bhVec2& GetMaxLinearVelocity()
+	{
+		return maxLinearV;
 	}
 
 	// Get the body angular velocity

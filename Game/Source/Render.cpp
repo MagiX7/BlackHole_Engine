@@ -48,7 +48,7 @@ update_status Render::PreUpdate()
 }
 
 // Update: debug camera
-update_status Render::Update()
+update_status Render::Update(float dt)
 {
 	/*
 	int speed = 3;
