@@ -14,9 +14,12 @@ Scene::~Scene()
 
 bool Scene::Start()
 {
-	floor = new bhBody;
-	floor->SetPosition(bhVec2(0,718));
+	floor = app->physics->CreateBody("floor");
+	floor->SetPosition(bhVec2(0, 718));
 	floor->SetRadius(10);
+	floor2 = app->physics->CreateBody("top");
+	floor2->SetPosition(bhVec2(0, 0));
+	floor2->SetRadius(10);
 
 	return true;
 }
@@ -28,7 +31,6 @@ update_status Scene::PreUpdate()
 
 update_status Scene::Update()
 {
-	app->physics->Collisions(app->spaceship, floor);
 
 	return update_status::UPDATE_CONTINUE;
 }
@@ -36,6 +38,7 @@ update_status Scene::Update()
 update_status Scene::PostUpdate()
 {
 	app->render->DrawQuad({ (int)floor->GetPosition().x, (int)floor->GetPosition().y, 1024, 50 }, 255, 0, 0);
+	app->render->DrawQuad({ (int)floor2->GetPosition().x, (int)floor2->GetPosition().y, 1024, 50 }, 255, 0, 0);
 
 	return update_status::UPDATE_CONTINUE;
 }

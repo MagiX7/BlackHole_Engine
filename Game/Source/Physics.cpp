@@ -5,7 +5,7 @@
 
 PhysicsEngine::PhysicsEngine(App* app, bool start_enabled) : Module(app, start_enabled)
 {
-	gravity = bhVec2(0, 250.0f);
+	gravity = bhVec2(PIXEL_TO_METERS(0), PIXEL_TO_METERS(250.0f));
 	aeroDrag = 0.3f;
 	aeroLift = 0.3f;
 	hydroDrag = 0.3f;
@@ -71,17 +71,41 @@ bhVec2 PhysicsEngine::HydroDrag(bhBody* b)
 
 void PhysicsEngine::Step(float dt)
 {
-	Integrator(app->spaceship->GetPosition(), app->spaceship->GetLinearVelocity(), app->spaceship->GetAcceleration() + gravity, dt);
+	Integrator(app->spaceship->GetBody()->GetPosition(), app->spaceship->GetBody()->GetLinearVelocity(), app->spaceship->GetBody()->GetAcceleration() + gravity, dt);
 
+	p2List_item<bhBody*>* item = bodyList.getFirst();
+
+	while (item != nullptr)
+	{
+		if (item->data->GetName() != "spaceship")
+			Collisions(app->spaceship->GetBody(), item->data);
+
+		item = item->next;
+	}
 }
+
+//bool PhysicsEngine::Intersects(bhBody* b, bhBody* b2) const
+//{
+//	return (rect.x < r.x + r.w &&
+//		rect.x + rect.w > r.x &&
+//		rect.y < r.y + r.h &&
+//		rect.h + rect.y > r.y);
+//}
 
 void PhysicsEngine::Collisions(bhBody* b, bhBody* b2)
 {
-	float y = b->GetPosition().y + (2 * b->GetBodyRadius());
+	float y = b->GetPosition().y + (b->GetBodyRadius());
 
-	if (y >= b2->GetPosition().y)
+	if (y > PIXEL_TO_METERS(b2->GetPosition().y) && b2->GetName() == "floor")
 	{
-		b->SetLinearVelocity(b->GetLinearVelocity().Negate());
+		bhVec2 aux = bhVec2(b->GetLinearVelocity().x, b->GetLinearVelocity().Negate().y * 0.9f);
+		b->SetLinearVelocity(aux);
+	}
+
+	else if ((b->GetPosition().y - b->GetBodyRadius()) < PIXEL_TO_METERS(b2->GetPosition().y + PIXEL_TO_METERS(50)) && b2->GetName() == "top")
+	{
+		bhVec2 aux = bhVec2(b->GetLinearVelocity().x, b->GetLinearVelocity().Negate().y * 0.9f);
+		b->SetLinearVelocity(aux);
 	}
 }
 
@@ -98,4 +122,26 @@ void PhysicsEngine::Integrator(bhVec2& pos, bhVec2& v, bhVec2& a, float dt)
 	v.x += a.x * dt;
 	v.y += a.y * dt;
 
+}
+
+bhBody* PhysicsEngine::CreateBody(SString n)
+{
+	bhBody* b = new bhBody(n);
+
+	bodyList.add(b);
+
+	return b;
+}
+
+void PhysicsEngine::DestroyBody(bhBody* b)
+{
+	p2List_item<bhBody*>* item = bodyList.getFirst();
+
+	while (item != nullptr)
+	{
+		if (item->data == b)
+			bodyList.del(item);
+
+		item = item->next;
+	}
 }

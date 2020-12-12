@@ -4,7 +4,7 @@
 
 class SDL_Texture;
 
-class Spaceship : public bhBody, public Module
+class Spaceship : public Module
 {
 public:
 	Spaceship(App* app, bool start_enabled = true);
@@ -16,6 +16,10 @@ public:
 	void Draw();
 	bool CleanUp();
 
+	inline bhBody* GetBody()
+	{
+		return body;
+	}
 
 public:
 	float health;
@@ -27,6 +31,6 @@ private:
 	
 	float r; // for collision detection
 
-
+	bhBody* body;
 };
 

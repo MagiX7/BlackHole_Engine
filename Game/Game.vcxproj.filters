@@ -50,7 +50,6 @@
       <Filter>Utils</Filter>
     </ClInclude>
     <ClInclude Include="Source\App.h" />
-    <ClInclude Include="Source\Globals.h" />
     <ClInclude Include="Source\Module.h" />
     <ClInclude Include="Source\Physics.h" />
     <ClInclude Include="Source\Window.h" />
@@ -69,6 +68,9 @@
       <Filter>Utils</Filter>
     </ClInclude>
     <ClInclude Include="Source\Timer.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Globals.h">
       <Filter>Utils</Filter>
     </ClInclude>
   </ItemGroup>

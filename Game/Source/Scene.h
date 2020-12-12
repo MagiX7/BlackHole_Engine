@@ -18,4 +18,5 @@ public:
 
 private:
 	bhBody* floor;
+	bhBody* floor2;
 };

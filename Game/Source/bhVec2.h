@@ -40,13 +40,13 @@ public:
 	}
 
 	// Vector addition
-	void operator += (const bhVec2 v)
+	void operator += (const bhVec2& v)
 	{
 		x += v.x;
 		y += v.y;
 	}
 	
-	bhVec2 operator + (const bhVec2 v)
+	bhVec2 operator + (const bhVec2& v)
 	{
 		bhVec2 nv;
 		nv.x += v.x;
@@ -55,38 +55,41 @@ public:
 	}
 
 	// Vector substraction
-	void operator -= (const bhVec2 v)
+	void operator -= (const bhVec2& v)
 	{
 		x -= v.x;
 		y -= v.y;
 	}
 
 	// Multply a vector by a scalar
-	void operator *= (float a)
+	void operator *= (float& a)
 	{
 		x *= a;
 		y *= a;
 	}
 
-	void operator*(bhVec2 a)
+	void operator*(bhVec2& a)
 	{
 		x = x * a.x;
 		y = y * a.y;
 	}
 
-	void operator*(float a)
+	bhVec2 operator*(float& a)
+	{
+		bhVec2 aux;
+		aux.x = x * a;
+		aux.y = y * a;
+
+		return aux;
+	}
+
+	void operator*(double& a)
 	{
 		x = x * a;
 		y = y * a;
 	}
 
-	void operator*(double a)
-	{
-		x = x * a;
-		y = y * a;
-	}
-
-	bhVec2 operator/(float a)
+	bhVec2 operator/(float& a)
 	{
 		bhVec2 nv;
 		nv.x /= a;

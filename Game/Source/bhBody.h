@@ -1,6 +1,7 @@
 #pragma once
 
 #include "bhVec2.h"
+#include "SString.h"
 
 class bhBody
 {
@@ -14,19 +15,21 @@ private:
 	float mass;
 	float bodyGravity;
 	float angle;
+	SString name;
 
 public:
 	// Default constructor that sets all the variables to default
-	bhBody()
+	bhBody(SString n)
 	{
 		position = bhVec2(0.0f, 0.0f);
 		linearV = bhVec2(0.0f, 0.0f);
-		angularV = bhVec2(0.0f, 0.0f);
+		//angularV = bhVec2(0.0f, 0.0f);
 		acceleration = bhVec2(0.0f, 0.0f);
 		force = bhVec2(0.0f, 0.0f);
 		mass = 0.0f;
 		bodyGravity = 0.0f;
 		angle = 0.0f;
+		name = n;
 	}
 
 	virtual ~bhBody() {};
@@ -76,7 +79,7 @@ public:
 	// Set body angluar speed
 	inline void SetAngularVelocity(bhVec2 v)
 	{
-		angularV += v;
+		//angularV += v;
 	}
 
 	// Set body radius
@@ -104,7 +107,7 @@ public:
 	// Get the body angular velocity
 	inline bhVec2& GetAngularVelocity()
 	{
-		return angularV;
+		//return angularV;
 	}
 
 	// Get the body acceleration
@@ -135,5 +138,10 @@ public:
 	inline float& GetBodyRadius()
 	{
 		return radius;
+	}
+
+	inline SString& GetName()
+	{
+		return name;
 	}
 };

@@ -1,6 +1,13 @@
 #pragma once
 
 #include "Module.h"
+#include "SString.h"
+
+#define PIXELS_PER_METER 50.0f // if touched change METER_PER_PIXEL too
+#define METER_PER_PIXEL 0.02f // this is 1 / PIXELS_PER_METER !
+
+#define METERS_TO_PIXELS(m) ((int) floor(PIXELS_PER_METER * m))
+#define PIXEL_TO_METERS(p)  ((float) METER_PER_PIXEL * p)
 
 class bhVec2;
 class bhBody;
@@ -21,6 +28,10 @@ public:
 
 	void Collisions(bhBody* b, bhBody* b2);
 
+	bhBody* CreateBody(SString n);
+
+	void DestroyBody(bhBody* b);
+
 private:
 
 	void Integrator(bhVec2& x, bhVec2& v, bhVec2& a, float dt);
@@ -30,4 +41,6 @@ private:
 	float aeroLift;
 	float hydroBuoy;
 	float hydroDrag;
+
+	p2List<bhBody*> bodyList;
 };
