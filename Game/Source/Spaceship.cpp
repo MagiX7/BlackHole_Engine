@@ -55,18 +55,17 @@ update_status Spaceship::Update(float dt)
 		body->AddMomentum(bhVec2(PIXEL_TO_METERS(0), PIXEL_TO_METERS(500.0f * dt)));
 	}
 
-	//LOG("%f  %f", body->GetLinearVelocity().x, body->GetLinearVelocity().y)
+	LOG("%f  %f", body->GetPosition().x, body->GetPosition().y);
+	//LOG("%f  %f", body->GetPosition());
 
 	app->physics->Step(dt);
-
-	Draw();
 
 	return update_status::UPDATE_CONTINUE;
 }
 
 void Spaceship::Draw()
 {
-	app->render->DrawCircle(METERS_TO_PIXELS(body->GetPosition().x), METERS_TO_PIXELS(body->GetPosition().y), METERS_TO_PIXELS(body->GetBodyRadius()), 255, 255, 255);
+	app->render->DrawCircle(METERS_TO_PIXELS(body->GetPosition().x), METERS_TO_PIXELS(body->GetPosition().y), METERS_TO_PIXELS(body->GetBodyRadius()), 255, 0, 0);
 }
 
 bool Spaceship::CleanUp()

@@ -24,10 +24,10 @@ App::App()
 	AddModule(audio);
 	AddModule(tex);
 	AddModule(spaceship);
+	AddModule(scene);
 	//AddModule(camera);
 
 	// Scenes
-	AddModule(scene);
 
 
 	AddModule(render);

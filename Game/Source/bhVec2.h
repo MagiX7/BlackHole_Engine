@@ -39,6 +39,15 @@ public:
 		return aux;
 	}
 
+	// Get the perpendicular vector
+	//bhVec2 Perpendicular(bhVec2& v)
+	//{
+	//	x = -v.y;
+	//	y = v.x;
+	//	bhVec2 ret = bhVec2(x, y);
+	//	return ret;
+	//}
+
 	// Vector addition
 	void operator += (const bhVec2& v)
 	{

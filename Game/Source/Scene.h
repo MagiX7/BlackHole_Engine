@@ -19,4 +19,6 @@ public:
 private:
 	bhBody* floor;
 	bhBody* floor2;
+
+	SDL_Texture* bg;
 };

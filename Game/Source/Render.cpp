@@ -2,6 +2,7 @@
 #include "App.h"
 #include "Window.h"
 #include "Render.h"
+#include "bhVec2.h"
 #include <math.h>
 
 Render::Render(App* app, bool start_enabled) : Module(app, start_enabled)
@@ -50,21 +51,25 @@ update_status Render::PreUpdate()
 // Update: debug camera
 update_status Render::Update(float dt)
 {
-	/*
-	int speed = 3;
+	int speed = 10;
 
-	if(App->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
-		App->renderer->camera.y += speed;
+	if(app->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
+		app->render->camera.y += speed;
 
-	if(App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT)
-		App->renderer->camera.y -= speed;
+	if(app->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT)
+		app->render->camera.y -= speed;
 
-	if(App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT)
-		App->renderer->camera.x += speed;
+	if(app->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT)
+		app->render->camera.x += speed;
 
-	if(App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
-		App->renderer->camera.x -= speed;
-	*/
+	if(app->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
+		app->render->camera.x -= speed;
+	
+
+	camera.x = METERS_TO_PIXELS(-app->spaceship->GetBody()->GetPosition().x) + SCREEN_WIDTH / 2;
+	camera.y = METERS_TO_PIXELS(-app->spaceship->GetBody()->GetPosition().y);
+
+
 	return update_status::UPDATE_CONTINUE;
 }
 
@@ -90,7 +95,7 @@ bool Render::CleanUp()
 }
 
 // Blit to screen
-bool Render::Blit(SDL_Texture* texture, int x, int y, SDL_Rect* section, float speed, double angle, int pivot_x, int pivot_y )
+bool Render::DrawTexture(SDL_Texture* texture, int x, int y, SDL_Rect* section, float speed, double angle, int pivot_x, int pivot_y )
 {
 	bool ret = true;
 	SDL_Rect rect;

@@ -96,6 +96,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Source\Audio.cpp" />
+    <ClCompile Include="Source\Collider.cpp" />
     <ClCompile Include="Source\Input.cpp" />
     <ClCompile Include="Source\log.cpp" />
     <ClCompile Include="Source\Main.cpp" />
@@ -111,6 +112,7 @@
     <ClInclude Include="Source\Audio.h" />
     <ClInclude Include="Source\bhBody.h" />
     <ClInclude Include="Source\bhVec2.h" />
+    <ClInclude Include="Source\Collider.h" />
     <ClInclude Include="Source\Globals.h" />
     <ClInclude Include="Source\Input.h" />
     <ClInclude Include="Source\Module.h" />
@@ -118,7 +120,6 @@
     <ClInclude Include="Source\PerfTimer.h" />
     <ClInclude Include="Source\Physics.h" />
     <ClInclude Include="Source\Queue.h" />
-    <ClInclude Include="Source\Defs.h" />
     <ClInclude Include="Source\List.h" />
     <ClCompile Include="Source\App.cpp" />
     <ClInclude Include="Source\Point.h" />
