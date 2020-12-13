@@ -2,10 +2,11 @@
 #include "Spaceship.h"
 
 #include "Physics.h"
+#include <math.h>
 
 PhysicsEngine::PhysicsEngine(App* app, bool start_enabled) : Module(app, start_enabled)
 {
-	gravity = bhVec2(PIXEL_TO_METERS(0), PIXEL_TO_METERS(250.0f));
+	gravity = bhVec2(PIXEL_TO_METERS(0), PIXEL_TO_METERS(250));
 	aeroDrag = 0.3f;
 	aeroLift = 0.3f;
 	hydroDrag = 0.3f;
@@ -74,12 +75,17 @@ void PhysicsEngine::Step(float dt)
 	Integrator(app->spaceship->GetBody()->GetPosition(), app->spaceship->GetBody()->GetLinearVelocity(), app->spaceship->GetBody()->GetAcceleration() + gravity, dt);
 
 	p2List_item<bhBody*>* item = bodyList.getFirst();
-
 	while (item != nullptr)
 	{
 		if (item->data->GetName() != "spaceship")
-			Collisions(app->spaceship->GetBody(), item->data);
+		{
+			if (Intersection(app->spaceship->GetBody(), item->data))
+			{
+				Collisions(app->spaceship->GetBody(), item->data);
+				break;
 
+			}
+		}
 		item = item->next;
 	}
 }
@@ -92,17 +98,29 @@ void PhysicsEngine::Step(float dt)
 //		rect.h + rect.y > r.y);
 //}
 
+bool PhysicsEngine::Intersection(bhBody* b1, bhBody* b2)
+{
+	float x = b2->GetPosition().x - (b1->GetPosition().x);
+	float y = b2->GetPosition().y - (b1->GetPosition().y);
+	float dist = sqrt(pow(x, 2) + pow(y, 2));
+
+	if (dist < b1->GetBodyRadius() + b2->GetBodyRadius())
+		return true;
+	else
+		return false;
+}
+
 void PhysicsEngine::Collisions(bhBody* b, bhBody* b2)
 {
 	float y = b->GetPosition().y + (b->GetBodyRadius());
 
-	if (y > PIXEL_TO_METERS(b2->GetPosition().y) && b2->GetName() == "floor")
+	if (y > (b2->GetPosition().y - b2->GetBodyRadius()) && b2->GetName() == "floor")
 	{
 		bhVec2 aux = bhVec2(b->GetLinearVelocity().x, b->GetLinearVelocity().Negate().y * 0.9f);
 		b->SetLinearVelocity(aux);
 	}
 
-	else if ((b->GetPosition().y - b->GetBodyRadius()) < PIXEL_TO_METERS(b2->GetPosition().y + PIXEL_TO_METERS(50)) && b2->GetName() == "top")
+	else if ((b->GetPosition().y - b->GetBodyRadius()) < b2->GetPosition().y + PIXEL_TO_METERS(50) && b2->GetName() == "top")
 	{
 		bhVec2 aux = bhVec2(b->GetLinearVelocity().x, b->GetLinearVelocity().Negate().y * 0.9f);
 		b->SetLinearVelocity(aux);

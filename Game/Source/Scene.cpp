@@ -16,11 +16,15 @@ Scene::~Scene()
 bool Scene::Start()
 {
 	floor = app->physics->CreateBody("floor");
-	floor->SetPosition(bhVec2(0, 718));
-	floor->SetRadius(10);
+	floor->SetRadius(PIXEL_TO_METERS(1000));
+	int x = SCREEN_WIDTH / 2;
+	int y = 1550 + 2 * floor->GetBodyRadius();
+	floor->SetPosition(bhVec2(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y)));
+	//floor->SetPosition(bhVec2(PIXEL_TO_METERS(0), PIXEL_TO_METERS(1000)));
+
 	floor2 = app->physics->CreateBody("top");
 	floor2->SetPosition(bhVec2(0, 0));
-	floor2->SetRadius(10);
+	floor2->SetRadius(PIXEL_TO_METERS(1000));
 
 	bg = app->tex->Load("Assets/Textures/bg.png");
 
@@ -35,16 +39,21 @@ update_status Scene::PreUpdate()
 update_status Scene::Update(float dt)
 {
 	//LOG("%f  %f", app->spaceship->GetBody()->GetPosition().x, app->spaceship->GetBody()->GetPosition().x);
-
+	LOG("==========================");
+	LOG("%f  %f", floor->GetPosition().x, floor->GetPosition().y);
 	return update_status::UPDATE_CONTINUE;
 }
 
 update_status Scene::PostUpdate()
 {
-	app->render->DrawTexture(bg, 0, -5200, NULL);
+	//app->render->DrawTexture(bg, 0, -5200, NULL);
 	app->spaceship->Draw();
-
-	app->render->DrawQuad({ (int)floor->GetPosition().x, (int)floor->GetPosition().y, 1024, 50 }, 255, 0, 0);
+	int r = floor->GetBodyRadius();
+	r = METERS_TO_PIXELS(r);
+	int x = METERS_TO_PIXELS(floor->GetPosition().x);
+	int y = METERS_TO_PIXELS(floor->GetPosition().y);
+	app->render->DrawCircle(METERS_TO_PIXELS(floor->GetPosition().x), METERS_TO_PIXELS(floor->GetPosition().y), r, 255, 0, 0);
+	//app->render->DrawQuad({ (int)floor->GetPosition().x, (int)floor->GetPosition().y, 1024, 50 }, 255, 0, 0);
 	//app->render->DrawQuad({ (int)floor2->GetPosition().x, (int)floor2->GetPosition().y, 1024, 50 }, 255, 0, 0);
 
 	return update_status::UPDATE_CONTINUE;

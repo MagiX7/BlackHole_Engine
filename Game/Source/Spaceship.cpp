@@ -17,7 +17,7 @@ bool Spaceship::Start()
 {
 	body = app->physics->CreateBody("spaceship");
 
-	body->SetPosition(bhVec2(PIXEL_TO_METERS(100), PIXEL_TO_METERS(100)));
+	body->SetPosition(bhVec2(PIXEL_TO_METERS(0), PIXEL_TO_METERS(0)));
 	body->SetLinearVelocity(bhVec2(PIXEL_TO_METERS(0), PIXEL_TO_METERS(0)));
 	body->SetMass(0.1);
 	body->SetRadius(PIXEL_TO_METERS(10));

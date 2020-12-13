@@ -66,8 +66,8 @@ update_status Render::Update(float dt)
 		app->render->camera.x -= speed;
 	
 
-	camera.x = METERS_TO_PIXELS(-app->spaceship->GetBody()->GetPosition().x) + SCREEN_WIDTH / 2;
-	camera.y = METERS_TO_PIXELS(-app->spaceship->GetBody()->GetPosition().y);
+	//camera.x = 0;
+	//camera.y = METERS_TO_PIXELS(-app->spaceship->GetBody()->GetPosition().y);
 
 
 	return update_status::UPDATE_CONTINUE;
@@ -198,8 +198,8 @@ bool Render::DrawCircle(int x, int y, int radius, Uint8 r, Uint8 g, Uint8 b, Uin
 
 	for(uint i = 0; i < 360; ++i)
 	{
-		points[i].x = (int) (x + radius * cos( i * factor));
-		points[i].y = (int) (y + radius * sin( i * factor));
+		points[i].x = (int) (x + camera.x + radius * cos(i * factor));
+		points[i].y = (int) (y + camera.y + radius * sin(i * factor));
 	}
 
 	result = SDL_RenderDrawPoints(renderer, points, 360);

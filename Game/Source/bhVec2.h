@@ -40,13 +40,13 @@ public:
 	}
 
 	// Get the perpendicular vector
-	//bhVec2 Perpendicular(bhVec2& v)
-	//{
-	//	x = -v.y;
-	//	y = v.x;
-	//	bhVec2 ret = bhVec2(x, y);
-	//	return ret;
-	//}
+	bhVec2 Perpendicular(bhVec2& v)
+	{
+		bhVec2 ret;
+		ret.x = v.y;
+		ret.y = -v.x;
+		return ret;
+	}
 
 	// Vector addition
 	void operator += (const bhVec2& v)
