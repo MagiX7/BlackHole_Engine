@@ -82,21 +82,11 @@ void PhysicsEngine::Step(float dt)
 			if (Intersection(app->spaceship->GetBody(), item->data))
 			{
 				Collisions(app->spaceship->GetBody(), item->data);
-				break;
-
 			}
 		}
 		item = item->next;
 	}
 }
-
-//bool PhysicsEngine::Intersects(bhBody* b, bhBody* b2) const
-//{
-//	return (rect.x < r.x + r.w &&
-//		rect.x + rect.w > r.x &&
-//		rect.y < r.y + r.h &&
-//		rect.h + rect.y > r.y);
-//}
 
 bool PhysicsEngine::Intersection(bhBody* b1, bhBody* b2)
 {
@@ -112,7 +102,33 @@ bool PhysicsEngine::Intersection(bhBody* b1, bhBody* b2)
 
 void PhysicsEngine::Collisions(bhBody* b, bhBody* b2)
 {
-	float y = b->GetPosition().y + (b->GetBodyRadius());
+	bhVec2 dir = b2->GetPosition() - b->GetPosition();
+	dir = dir.Normalize();
+
+	bhVec2 impact = dir + b->GetBodyRadius();
+
+	bhVec2 newSpeed = impact * b->GetLinearVelocity();
+	
+	b->SetLinearVelocity(newSpeed.Negate());
+
+	// =======================================================================================================================
+
+
+
+
+	/*float dist = sqrt(pow(b2->GetPosition().x - b->GetPosition().x, 2) + pow(b2->GetPosition().y - b->GetPosition().y, 2));
+
+	float intersection = b2->GetBodyRadius() - b->GetBodyRadius();
+
+	bhVec2 groundNormal = b2->GetPosition() + intersection;
+	groundNormal = groundNormal.Normalize();
+
+	bhVec2 newSpeed = b->GetLinearVelocity() * groundNormal;
+	b->SetLinearVelocity(newSpeed);*/
+
+	// =======================================================================================================================
+
+	/*float y = b->GetPosition().y + (b->GetBodyRadius());
 
 	if (y > (b2->GetPosition().y - b2->GetBodyRadius()) && b2->GetName() == "floor")
 	{
@@ -124,7 +140,21 @@ void PhysicsEngine::Collisions(bhBody* b, bhBody* b2)
 	{
 		bhVec2 aux = bhVec2(b->GetLinearVelocity().x, b->GetLinearVelocity().Negate().y * 0.9f);
 		b->SetLinearVelocity(aux);
+	}*/
+	
+	/*float y = b->GetPosition().y + (b->GetBodyRadius());
+
+	if (y > (b2->GetPosition().y - b2->GetBodyRadius()) && b2->GetName() == "floor")
+	{
+		bhVec2 aux = bhVec2(b->GetLinearVelocity().x, b->GetLinearVelocity().Negate().y * 0.9f);
+		b->SetLinearVelocity(aux);
 	}
+
+	else if ((b->GetPosition().y - b->GetBodyRadius()) < b2->GetPosition().y + PIXEL_TO_METERS(50) && b2->GetName() == "top")
+	{
+		bhVec2 aux = bhVec2(b->GetLinearVelocity().x, b->GetLinearVelocity().Negate().y * 0.9f);
+		b->SetLinearVelocity(aux);
+	}*/
 }
 
 void PhysicsEngine::Integrator(bhVec2& pos, bhVec2& v, bhVec2& a, float dt)

@@ -3,8 +3,8 @@
 class bhVec2
 {
 public:
-	float x = 0;
-	float y = 0;
+	double x = 0;
+	double y = 0;
 
 public:
 	bhVec2() {};
@@ -48,6 +48,14 @@ public:
 		return ret;
 	}
 
+	bhVec2 Normalize()
+	{
+		bhVec2 aux = bhVec2(x, y);
+		float l = sqrt(pow(aux.x, 2) + pow(aux.y, 2));
+		aux = aux / l;
+		return aux;
+	}
+
 	// Vector addition
 	void operator += (const bhVec2& v)
 	{
@@ -58,8 +66,16 @@ public:
 	bhVec2 operator + (const bhVec2& v)
 	{
 		bhVec2 nv;
-		nv.x += v.x;
-		nv.y += v.y;
+		nv.x = x + v.x;
+		nv.y = y + v.y;
+		return nv;
+	}
+
+	bhVec2 operator + (const float& a)
+	{
+		bhVec2 nv;
+		nv.x = x + a;
+		nv.y = y + a;
 		return nv;
 	}
 
@@ -70,6 +86,14 @@ public:
 		y -= v.y;
 	}
 
+	bhVec2 operator- (bhVec2& v)
+	{
+		bhVec2 nv;
+		nv.x = x - v.x;
+		nv.y = y - v.y;
+		return nv;
+	}
+
 	// Multply a vector by a scalar
 	void operator *= (float& a)
 	{
@@ -77,10 +101,12 @@ public:
 		y *= a;
 	}
 
-	void operator*(bhVec2& a)
+	bhVec2 operator*(bhVec2& a)
 	{
-		x = x * a.x;
-		y = y * a.y;
+		bhVec2 nv;
+		nv.x = x * a.x;
+		nv.y = y * a.y;
+		return nv;
 	}
 
 	bhVec2 operator*(float& a)
@@ -101,13 +127,13 @@ public:
 	bhVec2 operator/(float& a)
 	{
 		bhVec2 nv;
-		nv.x /= a;
-		nv.y /= a;
+		nv.x = x / a;
+		nv.y = y / a;
 		return nv;
 	}
 	
 	bool operator< (bhVec2 v)
 	{
-		return x < v.x && y < v.y;
+		return (x < v.x) && (y < v.y);
 	}
 };
