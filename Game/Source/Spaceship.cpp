@@ -21,7 +21,7 @@ bool Spaceship::Start()
 	body->SetLinearVelocity(bhVec2(PIXEL_TO_METERS(0), PIXEL_TO_METERS(0)));
 	body->SetMass(0.1);
 	body->SetRadius(PIXEL_TO_METERS(10));
-	body->SetMaxLinearVelocity(bhVec2(PIXEL_TO_METERS(5), PIXEL_TO_METERS(5)));
+	body->SetMaxLinearVelocity(bhVec2(PIXEL_TO_METERS(500), PIXEL_TO_METERS(500)));
 	
 	return true;
 }
@@ -37,22 +37,22 @@ update_status Spaceship::Update(float dt)
 {
 	if (app->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT && -body->GetLinearVelocity().y < body->GetMaxLinearVelocity().y)
 	{
-		body->AddMomentum(bhVec2(PIXEL_TO_METERS(0), PIXEL_TO_METERS(-500.0f * dt)));
+		body->AddMomentum(bhVec2(PIXEL_TO_METERS(0), PIXEL_TO_METERS(-1000.0f * dt)));
 	}
 	
 	if (app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT && body->GetLinearVelocity().x < body->GetMaxLinearVelocity().x)
 	{
-		body->AddMomentum(bhVec2(PIXEL_TO_METERS(500.0f * dt), PIXEL_TO_METERS(0)));
+		body->AddMomentum(bhVec2(PIXEL_TO_METERS(1000.0f * dt), PIXEL_TO_METERS(0)));
 	}
 	
 	if (app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT && -body->GetLinearVelocity().x < body->GetMaxLinearVelocity().x)
 	{
-		body->AddMomentum(bhVec2(PIXEL_TO_METERS(-500.0f * dt), PIXEL_TO_METERS(0)));
+		body->AddMomentum(bhVec2(PIXEL_TO_METERS(-1000.0f * dt), PIXEL_TO_METERS(0)));
 	}
 
 	if (app->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT && body->GetLinearVelocity().y < body->GetMaxLinearVelocity().y)
 	{
-		body->AddMomentum(bhVec2(PIXEL_TO_METERS(0), PIXEL_TO_METERS(500.0f * dt)));
+		body->AddMomentum(bhVec2(PIXEL_TO_METERS(0), PIXEL_TO_METERS(1000.0f * dt)));
 	}
 
 	LOG("%f  %f", body->GetPosition().x, body->GetPosition().y);
