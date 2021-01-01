@@ -38,15 +38,17 @@ update_status Scene::PreUpdate()
 
 update_status Scene::Update(float dt)
 {
-	//LOG("%f  %f", app->spaceship->GetBody()->GetPosition().x, app->spaceship->GetBody()->GetPosition().x);
+	app->physics->Step(dt);
+
 	LOG("==========================");
 	LOG("%f  %f", floor->GetPosition().x, floor->GetPosition().y);
+
 	return update_status::UPDATE_CONTINUE;
 }
 
 update_status Scene::PostUpdate()
 {
-	//app->render->DrawTexture(bg, 0, -5200, NULL);
+	app->render->DrawTexture(bg, 0, -5200, NULL);
 	app->spaceship->Draw();
 	
 	//int r = floor->GetBodyRadius();

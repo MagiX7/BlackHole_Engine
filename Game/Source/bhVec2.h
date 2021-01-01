@@ -56,6 +56,11 @@ public:
 		return aux;
 	}
 
+	float Dot(bhVec2& v)
+	{
+		return x * v.x + y * v.y;
+	}
+
 	// Vector addition
 	void operator += (const bhVec2& v)
 	{
@@ -95,10 +100,12 @@ public:
 	}
 
 	// Multply a vector by a scalar
-	void operator *= (float& a)
+	bhVec2 operator *= (float a)
 	{
-		x *= a;
-		y *= a;
+		bhVec2 nv;
+		nv.x = x * a;
+		nv.y = y * a;
+		return nv;
 	}
 
 	bhVec2 operator*(bhVec2& a)
@@ -109,7 +116,7 @@ public:
 		return nv;
 	}
 
-	bhVec2 operator*(float& a)
+	bhVec2 operator*(float a)
 	{
 		bhVec2 aux;
 		aux.x = x * a;

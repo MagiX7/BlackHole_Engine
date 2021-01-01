@@ -66,8 +66,8 @@ update_status Render::Update(float dt)
 		app->render->camera.x -= speed;
 	
 
-	//camera.x = 0;
-	//camera.y = METERS_TO_PIXELS(-app->spaceship->GetBody()->GetPosition().y);
+	camera.x = 0;
+	camera.y = METERS_TO_PIXELS(-app->spaceship->GetBody()->GetPosition().y + SCREEN_HEIGHT/2);
 
 
 	return update_status::UPDATE_CONTINUE;

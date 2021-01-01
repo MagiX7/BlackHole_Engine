@@ -1,6 +1,7 @@
 #pragma once
 
 #include "bhBody.h"
+#include "Animation.h"
 
 class SDL_Texture;
 
@@ -28,8 +29,10 @@ public:
 private:
 	
 	SDL_Texture* texture;
+	Animation* currentAnim;
+	Animation idleAnim;
 	
-	float r; // for collision detection
+	//float r; // for collision detection
 
 	bhBody* body;
 };

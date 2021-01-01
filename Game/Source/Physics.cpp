@@ -72,6 +72,8 @@ bhVec2 PhysicsEngine::HydroDrag(bhBody* b)
 
 void PhysicsEngine::Step(float dt)
 {
+
+
 	Integrator(app->spaceship->GetBody()->GetPosition(), app->spaceship->GetBody()->GetLinearVelocity(), app->spaceship->GetBody()->GetAcceleration() + gravity, dt);
 
 	p2List_item<bhBody*>* item = bodyList.getFirst();
@@ -118,6 +120,7 @@ void PhysicsEngine::Collisions(bhBody* b, bhBody* b2)
 	
 	// First we get the normal corresponding from the world to the body
 	bhVec2 dir = b->GetPosition() - b2->GetPosition();
+	bhVec2 dirNoNormalized = dir;
 
 	// We normalize the vector, since we only want the direction
 	dir = dir.Normalize();
@@ -136,12 +139,46 @@ void PhysicsEngine::Collisions(bhBody* b, bhBody* b2)
 	// We now multiply the speed for the direction so the spaceship knows the direction where it has to go to
 	newSpeed = dir * speed;
 
+	if (b2->GetName() == "floor")
+		newSpeed = newSpeed * 0.6f;
+	
+	else
+		newSpeed = newSpeed * 0.9f;
+
 
 	b->SetLinearVelocity((newSpeed));
 
 	// =======================================================================================================================
 
+	/*bhVec2 groundNormal = bhVec2(b2->GetPosition().x, b2->GetPosition().y + b2->GetBodyRadius());
 
+	float grNormalModule = sqrt(groundNormal.x * groundNormal.x + groundNormal.y * groundNormal.y);
+	float dirModule = sqrt(dirNoNormalized.x * dirNoNormalized.x + dirNoNormalized.y * dirNoNormalized.y);
+
+	bhVec2 sinVec = dirNoNormalized - groundNormal;
+	float sin = sqrt(sinVec.x * sinVec.x + sinVec.y * sinVec.y);
+
+	float angle = atan2(sin, grNormalModule / dirModule);
+	angle = angle * 180 / M_PI;*/
+
+	// =======================================================================================================================
+
+
+	/*bhVec2 groundNormal = bhVec2(b2->GetPosition().x, b2->GetPosition().y + b2->GetBodyRadius());
+	float grNormalModule = sqrt(groundNormal.x * groundNormal.x + groundNormal.y * groundNormal.y);
+	float dirModule = sqrt(dirNoNormalized.x * dirNoNormalized.x + dirNoNormalized.y * dirNoNormalized.y);
+	
+	float dot = dirNoNormalized.Dot(groundNormal);
+
+	float c = dot / (grNormalModule * dirModule);
+	float angle = acos(c);
+
+	angle = angle * 180 / M_PI;
+	
+	
+
+	int a = 0;
+	a = 1;*/
 
 
 	/*float dist = sqrt(pow(b2->GetPosition().x - b->GetPosition().x, 2) + pow(b2->GetPosition().y - b->GetPosition().y, 2));
