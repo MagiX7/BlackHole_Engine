@@ -16,7 +16,7 @@ public:
 	update_status PostUpdate() override;
 	bool CleanUp() override;
 
-private:
+public:
 	bhBody* floor;
 	bhBody* floor2;
 
