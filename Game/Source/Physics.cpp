@@ -16,6 +16,20 @@ PhysicsEngine::~PhysicsEngine()
 {
 }
 
+bhVec2 PhysicsEngine::ForceGravity(float gravity, float mass1, float mass2, float distance, bhVec2 direction)
+{
+	bhVec2 forceGravity;
+
+	float gravityFormule = (gravity * (mass1 * mass2) / (distance * distance));
+
+
+	forceGravity.x = direction.x * gravityFormule;
+	forceGravity.y = direction.y * gravityFormule;
+
+
+	return forceGravity;
+}
+
 bhVec2 PhysicsEngine::Gravity()
 {
 	return gravity;
