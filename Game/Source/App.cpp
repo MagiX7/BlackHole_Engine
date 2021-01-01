@@ -113,16 +113,15 @@ void App::FinishUpdate()
 
 	if ((cappedMs > 0) && (lastFrameMs < cappedMs))
 	{
-		PERF_START(pTimer);
-		SDL_Delay(cappedMs);
+		PerfTimer pt;
+		SDL_Delay(cappedMs - lastFrameMs);
+		//LOG("We waited for %i ms and got back in %f", cappedMs - lastFrameMs, pt.ReadMs());
 	}
 }
 
 // Call PreUpdate, Update and PostUpdate on all modules
 update_status App::Update()
 {
-	PERF_START(pTimer);
-
 	update_status ret = update_status::UPDATE_CONTINUE;
 	PrepareUpdate();
 

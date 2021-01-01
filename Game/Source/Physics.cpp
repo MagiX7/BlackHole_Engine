@@ -125,16 +125,11 @@ void PhysicsEngine::Collisions(bhBody* b, bhBody* b2)
 	// We normalize the vector, since we only want the direction
 	dir = dir.Normalize();
 	
-	// We get the actual velocit yof the spaceship
+	// We get the actual velocity of the spaceship
 	bhVec2 newSpeed = b->GetLinearVelocity();
 
 	// We get the speed as a float
 	float speed = sqrt((newSpeed.x * newSpeed.x) + (newSpeed.y * newSpeed.y));
-
-	if (b->GetLinearVelocity().x == 0)
-	{
-		newSpeed.x = 8.0f * dir.x;
-	}
 
 	// We now multiply the speed for the direction so the spaceship knows the direction where it has to go to
 	newSpeed = dir * speed;
@@ -179,7 +174,6 @@ void PhysicsEngine::Collisions(bhBody* b, bhBody* b2)
 
 	int a = 0;
 	a = 1;*/
-
 
 	/*float dist = sqrt(pow(b2->GetPosition().x - b->GetPosition().x, 2) + pow(b2->GetPosition().y - b->GetPosition().y, 2));
 

@@ -25,6 +25,8 @@ bool Spaceship::Start()
 	body->SetMass(0.1);
 	body->SetRadius(PIXEL_TO_METERS(18));
 	body->SetMaxLinearVelocity(bhVec2(PIXEL_TO_METERS(500), PIXEL_TO_METERS(500)));
+
+	fuel = 50.0f;
 	
 	currentAnim = &idleAnim;
 
@@ -40,9 +42,10 @@ update_status Spaceship::PreUpdate()
 
 update_status Spaceship::Update(float dt)
 {
-	if (app->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT && -body->GetLinearVelocity().y < body->GetMaxLinearVelocity().y)
+	if (app->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT && -body->GetLinearVelocity().y < body->GetMaxLinearVelocity().y && fuel > 0)
 	{
 		body->AddMomentum(bhVec2(PIXEL_TO_METERS(0), PIXEL_TO_METERS(-1000.0f * dt)));
+		fuel -= (5.0f * dt);
 	}
 	
 	if (app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT && body->GetLinearVelocity().x < body->GetMaxLinearVelocity().x)
@@ -55,12 +58,17 @@ update_status Spaceship::Update(float dt)
 		body->AddMomentum(bhVec2(PIXEL_TO_METERS(-1000.0f * dt), PIXEL_TO_METERS(0)));
 	}
 
-	if (app->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT && body->GetLinearVelocity().y < body->GetMaxLinearVelocity().y)
+	if (app->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT && body->GetLinearVelocity().y < body->GetMaxLinearVelocity().y && fuel > 0)
 	{
 		body->AddMomentum(bhVec2(PIXEL_TO_METERS(0), PIXEL_TO_METERS(1000.0f * dt)));
 	}
 
+
 	LOG("%f  %f", body->GetPosition().x, body->GetPosition().y);
+
+	if (fuel < 0) fuel = 0;
+
+	LOG("%f", fuel);
 
 	currentAnim->Update();
 
