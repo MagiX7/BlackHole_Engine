@@ -7,7 +7,17 @@
 
 Spaceship::Spaceship(App* app, bool start_enabled) : Module(app, start_enabled)
 {
-	idleAnim.PushBack({ 11,13, 18,15 });
+	//idleAnim.PushBack({ 11,13, 18,15 });
+
+	idleAnim.PushBack({ 0,0,36,35 });
+	
+	flyAnim.PushBack({ 40,0,36,35 });
+	
+	engineOnAnim.PushBack({ 0,46,36,35 });
+	engineOnAnim.PushBack({ 38,46,36,35 });
+	engineOnAnim.PushBack({ 76,46,36,35 });
+	engineOnAnim.loop = true;
+
 }
 
 Spaceship::~Spaceship()
@@ -16,7 +26,7 @@ Spaceship::~Spaceship()
 
 bool Spaceship::Start()
 {
-	texture = app->tex->Load("Assets/Textures/spaceship.png");
+	texture = app->tex->Load("Assets/Textures/Spaceship/spaceship_sheet.png");
 
 	body = app->physics->CreateBody("spaceship");
 
@@ -25,7 +35,7 @@ bool Spaceship::Start()
 	body->SetMass(0.1);
 	body->SetRadius(PIXEL_TO_METERS(18));
 	body->SetMaxLinearVelocity(bhVec2(PIXEL_TO_METERS(500), PIXEL_TO_METERS(500)));
-	body->SetBodyAngle(0 * M_PI / 180);
+	body->SetBodyAngle(0);
 	fuel = 50.0f;
 	
 	currentAnim = &idleAnim;
@@ -42,15 +52,45 @@ update_status Spaceship::PreUpdate()
 
 update_status Spaceship::Update(float dt)
 {
+	engineOnAnim.speed = 200 * dt;
+
+	if (app->input->GetKey(SDL_SCANCODE_E) == KEY_DOWN)
+	{
+		if (currentAnim != &flyAnim)
+		{
+			flyAnim.Reset();
+			currentAnim = &flyAnim;
+		}
+		else if (currentAnim != &idleAnim)
+		{
+			idleAnim.Reset();
+			currentAnim = &idleAnim;
+		}
+	}
+
 	if (app->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT && -body->GetLinearVelocity().y < body->GetMaxLinearVelocity().y && fuel > 0)
 	{
+		if (currentAnim != &engineOnAnim)
+		{
+			engineOnAnim.Reset();
+			currentAnim = &engineOnAnim;
+		}
+
 		double angle = body->GetBodyAngle();
 		bhVec2 mom = bhVec2(cos(angle - 90 * M_PI / 180), sin(angle - 90 * M_PI / 180));
-		body->AddMomentum(bhVec2(PIXEL_TO_METERS(mom.x), PIXEL_TO_METERS(mom.y)));
+		body->AddMomentum(bhVec2(PIXEL_TO_METERS(mom.x * dt * 50), PIXEL_TO_METERS(mom.y * dt * 50)));
 
-		//fuel -= (5.0f * dt);
+		//fuel -= (1.2f * dt);
 	}
-	
+	if (app->input->GetKey(SDL_SCANCODE_W) == KEY_UP)
+	{
+		if (currentAnim != &flyAnim)
+		{
+			flyAnim.Reset();
+			currentAnim = &flyAnim;
+		}
+	}
+
 	if (app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT && body->GetLinearVelocity().x < body->GetMaxLinearVelocity().x)
 	{
 		double angle = body->GetBodyAngle();
@@ -79,15 +119,21 @@ update_status Spaceship::Update(float dt)
 
 	LOG("%f", fuel);
 
-	currentAnim->Update();
+	currentAnim->Update(dt);
 
 	return update_status::UPDATE_CONTINUE;
 }
 
 void Spaceship::Draw()
 {
-	app->render->DrawTexture(texture, METERS_TO_PIXELS(body->GetPosition().x - 18), METERS_TO_PIXELS(body->GetPosition().y - 14), NULL, 1.0f, body->GetBodyAngle() * 180 / M_PI);
+	// Draw spaceship
+	app->render->DrawTexture(texture, METERS_TO_PIXELS(body->GetPosition().x - 18), METERS_TO_PIXELS(body->GetPosition().y - 15), &currentAnim->GetCurrentFrame(), 1.0f, body->GetBodyAngle() * 180 / M_PI);
+	
+	// Draw fire engine
+	/*if(drawFire)
+		app->render->DrawTexture(texture, METERS_TO_PIXELS(body->GetPosition().x - 10), METERS_TO_PIXELS(body->GetPosition().y + 10), &fireAnim.GetCurrentFrame(), 1.0f, body->GetBodyAngle() * 180 / M_PI, body->GetPosition().x), METERS_TO_PIXELS(body->GetPosition().y);*/
 
+	// Draw collider
 	app->render->DrawCircle(METERS_TO_PIXELS(body->GetPosition().x), METERS_TO_PIXELS(body->GetPosition().y), METERS_TO_PIXELS(body->GetBodyRadius()), 255, 0, 0);
 }
 

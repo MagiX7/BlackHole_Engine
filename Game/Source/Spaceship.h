@@ -43,9 +43,10 @@ private:
 	SDL_Texture* texture;
 	Animation* currentAnim;
 	Animation idleAnim;
-
-	//float r; // for collision detection
+	Animation flyAnim;
+	Animation engineOnAnim;
 
 	bhBody* body;
+
 };
 
