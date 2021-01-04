@@ -6,7 +6,7 @@
 
 PhysicsEngine::PhysicsEngine(App* app, bool start_enabled) : Module(app, start_enabled)
 {
-	gravity = bhVec2(PIXEL_TO_METERS(0), PIXEL_TO_METERS(250));
+	gravity = bhVec2(PIXEL_TO_METERS(0), PIXEL_TO_METERS(0));
 	aeroDrag = 0.3f;
 	aeroLift = 0.3f;
 	hydroDrag = 0.3f;
@@ -86,10 +86,6 @@ bhVec2 PhysicsEngine::HydroDrag(bhBody* b)
 
 void PhysicsEngine::Step(float dt)
 {
-	// Gravity control
-
-	//if (app->spaceship->GetBody()->GetPosition().y >= 0)
-	gravity.y = 9.81f - ((app->scene->floor->GetPosition().y - app->spaceship->GetBody()->GetPosition().y) / 9.81f);
 
 	Integrator(app->spaceship->GetBody()->GetPosition(), app->spaceship->GetBody()->GetLinearVelocity(), app->spaceship->GetBody()->GetAcceleration() + gravity, dt);
 	/*else if (app->spaceship->GetBody()->GetPosition().y <= 0)

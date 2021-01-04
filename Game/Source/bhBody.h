@@ -15,7 +15,7 @@ private:
 	bhVec2 force;
 	float mass;
 	float bodyGravity;
-	float angle;
+	double angle;
 	SString name;
 
 public:
@@ -45,6 +45,13 @@ public:
 	inline void AddMomentum(bhVec2 v)
 	{
 		linearV += v;
+	}
+
+	inline void Rotate(float ang)
+	{
+		double newX = position.x * cos(ang) - position.y * sin(ang);
+		double newY = position.x * sin(ang) + position.y * cos(ang);
+		position = bhVec2(newX, newY);
 	}
 
 	// ===================================================
@@ -95,6 +102,11 @@ public:
 	{
 		radius = rad;
 	}
+
+	void SetBodyAngle(double a)
+	{
+		angle = a;
+	}
 	
 	// ===================================================
 	//					Getters
@@ -142,7 +154,7 @@ public:
 	}
 
 	// Get the body angle
-	inline float& GetBodyAngle()
+	inline double& GetBodyAngle()
 	{
 		return angle;
 	}

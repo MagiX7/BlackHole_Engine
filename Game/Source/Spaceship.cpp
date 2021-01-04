@@ -20,12 +20,12 @@ bool Spaceship::Start()
 
 	body = app->physics->CreateBody("spaceship");
 
-	body->SetPosition(bhVec2(PIXEL_TO_METERS(0), PIXEL_TO_METERS(0)));
+	body->SetPosition(bhVec2(PIXEL_TO_METERS(500), PIXEL_TO_METERS(0)));
 	body->SetLinearVelocity(bhVec2(PIXEL_TO_METERS(0), PIXEL_TO_METERS(0)));
 	body->SetMass(0.1);
 	body->SetRadius(PIXEL_TO_METERS(18));
 	body->SetMaxLinearVelocity(bhVec2(PIXEL_TO_METERS(500), PIXEL_TO_METERS(500)));
-
+	body->SetBodyAngle(0 * M_PI / 180);
 	fuel = 50.0f;
 	
 	currentAnim = &idleAnim;
@@ -44,25 +44,34 @@ update_status Spaceship::Update(float dt)
 {
 	if (app->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT && -body->GetLinearVelocity().y < body->GetMaxLinearVelocity().y && fuel > 0)
 	{
-		body->AddMomentum(bhVec2(PIXEL_TO_METERS(0), PIXEL_TO_METERS(-1000.0f * dt)));
-		fuel -= (5.0f * dt);
+		double angle = body->GetBodyAngle();
+		bhVec2 mom = bhVec2(cos(angle - 90 * M_PI / 180), sin(angle - 90 * M_PI / 180));
+		body->AddMomentum(bhVec2(PIXEL_TO_METERS(mom.x), PIXEL_TO_METERS(mom.y)));
+
+		//fuel -= (5.0f * dt);
 	}
 	
 	if (app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT && body->GetLinearVelocity().x < body->GetMaxLinearVelocity().x)
 	{
-		body->AddMomentum(bhVec2(PIXEL_TO_METERS(1000.0f * dt), PIXEL_TO_METERS(0)));
+		double angle = body->GetBodyAngle();
+		angle += 2 * M_PI / 180;
+		
+		if (angle == 360)
+			angle = 0;
+
+		body->SetBodyAngle(angle);
 	}
 	
 	if (app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT && -body->GetLinearVelocity().x < body->GetMaxLinearVelocity().x)
 	{
-		body->AddMomentum(bhVec2(PIXEL_TO_METERS(-1000.0f * dt), PIXEL_TO_METERS(0)));
-	}
+		double angle = body->GetBodyAngle();
+		angle -= 2 * M_PI / 180;
 
-	if (app->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT && body->GetLinearVelocity().y < body->GetMaxLinearVelocity().y && fuel > 0)
-	{
-		body->AddMomentum(bhVec2(PIXEL_TO_METERS(0), PIXEL_TO_METERS(1000.0f * dt)));
-	}
+		if (angle == 360)
+			angle = 0;
 
+		body->SetBodyAngle(angle);
+	}
 
 	LOG("%f  %f", body->GetPosition().x, body->GetPosition().y);
 
@@ -77,9 +86,8 @@ update_status Spaceship::Update(float dt)
 
 void Spaceship::Draw()
 {
+	app->render->DrawTexture(texture, METERS_TO_PIXELS(body->GetPosition().x - 18), METERS_TO_PIXELS(body->GetPosition().y - 14), NULL, 1.0f, body->GetBodyAngle() * 180 / M_PI);
 
-
-	app->render->DrawTexture(texture, METERS_TO_PIXELS(body->GetPosition().x - 18), METERS_TO_PIXELS(body->GetPosition().y - 14), NULL);
 	app->render->DrawCircle(METERS_TO_PIXELS(body->GetPosition().x), METERS_TO_PIXELS(body->GetPosition().y), METERS_TO_PIXELS(body->GetBodyRadius()), 255, 0, 0);
 }
 

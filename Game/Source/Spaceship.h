@@ -44,8 +44,6 @@ private:
 	Animation* currentAnim;
 	Animation idleAnim;
 
-
-	
 	//float r; // for collision detection
 
 	bhBody* body;

@@ -40,15 +40,15 @@ update_status Scene::Update(float dt)
 {
 	app->physics->Step(dt);
 
-	LOG("==========================");
-	LOG("%f  %f", floor->GetPosition().x, floor->GetPosition().y);
+	//LOG("==========================");
+	//LOG("%f  %f", floor->GetPosition().x, floor->GetPosition().y);
 
 	return update_status::UPDATE_CONTINUE;
 }
 
 update_status Scene::PostUpdate()
 {
-	app->render->DrawTexture(bg, 0, -5200, NULL);
+	app->render->DrawTexture(bg, 0, -5500, NULL);
 	app->spaceship->Draw();
 	
 	//int r = floor->GetBodyRadius();
