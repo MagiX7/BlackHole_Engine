@@ -18,7 +18,7 @@ bool Scene::Start()
 	floor = app->physics->CreateBody("floor");
 	floor->SetRadius(PIXEL_TO_METERS(1000));
 	int x = SCREEN_WIDTH / 2;
-	int y = 1550 + 2 * floor->GetBodyRadius();
+	int y = 1250 + 2 * floor->GetBodyRadius();
 	floor->SetPosition(bhVec2(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y)));
 	//floor->SetPosition(bhVec2(PIXEL_TO_METERS(0), PIXEL_TO_METERS(1000)));
 

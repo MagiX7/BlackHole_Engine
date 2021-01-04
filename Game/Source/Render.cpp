@@ -68,7 +68,7 @@ update_status Render::Update(float dt)
 
 	camera.x = 0;
 	camera.y = METERS_TO_PIXELS(-app->spaceship->GetBody()->GetPosition().y + SCREEN_HEIGHT/2);
-
+	if (app->render->camera.y <= 300) app->render->camera.y = 300;
 
 	return update_status::UPDATE_CONTINUE;
 }
