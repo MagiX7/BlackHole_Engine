@@ -92,3 +92,38 @@ Astronaut* AstronautManager::CreateAstronaut(int radius, bhVec2 initialPos)
 
 	return astronaut;
 }
+
+void AstronautManager::DeleteAstronaut(Astronaut* astronaut)
+{
+	p2List_item<Astronaut*>* item = astronautsList.getFirst();
+
+	while (item != nullptr)
+	{
+		if (item->data == astronaut)
+		{
+			app->physics->DestroyBody(item->data->GetBody());
+			delete item->data;
+			astronautsList.del(item);
+		}
+
+		item = item->next;
+	}
+
+}
+
+void AstronautManager::DeleteAstronaut(bhBody* astronaut)
+{
+	p2List_item<Astronaut*>* item = astronautsList.getFirst();
+
+	while (item != nullptr)
+	{
+		if (item->data->GetBody() == astronaut)
+		{
+			app->physics->DestroyBody(item->data->GetBody());
+			delete item->data;
+			astronautsList.del(item);
+		}
+
+		item = item->next;
+	}
+}

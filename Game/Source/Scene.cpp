@@ -35,7 +35,7 @@ bool Scene::Start()
 	astronaut->SetPosition(bhVec2(PIXEL_TO_METERS(700), PIXEL_TO_METERS(0)));
 	astronautTexture = app->tex->Load("Assets/Textures/astronaut.png");*/
 
-	app->astronautManager->CreateAstronaut(15, bhVec2(700, 0));
+	app->astronautManager->CreateAstronaut(15, bhVec2(700, -20));
 
 	app->astronautManager->Start();
 

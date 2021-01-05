@@ -22,6 +22,8 @@ public:
 	void Draw();
 
 	Astronaut* CreateAstronaut(int radius, bhVec2 initialPos);
+	void DeleteAstronaut(Astronaut* astronaut);
+	void DeleteAstronaut(bhBody* astronaut);
 
 private:
 

@@ -32,6 +32,7 @@ public:
 	float health;
 	float fuel;
 	int ammo = 3;
+	int astronautsCollected;
 
 private:
 	

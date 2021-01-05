@@ -168,7 +168,17 @@ void PhysicsEngine::Collisions(bhBody* b, bhBody* b2)
 		newSpeed = newSpeed * 0.9f;
 
 
-	b->SetLinearVelocity((newSpeed));
+	if (b2->GetName() == "astronaut")
+	{
+		app->astronautManager->DeleteAstronaut(b2);
+		app->spaceship->astronautsCollected++;
+	}
+	else
+	{
+		b->SetLinearVelocity((newSpeed));
+	}
+
+
 
 	// =======================================================================================================================
 

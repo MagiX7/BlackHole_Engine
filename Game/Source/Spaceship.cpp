@@ -37,6 +37,7 @@ bool Spaceship::Start()
 	body->SetMaxLinearVelocity(bhVec2(PIXEL_TO_METERS(500), PIXEL_TO_METERS(500)));
 	body->SetBodyAngle(0);
 	fuel = 50.0f;
+	astronautsCollected = 0;
 	
 	currentAnim = &idleAnim;
 
