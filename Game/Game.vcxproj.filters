@@ -24,6 +24,8 @@
       <Filter>Utils</Filter>
     </ClCompile>
     <ClCompile Include="Source\Collider.cpp" />
+    <ClCompile Include="Source\Astronaut.cpp" />
+    <ClCompile Include="Source\AstronautManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\DynArray.h">
@@ -75,6 +77,8 @@
     <ClInclude Include="Source\Animation.h">
       <Filter>Utils</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Astronaut.h" />
+    <ClInclude Include="Source\AstronautManager.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="External">

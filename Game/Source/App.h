@@ -11,6 +11,7 @@
 #include "Scene.h"
 #include "Render.h"
 #include "Texture.h"
+#include "AstronautManager.h"
 #include "Spaceship.h"
 #include "Physics.h"
 
@@ -25,6 +26,7 @@ public:
 	Texture* tex;
 	Spaceship* spaceship;
 	PhysicsEngine* physics;
+	AstronautManager* astronautManager;
 
 private:
 

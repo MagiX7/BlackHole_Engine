@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Module.h"
+#include "Astronaut.h"
 
 class bhBody;
 
@@ -21,7 +22,7 @@ public:
 	bhBody* floor2;
 
 	p2List<bhBody*> astronauts;
-	bhBody* astronaut;
+	Astronaut* astronaut;
 	SDL_Texture* astronautTexture;
 
 	SDL_Texture* bg;
