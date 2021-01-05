@@ -3,6 +3,13 @@
 #include "bhVec2.h"
 #include "SString.h"
 
+enum class BodyType
+{
+	DYNAMIC,
+	STATIC,
+	NO_GRAVITY,
+};
+
 class bhBody
 {
 private:
@@ -19,9 +26,14 @@ private:
 	SString name;
 
 public:
+	BodyType type;
+
+public:
 	// Default constructor that sets all the variables to default
-	bhBody(SString n)
+	bhBody(SString n, BodyType t)
 	{
+		name = n;
+		t = type;
 		position = bhVec2(0.0f, 0.0f);
 		linearV = bhVec2(0.0f, 0.0f);
 		maxLinearV = bhVec2(0.0f, 0.0f);
@@ -31,12 +43,11 @@ public:
 		mass = 0.0f;
 		bodyGravity = 0.0f;
 		angle = 0.0f;
-		name = n;
 	}
 
 	virtual ~bhBody() {};
 
-	inline void AddForce(bhVec2 f)
+	void AddForce(bhVec2 f)
 	{
 		force += f;
 		acceleration = force / mass;
@@ -47,11 +58,12 @@ public:
 		linearV += v;
 	}
 
-	inline void Rotate(float ang)
+	// Rotate a body. NOTE: ang must be on DEGREES.
+	void Rotate(float ang)
 	{
-		double newX = position.x * cos(ang) - position.y * sin(ang);
-		double newY = position.x * sin(ang) + position.y * cos(ang);
-		position = bhVec2(newX, newY);
+		angle += ang * M_PI / 180;
+		if (angle >= 360)
+			angle = 0;
 	}
 
 	// ===================================================

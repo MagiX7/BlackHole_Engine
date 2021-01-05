@@ -14,6 +14,7 @@ bool Astronaut::Start()
 {
 	speedX = 1.5f;
 	speedY = 1.5f;
+	body->SetLinearVelocity(speedX, speedY);
 
 	return true;
 }

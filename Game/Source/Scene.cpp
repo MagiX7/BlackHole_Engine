@@ -15,7 +15,7 @@ Scene::~Scene()
 
 bool Scene::Start()
 {
-	floor = app->physics->CreateBody("floor");
+	floor = app->physics->CreateBody("floor", BodyType::STATIC);
 	floor->SetRadius(PIXEL_TO_METERS(1000));
 	int x = SCREEN_WIDTH / 2;
 	int y = 1250 + 2 * floor->GetBodyRadius();

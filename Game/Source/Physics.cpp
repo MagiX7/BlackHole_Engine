@@ -6,7 +6,7 @@
 
 PhysicsEngine::PhysicsEngine(App* app, bool start_enabled) : Module(app, start_enabled)
 {
-	gravity = bhVec2(PIXEL_TO_METERS(0), PIXEL_TO_METERS(0));
+	gravity = bhVec2(PIXEL_TO_METERS(0), PIXEL_TO_METERS(100));
 	aeroDrag = 0.3f;
 	aeroLift = 0.3f;
 	hydroDrag = 0.3f;
@@ -86,16 +86,24 @@ bhVec2 PhysicsEngine::HydroDrag(bhBody* b)
 
 void PhysicsEngine::Step(float dt)
 {
+	p2List_item<bhBody*>* item = bodyList.getFirst();
+	while (item != nullptr)
+	{
+		if(item->data->type == BodyType::DYNAMIC)
+			Integrator(item->data->GetPosition(), item->data->GetLinearVelocity(), item->data->GetAcceleration() + gravity, dt);
 
-	Integrator(app->spaceship->GetBody()->GetPosition(), app->spaceship->GetBody()->GetLinearVelocity(), app->spaceship->GetBody()->GetAcceleration() + gravity, dt);
+		else if(item->data->type == BodyType::NO_GRAVITY)
+			Integrator(item->data->GetPosition(), item->data->GetLinearVelocity(), item->data->GetAcceleration(), dt);
+
+		item = item->next;
+	}
+
 	/*else if (app->spaceship->GetBody()->GetPosition().y <= 0)
 		gravity.y = 9.81f - ((app->scene->floor->GetPosition().y - app->spaceship->GetBody()->GetPosition().y) / 9.81f);*/
 
 	LOG("gravity = %f", gravity.y);
 
-	Integrator(app->spaceship->GetBody()->GetPosition(), app->spaceship->GetBody()->GetLinearVelocity(), app->spaceship->GetBody()->GetAcceleration() + gravity, dt);
-
-	p2List_item<bhBody*>* item = bodyList.getFirst();
+	item = bodyList.getFirst();
 	while (item != nullptr)
 	{
 		if (item->data->GetName() != "spaceship")
@@ -237,9 +245,6 @@ void PhysicsEngine::Collisions(bhBody* b, bhBody* b2)
 
 void PhysicsEngine::Integrator(bhVec2& pos, bhVec2& v, bhVec2& a, float dt)
 {
-	// Calculate the total acceleration
-	//a.x -= gravity.x;
-	//a.y -= gravity.y;
 
 	// Velocity-Verlet
 	pos.x += v.x * dt + 0.5 * a.x * dt * dt;
@@ -250,9 +255,9 @@ void PhysicsEngine::Integrator(bhVec2& pos, bhVec2& v, bhVec2& a, float dt)
 
 }
 
-bhBody* PhysicsEngine::CreateBody(SString n)
+bhBody* PhysicsEngine::CreateBody(SString n, BodyType type)
 {
-	bhBody* b = new bhBody(n);
+	bhBody* b = new bhBody(n, type);
 
 	bodyList.add(b);
 

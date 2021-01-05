@@ -30,7 +30,7 @@ public:
 	bool Intersection(bhBody* b1, bhBody* b2);
 	void Collisions(bhBody* b, bhBody* b2);
 
-	bhBody* CreateBody(SString n);
+	bhBody* CreateBody(SString n, BodyType type);
 
 	void DestroyBody(bhBody* b);
 

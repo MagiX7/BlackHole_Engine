@@ -28,7 +28,7 @@ bool Spaceship::Start()
 {
 	texture = app->tex->Load("Assets/Textures/Spaceship/spaceship_sheet.png");
 
-	body = app->physics->CreateBody("spaceship");
+	body = app->physics->CreateBody("spaceship", BodyType::DYNAMIC);
 
 	body->SetPosition(bhVec2(PIXEL_TO_METERS(500), PIXEL_TO_METERS(0)));
 	body->SetLinearVelocity(bhVec2(PIXEL_TO_METERS(0), PIXEL_TO_METERS(0)));
@@ -78,7 +78,7 @@ update_status Spaceship::Update(float dt)
 
 		double angle = body->GetBodyAngle();
 		bhVec2 mom = bhVec2(cos(angle - 90 * M_PI / 180), sin(angle - 90 * M_PI / 180));
-		body->AddMomentum(bhVec2(PIXEL_TO_METERS(mom.x * dt * 50), PIXEL_TO_METERS(mom.y * dt * 50)));
+		body->AddMomentum(bhVec2(PIXEL_TO_METERS(mom.x * dt * 250), PIXEL_TO_METERS(mom.y * dt * 250)));
 
 		//fuel -= (1.2f * dt);
 	}
@@ -93,24 +93,12 @@ update_status Spaceship::Update(float dt)
 
 	if (app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT && body->GetLinearVelocity().x < body->GetMaxLinearVelocity().x)
 	{
-		double angle = body->GetBodyAngle();
-		angle += 2 * M_PI / 180;
-		
-		if (angle == 360)
-			angle = 0;
-
-		body->SetBodyAngle(angle);
+		body->Rotate(2);
 	}
 	
 	if (app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT && -body->GetLinearVelocity().x < body->GetMaxLinearVelocity().x)
 	{
-		double angle = body->GetBodyAngle();
-		angle -= 2 * M_PI / 180;
-
-		if (angle == 360)
-			angle = 0;
-
-		body->SetBodyAngle(angle);
+		body->Rotate(-2);
 	}
 
 	LOG("%f  %f", body->GetPosition().x, body->GetPosition().y);
@@ -129,9 +117,8 @@ void Spaceship::Draw()
 	// Draw spaceship
 	app->render->DrawTexture(texture, METERS_TO_PIXELS(body->GetPosition().x - 18), METERS_TO_PIXELS(body->GetPosition().y - 15), &currentAnim->GetCurrentFrame(), 1.0f, body->GetBodyAngle() * 180 / M_PI);
 	
-	// Draw fire engine
-	/*if(drawFire)
-		app->render->DrawTexture(texture, METERS_TO_PIXELS(body->GetPosition().x - 10), METERS_TO_PIXELS(body->GetPosition().y + 10), &fireAnim.GetCurrentFrame(), 1.0f, body->GetBodyAngle() * 180 / M_PI, body->GetPosition().x), METERS_TO_PIXELS(body->GetPosition().y);*/
+	if (missile != nullptr)
+		app->render->DrawQuad({ (int)body->GetPosition().x, (int)body->GetPosition().y, 2,8 }, 255, 0, 0, 200);
 
 	// Draw collider
 	app->render->DrawCircle(METERS_TO_PIXELS(body->GetPosition().x), METERS_TO_PIXELS(body->GetPosition().y), METERS_TO_PIXELS(body->GetBodyRadius()), 255, 0, 0);
@@ -142,4 +129,8 @@ bool Spaceship::CleanUp()
 	app->tex->Unload(texture);
 
 	return true;
+}
+
+void Spaceship::LaunchMissile()
+{
 }
