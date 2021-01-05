@@ -12,6 +12,7 @@
 #include "Render.h"
 #include "Texture.h"
 #include "AstronautManager.h"
+#include "AsteroidManager.h"
 #include "Spaceship.h"
 #include "Physics.h"
 
@@ -27,6 +28,7 @@ public:
 	Spaceship* spaceship;
 	PhysicsEngine* physics;
 	AstronautManager* astronautManager;
+	AsteroidManager* asteroidManager;
 
 private:
 

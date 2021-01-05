@@ -21,9 +21,5 @@ public:
 	bhBody* floor;
 	bhBody* floor2;
 
-	p2List<bhBody*> astronauts;
-	Astronaut* astronaut;
-	SDL_Texture* astronautTexture;
-
 	SDL_Texture* bg;
 };

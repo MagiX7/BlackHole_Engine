@@ -26,6 +26,8 @@
     <ClCompile Include="Source\Collider.cpp" />
     <ClCompile Include="Source\Astronaut.cpp" />
     <ClCompile Include="Source\AstronautManager.cpp" />
+    <ClCompile Include="Source\AsteroidManager.cpp" />
+    <ClCompile Include="Source\Asteroid.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\DynArray.h">
@@ -79,6 +81,8 @@
     </ClInclude>
     <ClInclude Include="Source\Astronaut.h" />
     <ClInclude Include="Source\AstronautManager.h" />
+    <ClInclude Include="Source\AsteroidManager.h" />
+    <ClInclude Include="Source\Asteroid.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="External">

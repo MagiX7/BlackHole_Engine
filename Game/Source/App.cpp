@@ -13,6 +13,7 @@ App::App()
 	spaceship = new Spaceship(this);
 	physics = new PhysicsEngine(this);
 	astronautManager = new AstronautManager(this);
+	asteroidManager = new AsteroidManager(this);
 	//camera = new ModuleCamera3D(this);
 
 	// The order of calls is very important!
@@ -26,6 +27,7 @@ App::App()
 	AddModule(tex);
 	AddModule(spaceship);
 	AddModule(astronautManager);
+	AddModule(asteroidManager);
 	AddModule(scene);
 	//AddModule(camera);
 
