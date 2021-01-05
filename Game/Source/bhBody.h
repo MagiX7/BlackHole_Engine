@@ -33,7 +33,7 @@ public:
 	bhBody(SString n, BodyType t)
 	{
 		name = n;
-		t = type;
+		type = t;
 		position = bhVec2(0.0f, 0.0f);
 		linearV = bhVec2(0.0f, 0.0f);
 		maxLinearV = bhVec2(0.0f, 0.0f);

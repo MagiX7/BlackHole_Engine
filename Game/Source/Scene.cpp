@@ -56,7 +56,7 @@ update_status Scene::Update(float dt)
 
 	//LOG("==========================");
 
-	//LOG("%f  %f", floor->GetPosition().x, floor->GetPosition().y);
+	LOG("MUNDO %f  %f", floor->GetPosition().x, floor->GetPosition().y);
 
 	return update_status::UPDATE_CONTINUE;
 }
@@ -68,11 +68,11 @@ update_status Scene::PostUpdate()
 	app->astronautManager->Draw();
 	//app->render->DrawTexture(astronautTexture, METERS_TO_PIXELS(astronaut->GetPosition().x - 14), METERS_TO_PIXELS(astronaut->GetPosition().y - 15), NULL, 1.0f, astronaut->GetBodyAngle());
 	
-	//int r = floor->GetBodyRadius();
-	//int x = METERS_TO_PIXELS(floor->GetPosition().x);
-	//int y = METERS_TO_PIXELS(floor->GetPosition().y);
+	int r = floor->GetBodyRadius();
+	int x = METERS_TO_PIXELS(floor->GetPosition().x);
+	int y = METERS_TO_PIXELS(floor->GetPosition().y);
 	
-	//app->render->DrawCircle(METERS_TO_PIXELS(floor->GetPosition().x), METERS_TO_PIXELS(floor->GetPosition().y), METERS_TO_PIXELS(floor->GetBodyRadius()), 255, 0, 0);
+	app->render->DrawCircle(METERS_TO_PIXELS(floor->GetPosition().x), METERS_TO_PIXELS(floor->GetPosition().y), METERS_TO_PIXELS(floor->GetBodyRadius()), 255, 0, 0);
 	
 	//app->render->DrawCircle(METERS_TO_PIXELS(astronaut->GetPosition().x), METERS_TO_PIXELS(astronaut->GetPosition().y), METERS_TO_PIXELS(astronaut->GetBodyRadius()), 255, 0, 0);
 	

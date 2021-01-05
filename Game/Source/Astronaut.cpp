@@ -21,17 +21,23 @@ bool Astronaut::Start()
 
 bool Astronaut::Update(float dt)
 {
-	body->SetPosition(bhVec2(body->GetPosition().x + (double)speedX * dt, body->GetPosition().y + (double)speedY * dt));
+	//body->SetPosition(bhVec2(body->GetPosition().x + (double)speedX * dt, body->GetPosition().y + (double)speedY * dt));
 	body->SetBodyAngle(body->GetBodyAngle() + (double)2.0f * dt);
 
-	if (METERS_TO_PIXELS(body->GetPosition().y) > METERS_TO_PIXELS(initialPos.y + 100.0f) || METERS_TO_PIXELS(body->GetPosition().y) < METERS_TO_PIXELS(initialPos.y - 100.0f))
-		speedY = -speedY;
+	/*if (METERS_TO_PIXELS(body->GetPosition().y) > METERS_TO_PIXELS(initialPos.y + 200.0f) || METERS_TO_PIXELS(body->GetPosition().y) < METERS_TO_PIXELS(initialPos.y - 200.0f))
+		body->SetLinearVelocity(body->GetLinearVelocity().x, -body->GetLinearVelocity().y);*/
 
 	if (METERS_TO_PIXELS(body->GetPosition().x) > SCREEN_WIDTH || METERS_TO_PIXELS(body->GetPosition().x) < 0)
-		speedX = -speedX;
+		body->SetLinearVelocity(-body->GetLinearVelocity().x, speedY);
+
+
+	body->SetLinearVelocity(body->GetLinearVelocity().x, cos(body->GetBodyAngle()));
 
 	LOG("POS X %f", METERS_TO_PIXELS(body->GetPosition().x));
 	LOG("POS X %f", METERS_TO_PIXELS(initialPos.x));
+
+	LOG("POS Y %f", METERS_TO_PIXELS(body->GetPosition().y));
+	LOG("POS Y %f", METERS_TO_PIXELS(initialPos.y));
 
 	return true;
 }
