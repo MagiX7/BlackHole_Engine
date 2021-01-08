@@ -69,7 +69,7 @@ update_status Scene::Update(float dt)
 
 update_status Scene::PostUpdate()
 {
-	app->render->DrawTexture(bg, 0, -5500, NULL);
+	app->render->DrawTexture(bg, 0, -12500, NULL);
 	app->spaceship->Draw();
 	app->astronautManager->Draw();
 	app->asteroidManager->Draw();
