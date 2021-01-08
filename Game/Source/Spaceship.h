@@ -26,13 +26,14 @@ public:
 	void AddFuel(float f) { fuel += f; }
 	void AddAmmo(int a) { ammo += a; }
 	void LaunchMissile();
+	void AddScore();
 
 
 public:
-	float health;
-	float fuel;
+	float health = 0.0f;
+	float fuel = 0.0f;
 	int ammo = 3;
-	int astronautsCollected;
+	int astronautsCollected = 0;
 
 private:
 	
@@ -44,5 +45,12 @@ private:
 
 	bhBody* body;
 	bhBody* missile;
+
+	int fontsIndex;
+
+	// Score
+	char scoreAstronautsText[3] = { "\0" };
+
+	int scoreFx = 0;
 
 };

@@ -16,6 +16,7 @@ Audio::~Audio()
 // Called before render is available
 bool Audio::Init()
 {
+	enabled = true;
 	LOG("Loading Audio Mixer");
 	bool ret = true;
 	SDL_Init(0);

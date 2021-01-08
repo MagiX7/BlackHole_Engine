@@ -7,6 +7,7 @@
 #include "Module.h"
 #include "Window.h"
 #include "Input.h"
+#include "Fonts.h"
 #include "Audio.h"
 #include "Scene.h"
 #include "Render.h"
@@ -29,6 +30,7 @@ public:
 	PhysicsEngine* physics;
 	AstronautManager* astronautManager;
 	AsteroidManager* asteroidManager;
+	Fonts* fonts;
 
 private:
 

@@ -30,6 +30,8 @@ bool Spaceship::Start()
 
 	body = app->physics->CreateBody("spaceship", BodyType::DYNAMIC);
 
+	scoreFx = app->audio->LoadFx("Assets/Audio/pickup_fx.wav");
+
 	body->SetPosition(bhVec2(PIXEL_TO_METERS(500), PIXEL_TO_METERS(0)));
 	body->SetLinearVelocity(bhVec2(PIXEL_TO_METERS(0), PIXEL_TO_METERS(0)));
 	body->SetMass(0.1);
@@ -40,6 +42,9 @@ bool Spaceship::Start()
 	astronautsCollected = 0;
 	
 	currentAnim = &idleAnim;
+
+	char lookupTable[] = { "0123456789?ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!    " };
+	fontsIndex = app->fonts->Load("Assets/Textures/fonts.png", lookupTable, 1);
 
 	return true;
 }
@@ -110,6 +115,8 @@ update_status Spaceship::Update(float dt)
 
 	currentAnim->Update(dt);
 
+	sprintf_s(scoreAstronautsText , 4, "%d", astronautsCollected);
+
 	return update_status::UPDATE_CONTINUE;
 }
 
@@ -123,15 +130,25 @@ void Spaceship::Draw()
 
 	// Draw collider
 	app->render->DrawCircle(METERS_TO_PIXELS(body->GetPosition().x), METERS_TO_PIXELS(body->GetPosition().y), METERS_TO_PIXELS(body->GetBodyRadius()), 255, 0, 0);
+
+	app->fonts->drawText(180, 20, fontsIndex, scoreAstronautsText);
+	app->fonts->drawText(20, 20, fontsIndex, "score");
+
 }
 
 bool Spaceship::CleanUp()
 {
-	app->tex->Unload(texture);
+	app->tex->UnLoad(texture);
 
 	return true;
 }
 
 void Spaceship::LaunchMissile()
 {
+}
+
+void Spaceship::AddScore()
+{
+	astronautsCollected++;
+	app->audio->PlayFx(scoreFx);
 }

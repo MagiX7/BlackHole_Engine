@@ -21,6 +21,8 @@ bool Scene::Start()
 	int y = 1250 + 2 * floor->GetBodyRadius();
 	floor->SetPosition(bhVec2(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y)));
 
+	app->audio->PlayMusic("Assets/Audio/earth_scene.ogg");
+
 	/*floor2 = app->physics->CreateBody("top");
 	floor2->SetPosition(bhVec2(0, 0));
 	floor2->SetRadius(PIXEL_TO_METERS(1000));*/

@@ -28,6 +28,7 @@
     <ClCompile Include="Source\AstronautManager.cpp" />
     <ClCompile Include="Source\AsteroidManager.cpp" />
     <ClCompile Include="Source\Asteroid.cpp" />
+    <ClCompile Include="Source\Fonts.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\DynArray.h">
@@ -83,6 +84,7 @@
     <ClInclude Include="Source\AstronautManager.h" />
     <ClInclude Include="Source\AsteroidManager.h" />
     <ClInclude Include="Source\Asteroid.h" />
+    <ClInclude Include="Source\Fonts.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="External">

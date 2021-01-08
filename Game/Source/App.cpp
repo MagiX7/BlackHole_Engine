@@ -6,7 +6,7 @@ App::App()
 
 	window = new Window(this);
 	input = new Input(this);
-	audio = new Audio(this);
+	audio = new Audio(this, true);
 	scene = new Scene(this);
 	render = new Render(this);
 	tex = new Texture(this);
@@ -14,6 +14,7 @@ App::App()
 	physics = new PhysicsEngine(this);
 	astronautManager = new AstronautManager(this);
 	asteroidManager = new AsteroidManager(this);
+	fonts = new Fonts(this);
 	//camera = new ModuleCamera3D(this);
 
 	// The order of calls is very important!
@@ -25,6 +26,7 @@ App::App()
 	AddModule(input);
 	AddModule(audio);
 	AddModule(tex);
+	AddModule(fonts);
 	AddModule(spaceship);
 	AddModule(astronautManager);
 	AddModule(asteroidManager);

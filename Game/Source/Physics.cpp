@@ -171,7 +171,7 @@ void PhysicsEngine::Collisions(bhBody* b, bhBody* b2)
 	if (b2->GetName() == "astronaut")
 	{
 		app->astronautManager->DeleteAstronaut(b2);
-		app->spaceship->astronautsCollected++;
+		app->spaceship->AddScore();
 	}
 	else
 	{

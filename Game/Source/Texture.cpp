@@ -4,7 +4,7 @@
 #include "Texture.h"
 
 #include "SDL_image/include/SDL_image.h"
-//#pragma comment( lib, "SDL_image/libx86/SDL2_image.lib" )
+
 
 Texture::Texture(App* app, bool start_enabled) : Module(app, start_enabled)
 {
@@ -81,7 +81,7 @@ SDL_Texture* const Texture::Load(const char* path)
 }
 
 // Free texture from memory
-void Texture::Unload(SDL_Texture* texture)
+bool Texture::UnLoad(SDL_Texture* texture)
 {
 	p2List_item<SDL_Texture*>* item = textures.getFirst();
 
@@ -91,8 +91,33 @@ void Texture::Unload(SDL_Texture* texture)
 		{
 			SDL_DestroyTexture(item->data);
 			textures.del(item);
-			break;
+			return true;
 		}
 		item = item->next;
 	}
+
+	return false;
+}
+
+// Translate a surface into a texture
+SDL_Texture* const Texture::LoadSurface(SDL_Surface* surface)
+{
+	SDL_Texture* texture = SDL_CreateTextureFromSurface(app->render->renderer, surface);
+
+	if (texture == NULL)
+	{
+		LOG("Unable to create texture from surface! SDL Error: %s\n", SDL_GetError());
+	}
+	else
+	{
+		textures.add(texture);
+	}
+
+	return texture;
+}
+
+// Retrieve size of a texture
+void Texture::GetSize(const SDL_Texture* texture, uint& width, uint& height) const
+{
+	SDL_QueryTexture((SDL_Texture*)texture, NULL, NULL, (int*)&width, (int*)&height);
 }
