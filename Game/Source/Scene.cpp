@@ -33,6 +33,12 @@ bool Scene::Start()
 	astronautTexture = app->tex->Load("Assets/Textures/astronaut.png");*/
 
 	app->astronautManager->CreateAstronaut(15, bhVec2(700, -20));
+	app->astronautManager->CreateAstronaut(15, bhVec2(400, -1000));
+	app->astronautManager->CreateAstronaut(15, bhVec2(550, -1500));
+	app->astronautManager->CreateAstronaut(15, bhVec2(700, -3000));
+	app->astronautManager->CreateAstronaut(15, bhVec2(650, -4000));
+	app->astronautManager->CreateAstronaut(15, bhVec2(660, -5000));
+	app->astronautManager->CreateAstronaut(15, bhVec2(700, -6000));
 
 	app->astronautManager->Start();
 

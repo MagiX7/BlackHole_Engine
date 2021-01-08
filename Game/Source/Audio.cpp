@@ -45,6 +45,8 @@ bool Audio::Init()
 		ret = true;
 	}
 
+	Mix_VolumeMusic(50);
+
 	return ret;
 }
 
