@@ -1,49 +1,32 @@
 #pragma once
 
 #include "Module.h"
-#include "SString.h"
-#include "p2List.h"
 
-#define PIXELS_PER_METER 50.0f // if touched change METER_PER_PIXEL too
-#define METER_PER_PIXEL 0.02f // this is 1 / PIXELS_PER_METER !
+#include "bhBody.h"
+#include "PhysicsEngine.h"
 
-#define METERS_TO_PIXELS(m) ((int) PIXELS_PER_METER * m)
-#define PIXEL_TO_METERS(p)  ((float) METER_PER_PIXEL * p)
-
-class bhVec2;
-class bhBody;
-
-class PhysicsEngine : public Module
+class Physics : public Module
 {
 public:
-	PhysicsEngine(App* app, bool start_enabled = true);
-	~PhysicsEngine();
 
-	bhVec2 ForceGravity(float gravity, float mass1, float mass2, float distance, bhVec2 direction);
-	bhVec2 Gravity();
-	bhVec2 AeroDrag(bhBody* b);
-	bhVec2 AeroLift(bhBody* b);
-	bhVec2 HydroBuoy(bhBody* b);
-	bhVec2 HydroDrag(bhBody* b);
+	Physics(App* app, bool start_enabled = true);
+	~Physics();
 
-	void Step(float dt);
+	bool Start() override;
 
-	bool Intersection(bhBody* b1, bhBody* b2);
-	void Collisions(bhBody* b, bhBody* b2);
+	update_status PreUpdate() override;
+	update_status Update(float dt) override;
+	update_status PostUpdate() override;
+
+	bool CleanUp() override;
 
 	bhBody* CreateBody(SString n, BodyType type);
-
 	void DestroyBody(bhBody* b);
 
 private:
 
-	void Integrator(bhVec2& x, bhVec2& v, bhVec2& a, float dt);
+	p2List<bhBody*> bodies;
 
-	bhVec2 gravity;
-	float aeroDrag;
-	float aeroLift;
-	float hydroBuoy;
-	float hydroDrag;
+	PhysicsEngine* world;
 
-	p2List<bhBody*> bodyList;
 };

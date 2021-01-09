@@ -106,6 +106,7 @@
     <ClCompile Include="Source\log.cpp" />
     <ClCompile Include="Source\Main.cpp" />
     <ClCompile Include="Source\PerfTimer.cpp" />
+    <ClCompile Include="Source\PhysicsEngine.cpp" />
     <ClCompile Include="Source\Physics.cpp" />
     <ClCompile Include="Source\Render.cpp" />
     <ClCompile Include="Source\Scene.cpp" />
@@ -129,6 +130,7 @@
     <ClInclude Include="Source\Module.h" />
     <ClInclude Include="Source\p2List.h" />
     <ClInclude Include="Source\PerfTimer.h" />
+    <ClInclude Include="Source\PhysicsEngine.h" />
     <ClInclude Include="Source\Physics.h" />
     <ClInclude Include="Source\Queue.h" />
     <ClInclude Include="Source\List.h" />

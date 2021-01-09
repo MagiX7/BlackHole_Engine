@@ -27,7 +27,7 @@ public:
 	Render* render;
 	Texture* tex;
 	Spaceship* spaceship;
-	PhysicsEngine* physics;
+	Physics* physics;
 	AstronautManager* astronautManager;
 	AsteroidManager* asteroidManager;
 	Fonts* fonts;

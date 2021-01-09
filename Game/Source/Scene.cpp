@@ -58,8 +58,6 @@ update_status Scene::PreUpdate()
 
 update_status Scene::Update(float dt)
 {
-	app->physics->Step(dt);
-
 	//LOG("==========================");
 
 	LOG("MUNDO %f  %f", floor->GetPosition().x, floor->GetPosition().y);

@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Globals.h"
+
 class App;
 enum class update_status;
 

@@ -5,15 +5,7 @@
       <Filter>External\PugiXml</Filter>
     </ClCompile>
     <ClCompile Include="Source\App.cpp" />
-    <ClCompile Include="Source\Physics.cpp" />
-    <ClCompile Include="Source\Window.cpp" />
     <ClCompile Include="Source\Main.cpp" />
-    <ClCompile Include="Source\Render.cpp" />
-    <ClCompile Include="Source\Input.cpp" />
-    <ClCompile Include="Source\Audio.cpp" />
-    <ClCompile Include="Source\Spaceship.cpp" />
-    <ClCompile Include="Source\Scene.cpp" />
-    <ClCompile Include="Source\Texture.cpp" />
     <ClCompile Include="Source\PerfTimer.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
@@ -23,12 +15,47 @@
     <ClCompile Include="Source\log.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Collider.cpp" />
     <ClCompile Include="Source\Astronaut.cpp" />
-    <ClCompile Include="Source\AstronautManager.cpp" />
-    <ClCompile Include="Source\AsteroidManager.cpp" />
     <ClCompile Include="Source\Asteroid.cpp" />
-    <ClCompile Include="Source\Fonts.cpp" />
+    <ClCompile Include="Source\Audio.cpp">
+      <Filter>Modules\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Fonts.cpp">
+      <Filter>Modules\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Input.cpp">
+      <Filter>Modules\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Physics.cpp">
+      <Filter>Modules\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Render.cpp">
+      <Filter>Modules\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Texture.cpp">
+      <Filter>Modules\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Window.cpp">
+      <Filter>Modules\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\AstronautManager.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\AsteroidManager.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Spaceship.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Collider.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Scene.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\PhysicsEngine.cpp">
+      <Filter>Physics Engine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\DynArray.h">
@@ -53,20 +80,9 @@
       <Filter>Utils</Filter>
     </ClInclude>
     <ClInclude Include="Source\App.h" />
-    <ClInclude Include="Source\Module.h" />
-    <ClInclude Include="Source\Physics.h" />
-    <ClInclude Include="Source\Window.h" />
-    <ClInclude Include="Source\bhBody.h" />
-    <ClInclude Include="Source\bhVec2.h" />
-    <ClInclude Include="Source\Render.h" />
-    <ClInclude Include="Source\Input.h" />
-    <ClInclude Include="Source\Audio.h" />
     <ClInclude Include="Source\p2List.h">
       <Filter>Utils</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Spaceship.h" />
-    <ClInclude Include="Source\Scene.h" />
-    <ClInclude Include="Source\Texture.h" />
     <ClInclude Include="Source\PerfTimer.h">
       <Filter>Utils</Filter>
     </ClInclude>
@@ -76,15 +92,59 @@
     <ClInclude Include="Source\Globals.h">
       <Filter>Utils</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Collider.h" />
     <ClInclude Include="Source\Animation.h">
       <Filter>Utils</Filter>
     </ClInclude>
     <ClInclude Include="Source\Astronaut.h" />
-    <ClInclude Include="Source\AstronautManager.h" />
-    <ClInclude Include="Source\AsteroidManager.h" />
     <ClInclude Include="Source\Asteroid.h" />
-    <ClInclude Include="Source\Fonts.h" />
+    <ClInclude Include="Source\Audio.h">
+      <Filter>Modules\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Fonts.h">
+      <Filter>Modules\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Input.h">
+      <Filter>Modules\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Module.h">
+      <Filter>Modules\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Physics.h">
+      <Filter>Modules\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Render.h">
+      <Filter>Modules\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Texture.h">
+      <Filter>Modules\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Window.h">
+      <Filter>Modules\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\AstronautManager.h">
+      <Filter>Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\AsteroidManager.h">
+      <Filter>Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Spaceship.h">
+      <Filter>Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\bhVec2.h">
+      <Filter>Physics Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\bhBody.h">
+      <Filter>Physics Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Collider.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Scene.h">
+      <Filter>Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\PhysicsEngine.h">
+      <Filter>Physics Engine</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="External">
@@ -95,6 +155,15 @@
     </Filter>
     <Filter Include="External\PugiXml">
       <UniqueIdentifier>{2855ff7f-53a1-413d-a75b-18b4ade921dd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Modules">
+      <UniqueIdentifier>{c01f8f0a-2d0b-418f-b9f3-7ab51e12947f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Modules\Core">
+      <UniqueIdentifier>{cf7052f0-0f2d-42fc-b7cb-3981c30e90b7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Physics Engine">
+      <UniqueIdentifier>{a5317353-749a-4bcf-9b40-4230bb03553e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

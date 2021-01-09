@@ -10,12 +10,11 @@ App::App()
 	scene = new Scene(this);
 	render = new Render(this);
 	tex = new Texture(this);
+	physics = new Physics(this);
 	spaceship = new Spaceship(this);
-	physics = new PhysicsEngine(this);
 	astronautManager = new AstronautManager(this);
 	asteroidManager = new AsteroidManager(this);
 	fonts = new Fonts(this);
-	//camera = new ModuleCamera3D(this);
 
 	// The order of calls is very important!
 	// Modules will Init() Start() and Update in this order
@@ -27,14 +26,11 @@ App::App()
 	AddModule(audio);
 	AddModule(tex);
 	AddModule(fonts);
+	AddModule(physics);
 	AddModule(spaceship);
 	AddModule(astronautManager);
 	AddModule(asteroidManager);
 	AddModule(scene);
-	//AddModule(camera);
-
-	// Scenes
-
 
 	AddModule(render);
 
