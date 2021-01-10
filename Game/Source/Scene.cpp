@@ -60,7 +60,7 @@ update_status Scene::Update(float dt)
 {
 	//LOG("==========================");
 
-	LOG("MUNDO %f  %f", floor->GetPosition().x, floor->GetPosition().y);
+	//LOG("MUNDO %f  %f", floor->GetPosition().x, floor->GetPosition().y);
 
 	return update_status::UPDATE_CONTINUE;
 }

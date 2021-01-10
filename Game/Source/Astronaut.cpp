@@ -33,11 +33,11 @@ bool Astronaut::Update(float dt)
 
 	body->SetLinearVelocity(body->GetLinearVelocity().x, cos(body->GetBodyAngle()));
 
-	LOG("POS X %f", METERS_TO_PIXELS(body->GetPosition().x));
+	/*LOG("POS X %f", METERS_TO_PIXELS(body->GetPosition().x));
 	LOG("POS X %f", METERS_TO_PIXELS(initialPos.x));
 
 	LOG("POS Y %f", METERS_TO_PIXELS(body->GetPosition().y));
-	LOG("POS Y %f", METERS_TO_PIXELS(initialPos.y));
+	LOG("POS Y %f", METERS_TO_PIXELS(initialPos.y));*/
 
 	return true;
 }

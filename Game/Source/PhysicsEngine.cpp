@@ -87,10 +87,10 @@ void PhysicsEngine::Step(float dt)
 	p2List_item<bhBody*>* item = bodyList.getFirst();
 	while (item != nullptr)
 	{
-		if(item->data->type == BodyType::DYNAMIC)
+		if(item->data->type == BodyType::DYNAMIC && item->data->IsActive())
 			Integrator(item->data->GetPosition(), item->data->GetLinearVelocity(), item->data->GetAcceleration() + gravity, dt);
 
-		else if(item->data->type == BodyType::NO_GRAVITY)
+		else if(item->data->type == BodyType::NO_GRAVITY && item->data->IsActive())
 			Integrator(item->data->GetPosition(), item->data->GetLinearVelocity(), item->data->GetAcceleration(), dt);
 
 		item = item->next;
@@ -101,33 +101,16 @@ void PhysicsEngine::Step(float dt)
 
 	//LOG("gravity = %f", gravity.y);
 
-	//item = bodyList.getFirst();
-	//p2List_item<bhBody*>* item2 = item;
-
-	for (p2List_item<bhBody*>* item2 = bodyList.getFirst(); item != nullptr; item = item->next)
+	for (p2List_item<bhBody*>* item = bodyList.getFirst(); item != nullptr; item = item->next)
 	{
-		for (item = item2; item != nullptr; item2 = item2->next)
+		for (p2List_item<bhBody*>* item2 = item->next; item2 != nullptr; item2 = item2->next)
 		{
-			if (Intersection(item->data, item2->data))
+			if (Intersection(item->data, item2->data) && item->data->IsActive())
 			{
 				Collisions(item->data, item2->data);
 			}
 		}
 	}
-	
-	//while (item != nullptr)
-	//{
-	//	while (item2 != nullptr)
-	//	{
-	//		item2 = item->next;
-	//		if (Intersection(item->data, item2->data))
-	//		{
-	//			Collisions(item->data, item2->data);
-	//		}
-	//		item2 = item2->next;
-	//	}
-	//	item = item->next;
-	//}
 }
 
 bool PhysicsEngine::Intersection(bhBody* b1, bhBody* b2)
@@ -144,19 +127,6 @@ bool PhysicsEngine::Intersection(bhBody* b1, bhBody* b2)
 
 void PhysicsEngine::Collisions(bhBody* b, bhBody* b2)
 {
-	/*bhVec2 dir = b2->GetPosition() - b->GetPosition();
-	dir = dir.Normalize();
-
-	bhVec2 impact = dir + b->GetBodyRadius();
-
-	bhVec2 impac;
-	impac.x = dir.x + b->GetBodyRadius();
-	impac.y = dir.y + b->GetBodyRadius();
-
-
-	bhVec2 newSpeed = impact * b->GetLinearVelocity();
-	
-	b->SetLinearVelocity(newSpeed.Negate());*/
 	
 	// First we get the normal corresponding from the world to the body
 	bhVec2 dir = b->GetPosition() - b2->GetPosition();
@@ -180,6 +150,10 @@ void PhysicsEngine::Collisions(bhBody* b, bhBody* b2)
 	else
 		newSpeed = newSpeed * 0.9f;
 
+	b->SetLinearVelocity(newSpeed);
+
+
+
 
 	/*if (b2->GetName() == "astronaut")
 	{
@@ -192,78 +166,6 @@ void PhysicsEngine::Collisions(bhBody* b, bhBody* b2)
 	}*/
 
 
-
-	// =======================================================================================================================
-
-	/*bhVec2 groundNormal = bhVec2(b2->GetPosition().x, b2->GetPosition().y + b2->GetBodyRadius());
-
-	float grNormalModule = sqrt(groundNormal.x * groundNormal.x + groundNormal.y * groundNormal.y);
-	float dirModule = sqrt(dirNoNormalized.x * dirNoNormalized.x + dirNoNormalized.y * dirNoNormalized.y);
-
-	bhVec2 sinVec = dirNoNormalized - groundNormal;
-	float sin = sqrt(sinVec.x * sinVec.x + sinVec.y * sinVec.y);
-
-	float angle = atan2(sin, grNormalModule / dirModule);
-	angle = angle * 180 / M_PI;*/
-
-	// =======================================================================================================================
-
-
-	/*bhVec2 groundNormal = bhVec2(b2->GetPosition().x, b2->GetPosition().y + b2->GetBodyRadius());
-	float grNormalModule = sqrt(groundNormal.x * groundNormal.x + groundNormal.y * groundNormal.y);
-	float dirModule = sqrt(dirNoNormalized.x * dirNoNormalized.x + dirNoNormalized.y * dirNoNormalized.y);
-	
-	float dot = dirNoNormalized.Dot(groundNormal);
-
-	float c = dot / (grNormalModule * dirModule);
-	float angle = acos(c);
-
-	angle = angle * 180 / M_PI;
-	
-	
-
-	int a = 0;
-	a = 1;*/
-
-	/*float dist = sqrt(pow(b2->GetPosition().x - b->GetPosition().x, 2) + pow(b2->GetPosition().y - b->GetPosition().y, 2));
-
-	float intersection = b2->GetBodyRadius() - b->GetBodyRadius();
-
-	bhVec2 groundNormal = b2->GetPosition() + intersection;
-	groundNormal = groundNormal.Normalize();
-
-	bhVec2 newSpeed = b->GetLinearVelocity() * groundNormal;
-	b->SetLinearVelocity(newSpeed);*/
-
-	// =======================================================================================================================
-
-	/*float y = b->GetPosition().y + (b->GetBodyRadius());
-
-	if (y > (b2->GetPosition().y - b2->GetBodyRadius()) && b2->GetName() == "floor")
-	{
-		bhVec2 aux = bhVec2(b->GetLinearVelocity().x, b->GetLinearVelocity().Negate().y * 0.9f);
-		b->SetLinearVelocity(aux);
-	}
-
-	else if ((b->GetPosition().y - b->GetBodyRadius()) < b2->GetPosition().y + PIXEL_TO_METERS(50) && b2->GetName() == "top")
-	{
-		bhVec2 aux = bhVec2(b->GetLinearVelocity().x, b->GetLinearVelocity().Negate().y * 0.9f);
-		b->SetLinearVelocity(aux);
-	}*/
-	
-	/*float y = b->GetPosition().y + (b->GetBodyRadius());
-
-	if (y > (b2->GetPosition().y - b2->GetBodyRadius()) && b2->GetName() == "floor")
-	{
-		bhVec2 aux = bhVec2(b->GetLinearVelocity().x, b->GetLinearVelocity().Negate().y * 0.9f);
-		b->SetLinearVelocity(aux);
-	}
-
-	else if ((b->GetPosition().y - b->GetBodyRadius()) < b2->GetPosition().y + PIXEL_TO_METERS(50) && b2->GetName() == "top")
-	{
-		bhVec2 aux = bhVec2(b->GetLinearVelocity().x, b->GetLinearVelocity().Negate().y * 0.9f);
-		b->SetLinearVelocity(aux);
-	}*/
 }
 
 void PhysicsEngine::AddBody(bhBody* b)

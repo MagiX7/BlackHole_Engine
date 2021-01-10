@@ -24,16 +24,18 @@ private:
 	float bodyGravity;
 	double angle;
 	SString name;
+	bool active;
 
 public:
 	BodyType type;
 
 public:
 	// Default constructor that sets all the variables to default
-	bhBody(SString n, BodyType t)
+	bhBody(SString n, BodyType t, bool act = true)
 	{
 		name = n;
 		type = t;
+		active = act;
 		position = bhVec2(0.0f, 0.0f);
 		linearV = bhVec2(0.0f, 0.0f);
 		maxLinearV = bhVec2(0.0f, 0.0f);
@@ -53,7 +55,7 @@ public:
 		acceleration = force / mass;
 	}
 	
-	inline void AddMomentum(bhVec2 v)
+	void AddMomentum(bhVec2 v)
 	{
 		linearV += v;
 	}
@@ -66,51 +68,58 @@ public:
 			angle = 0;
 	}
 
+	bool IsActive() { return active; }
+
 	// ===================================================
 	//					Setters
 	// ===================================================
 
-	inline void SetMass(float m)
+	void SetActive(bool act)
+	{
+		active = act;
+	}
+
+	void SetMass(float m)
 	{
 		mass = m;
 	}
 
 	// Set body position 
-	inline void SetPosition(bhVec2 pos)
+	void SetPosition(bhVec2 pos)
 	{
 		position = pos;
 	}
-	inline void SetPosition(float x, float y)
+	void SetPosition(float x, float y)
 	{
 		position.x = x;
 		position.y = y;
 	}
 
 	// Set body linear speed
-	inline void SetLinearVelocity(bhVec2 v)
+	void SetLinearVelocity(bhVec2 v)
 	{
 		linearV = v;
 	}
 
-	inline void SetLinearVelocity(float x, float y)
+	void SetLinearVelocity(float x, float y)
 	{
 		linearV.x = x;
 		linearV.y = y;
 	}
 
-	inline void SetMaxLinearVelocity(bhVec2 v)
+	void SetMaxLinearVelocity(bhVec2 v)
 	{
 		maxLinearV = v;
 	}
 
 	// Set body angluar speed
-	inline void SetAngularVelocity(bhVec2 v)
+	void SetAngularVelocity(bhVec2 v)
 	{
 		//angularV += v;
 	}
 
 	// Set body radius
-	inline void SetRadius(float rad)
+	void SetRadius(float rad)
 	{
 		radius = rad;
 	}

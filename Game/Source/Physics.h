@@ -23,6 +23,8 @@ public:
 	bhBody* CreateBody(SString n, BodyType type);
 	void DestroyBody(bhBody* b);
 
+	inline PhysicsEngine* GetWorld() { return world; }
+
 private:
 
 	p2List<bhBody*> bodies;

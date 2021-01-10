@@ -30,7 +30,7 @@ public:
 
 
 public:
-	float health = 0.0f;
+	float health = 100.0f;
 	float fuel = 0.0f;
 	int ammo = 3;
 	int astronautsCollected = 0;
@@ -38,10 +38,12 @@ public:
 private:
 	
 	SDL_Texture* texture;
+
 	Animation* currentAnim;
 	Animation idleAnim;
 	Animation flyAnim;
 	Animation engineOnAnim;
+	Animation explosionAnim;
 
 	bhBody* body;
 	bhBody* missile;
