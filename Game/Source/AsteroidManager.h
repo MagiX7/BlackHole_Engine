@@ -18,8 +18,11 @@ public:
 	bool CleanUp() override;
 
 	Asteroid* CreateAsteroid(int radius, bhVec2 position);
+	void DestroyAsteroid(Asteroid* ast);
+
+	bool CheckCollision(bhBody* body);
 	
-private:
+public:
 
 	p2List<Asteroid*> asteroidList;
 

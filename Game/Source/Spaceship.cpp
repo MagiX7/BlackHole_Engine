@@ -35,7 +35,7 @@ Spaceship::Spaceship(App* app, bool start_enabled) : Module(app, start_enabled)
 	explosionAnim.PushBack({ 73,163,53,53 });
 	explosionAnim.PushBack({ 142,155,53,53 });*/
 
-	explosionAnim.PushBack({ 5,6,59,52 });
+	explosionAnim.PushBack({ 5,6,58,52 });
 	explosionAnim.PushBack({ 57,6,58,52 });
 	explosionAnim.PushBack({ 110,7,58,52 });
 	explosionAnim.PushBack({ 165,6,58,52 });
@@ -157,6 +157,17 @@ update_status Spaceship::Update(float dt)
 		}
 	}
 
+	if (app->asteroidManager->CheckCollision(body) == true)
+	{
+		health = 0;
+		body->SetLinearVelocity(0, 0);
+		if (currentAnim != &explosionAnim)
+		{
+			explosionAnim.Reset();
+			currentAnim = &explosionAnim;
+		}
+	}
+
 	p2List_item <Astronaut*>* item = app->astronautManager->astronautsList.getFirst();
 
 	while (item != nullptr)
@@ -169,7 +180,6 @@ update_status Spaceship::Update(float dt)
 
 		item = item->next;
 	}
-	
 
 	if (health <= 0)
 	{

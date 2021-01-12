@@ -84,3 +84,35 @@ Asteroid* AsteroidManager::CreateAsteroid(int radius, bhVec2 position)
 
 	return asteroid;
 }
+
+void AsteroidManager::DestroyAsteroid(Asteroid* ast)
+{
+	p2List_item<Asteroid*>* item = asteroidList.getFirst();
+
+	while (item != nullptr)
+	{
+		if (item->data == ast)
+		{
+			asteroidList.del(item);
+			break;
+		}
+
+		item = item->next;
+	}
+}
+
+bool AsteroidManager::CheckCollision(bhBody* body)
+{
+	p2List_item<Asteroid*>* item = asteroidList.getFirst();
+
+	while (item != nullptr)
+	{
+		if (app->physics->GetWorld()->Intersection(body, item->data->GetBody()))
+		{
+			return true;
+		}
+		item = item->next;
+	}
+
+	return false;
+}
