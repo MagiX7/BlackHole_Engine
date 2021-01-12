@@ -35,7 +35,7 @@ Spaceship::Spaceship(App* app, bool start_enabled) : Module(app, start_enabled)
 	explosionAnim.PushBack({ 73,163,53,53 });
 	explosionAnim.PushBack({ 142,155,53,53 });*/
 
-	explosionAnim.PushBack({ 5,6,59,52 });
+	explosionAnim.PushBack({ 5,6,58,52 });
 	explosionAnim.PushBack({ 57,6,58,52 });
 	explosionAnim.PushBack({ 110,7,58,52 });
 	explosionAnim.PushBack({ 165,6,58,52 });
@@ -144,6 +144,17 @@ update_status Spaceship::Update(float dt)
 	}
 
 	if (app->physics->GetWorld()->Intersection(body, app->scene->floor) && fabs(body->GetLinearVelocity().y) > 2)
+	{
+		health = 0;
+		body->SetLinearVelocity(0, 0);
+		if (currentAnim != &explosionAnim)
+		{
+			explosionAnim.Reset();
+			currentAnim = &explosionAnim;
+		}
+	}
+
+	if (app->asteroidManager->CheckCollision(body) == true)
 	{
 		health = 0;
 		body->SetLinearVelocity(0, 0);
