@@ -52,7 +52,7 @@ private:
 
 	// Score
 	char scoreAstronautsText[3] = { "\0" };
-
 	int scoreFx = 0;
+	SDL_Texture* scoreTexture;
 
 };

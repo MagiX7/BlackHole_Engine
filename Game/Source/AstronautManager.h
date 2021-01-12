@@ -25,9 +25,9 @@ public:
 	void DeleteAstronaut(Astronaut* astronaut);
 	void DeleteAstronaut(bhBody* astronaut);
 
+	p2List<Astronaut*> astronautsList;
+
 private:
 
-	p2List<Astronaut*> astronautsList;
-	
 	SDL_Texture* astronautTexture;
 };

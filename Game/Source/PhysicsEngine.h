@@ -13,6 +13,8 @@ public:
 	~PhysicsEngine();
 
 	bhVec2 ForceGravity(float gravity, float mass1, float mass2, float distance, bhVec2 direction);
+	bhVec2 ForceGravity(float gravity, bhBody& body1, bhBody& body2, bhVec2 direction);
+
 
 	bhVec2 Gravity();
 	bhVec2 AeroDrag(bhBody* b);

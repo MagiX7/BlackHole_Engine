@@ -28,6 +28,23 @@ bhVec2 PhysicsEngine::ForceGravity(float gravity, float mass1, float mass2, floa
 	return forceGravity;
 }
 
+bhVec2 PhysicsEngine::ForceGravity(float gravity, bhBody& body1, bhBody& body2, bhVec2 direction)
+{
+	bhVec2 forceGravity;
+
+	bhVec2 distance = {};
+	distance = body2.GetPosition() - body1.GetPosition();
+
+	
+
+	float gravityFormule = (gravity * (body1.GetBodyMass() * body2.GetBodyMass()) / (23.0f * 23.0f));
+
+	forceGravity.x = direction.x * gravityFormule;
+	forceGravity.y = direction.y * gravityFormule;
+
+	return forceGravity;
+}
+
 bhVec2 PhysicsEngine::Gravity()
 {
 	return gravity;
@@ -151,21 +168,6 @@ void PhysicsEngine::Collisions(bhBody* b, bhBody* b2)
 		newSpeed = newSpeed * 0.9f;
 
 	b->SetLinearVelocity(newSpeed);
-
-
-
-
-	/*if (b2->GetName() == "astronaut")
-	{
-		app->astronautManager->DeleteAstronaut(b2);
-		app->spaceship->AddScore();
-	}
-	else
-	{
-		b->SetLinearVelocity((newSpeed));
-	}*/
-
-
 }
 
 void PhysicsEngine::AddBody(bhBody* b)

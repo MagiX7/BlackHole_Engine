@@ -58,6 +58,8 @@ bool AstronautManager::CleanUp()
 
 		item = item->next;
 	}
+	
+	app->tex->UnLoad(astronautTexture);
 
 	return false;
 }
