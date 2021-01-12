@@ -7,7 +7,7 @@
 PhysicsEngine::PhysicsEngine()
 {
 	gravity = bhVec2(PIXEL_TO_METERS(0), PIXEL_TO_METERS(100));
-	aeroDrag = 0.3f;
+	aeroDrag = 0.01f;
 	aeroLift = 0.3f;
 	hydroDrag = 0.3f;
 }
@@ -44,9 +44,10 @@ void PhysicsEngine::ForceGravity(bhBody& body1)
 	
 	float gravity1 = 0.4f;  // Earth
 	float gravity2 = 0.0f;  // Void
-	float gravity3 = -2.0f; // Moon
+	float gravity3 = -0.08f; // Moon
 	
-	
+	LOG("%f", body1.GetPosition().y)
+
 	if (body1.GetPosition().y > PIXEL_TO_METERS(-5000) && body1.GetPosition().y <= PIXEL_TO_METERS(250))
 	{
 		LOG("ON FIRST IF=====================")
@@ -54,16 +55,37 @@ void PhysicsEngine::ForceGravity(bhBody& body1)
 		float m = (gravity1) / PIXEL_TO_METERS(5000);
 		float forceGravity = m * body1.GetPosition().y + b;
 		
+		bhVec2 drag = AeroDrag(&body1);
+
+		body1.AddForce(bhVec2(0, forceGravity + drag.y));
 		LOG("%f", forceGravity);
-		
-		body1.AddForce(bhVec2(0, forceGravity));
 	}
-	else if (body1.GetPosition().y > PIXEL_TO_METERS(-251) && body1.GetPosition().y <= PIXEL_TO_METERS(-6000))
+	else if (body1.GetPosition().y < PIXEL_TO_METERS(-5001) && body1.GetPosition().y >= PIXEL_TO_METERS(-9000))
 	{
 		LOG("ON SECOND IF===================")
+		float b = gravity2;
+		float m = (gravity2) / PIXEL_TO_METERS(9000);
+		float forceGravity = m * body1.GetPosition().y + b;
+
+		body1.AddForce(bhVec2(0, forceGravity));
+		LOG("%f", forceGravity);
+	}
+	else if (body1.GetPosition().y < PIXEL_TO_METERS(-9001) && body1.GetPosition().y >= PIXEL_TO_METERS(-13000))
+	{
+		LOG("ON THIRD IF")
+
+		float b = gravity3;
+		float m = (gravity3) / PIXEL_TO_METERS(9000-13000);
+		float forceGravity = m * body1.GetPosition().y + b;
+
+		bhVec2 drag = AeroDrag(&body1);
+		body1.AddForce(bhVec2(0, forceGravity + drag.y));
+		LOG("%f", forceGravity);
 	}
 	else
+	{
 		LOG("NO IF==========================")
+	}
 }
 
 bhVec2 PhysicsEngine::Gravity()
@@ -75,12 +97,21 @@ bhVec2 PhysicsEngine::AeroDrag(bhBody* b)
 {
 	float density = b->GetBodyMass() /*b->*/;
 
-	bhVec2 dragForce;
+	// Re = (Vs*Lc)/v
+	// Where Re is Reynolds number
+	// Vs is characteristic fluid velocity
+	// v is kinematic viscosity 
 
-	float x = aeroDrag /* Area*/ * ((density * (b->GetLinearVelocity().x * b->GetLinearVelocity().x)) / 2);
-	float y = aeroDrag /* Area*/ * ((density * (b->GetLinearVelocity().y * b->GetLinearVelocity().y)) / 2);
+	float area = M_PI * b->GetBodyRadius() * b->GetBodyRadius();
+	float Lc = sqrt(area);
+	float reynolds = (1.5 /* Air velocity*/ * Lc) / 13.3f /*air viscosity*/;
+	
+	area /= 2;
+	float x = aeroDrag * area * ((density * (b->GetLinearVelocity().x * b->GetLinearVelocity().x)) / 2);
+	float y = aeroDrag * area * ((density * (b->GetLinearVelocity().y * b->GetLinearVelocity().y)) / 2);
 
-	dragForce = bhVec2(x, y);
+	
+	bhVec2 dragForce = bhVec2(x, y);
 
 	return dragForce;
 }

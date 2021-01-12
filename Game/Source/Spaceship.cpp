@@ -113,7 +113,7 @@ update_status Spaceship::Update(float dt)
 	}
 	float er = body->GetBodyGravity();
 	
-	if (app->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT && -body->GetLinearVelocity().y < body->GetMaxLinearVelocity().y && fuel > 0)
+	if (app->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT)
 	{
 		if (currentAnim != &engineOnAnim)
 		{
@@ -121,11 +121,13 @@ update_status Spaceship::Update(float dt)
 			currentAnim = &engineOnAnim;
 		}
 
-		double angle = body->GetBodyAngle();
-		bhVec2 mom = bhVec2(cos(angle - 90 * M_PI / 180), sin(angle - 90 * M_PI / 180));
-		body->AddMomentum(bhVec2(PIXEL_TO_METERS(mom.x * dt * 250), PIXEL_TO_METERS(mom.y * dt * 250)));
-
-		//fuel -= (1.2f * dt);
+		/*if (-body->GetLinearVelocity().y < body->GetMaxLinearVelocity().y && fuel > 0)
+		{*/
+			double angle = body->GetBodyAngle();
+			bhVec2 mom = bhVec2(cos(angle - 90 * M_PI / 180), sin(angle - 90 * M_PI / 180));
+			body->AddMomentum(bhVec2(PIXEL_TO_METERS(mom.x * dt * 250), PIXEL_TO_METERS(mom.y * dt * 250)));
+			//fuel -= (1.2f * dt);
+		//}
 	}
 	if (app->input->GetKey(SDL_SCANCODE_W) == KEY_UP)
 	{
