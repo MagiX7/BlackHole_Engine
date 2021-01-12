@@ -77,6 +77,8 @@ bool Spaceship::Start()
 
 	texture = app->tex->Load("Assets/Textures/Spaceship/sheet.png");
 	scoreFx = app->audio->LoadFx("Assets/Audio/pickup_fx.wav");
+	scoreTexture = app->tex->Load("Assets/Textures/astronaut_score.png");
+
 
 	char lookupTable[] = { "0123456789?ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!    " };
 	fontsIndex = app->fonts->Load("Assets/Textures/fonts.png", lookupTable, 1);
@@ -137,7 +139,7 @@ update_status Spaceship::Update(float dt)
 	{
 		body->Rotate(2);
 	}
-	
+
 	if (app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT && -body->GetLinearVelocity().x < body->GetMaxLinearVelocity().x)
 	{
 		body->Rotate(-2);
@@ -153,6 +155,20 @@ update_status Spaceship::Update(float dt)
 			currentAnim = &explosionAnim;
 		}
 	}
+
+	p2List_item <Astronaut*>* item = app->astronautManager->astronautsList.getFirst();
+
+	while (item != nullptr)
+	{
+		if (app->physics->GetWorld()->Intersection(body, item->data->GetBody()))
+		{
+			app->astronautManager->DeleteAstronaut(item->data->GetBody());
+			AddScore();
+		}
+
+		item = item->next;
+	}
+	
 
 	if (health <= 0)
 	{
@@ -191,15 +207,18 @@ void Spaceship::Draw()
 	// Draw collider
 	app->render->DrawCircle(METERS_TO_PIXELS(body->GetPosition().x), METERS_TO_PIXELS(body->GetPosition().y), METERS_TO_PIXELS(body->GetBodyRadius()), 255, 0, 0);
 
-	app->fonts->drawText(180, 20, fontsIndex, scoreAstronautsText);
-	app->fonts->drawText(20, 20, fontsIndex, "score");
+	app->fonts->drawText(80, 20, fontsIndex, scoreAstronautsText);
+	app->fonts->drawText(63, 25, fontsIndex, "x");
+	app->render->DrawTexture(scoreTexture, 20 + app->render->camera.x, 20 - (app->render->camera.y), NULL);
 
 }
 
 bool Spaceship::CleanUp()
 {
 	app->tex->UnLoad(texture);
+	app->tex->UnLoad(scoreTexture);
 	app->physics->DestroyBody(body);
+
 
 	return true;
 }
