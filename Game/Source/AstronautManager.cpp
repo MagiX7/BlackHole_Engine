@@ -80,7 +80,7 @@ void AstronautManager::Draw()
 Astronaut* AstronautManager::CreateAstronaut(int radius, bhVec2 initialPos)
 {
 	Astronaut* astronaut = new Astronaut();
-	bhBody* astronautBody = app->physics->CreateBody("astronaut", BodyType::NO_GRAVITY);
+	bhBody* astronautBody = app->physics->CreateBody("astronaut", BodyType::SENSOR);
 	initialPos.x = PIXEL_TO_METERS(initialPos.x);
 	initialPos.y = PIXEL_TO_METERS(initialPos.y);
 	astronaut->SetInitialPos(initialPos);

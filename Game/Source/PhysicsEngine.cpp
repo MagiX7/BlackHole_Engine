@@ -45,12 +45,10 @@ void PhysicsEngine::ForceGravity(bhBody& body1)
 	float gravity1 = 0.4f;  // Earth
 	float gravity2 = 0.0f;  // Void
 	float gravity3 = -0.08f; // Moon
-	
-	LOG("%f", body1.GetPosition().y)
 
 	if (body1.GetPosition().y > PIXEL_TO_METERS(-5000) && body1.GetPosition().y <= PIXEL_TO_METERS(250))
 	{
-		LOG("ON FIRST IF=====================")
+		LOG("ON FIRST IF=====================");
 		float b = gravity1;
 		float m = (gravity1) / PIXEL_TO_METERS(5000);
 		float forceGravity = m * body1.GetPosition().y + b;
@@ -161,8 +159,9 @@ void PhysicsEngine::Step(float dt)
 			ForceGravity(*item->data);
 			Integrator(item->data->GetPosition(), item->data->GetLinearVelocity(), item->data->GetAcceleration() /*+ gravity*/, dt);
 		}
-
 		else if(item->data->type == BodyType::NO_GRAVITY && item->data->IsActive())
+			Integrator(item->data->GetPosition(), item->data->GetLinearVelocity(), item->data->GetAcceleration(), dt);
+		else if (item->data->type == BodyType::SENSOR && item->data->IsActive())
 			Integrator(item->data->GetPosition(), item->data->GetLinearVelocity(), item->data->GetAcceleration(), dt);
 
 		item = item->next;
@@ -222,7 +221,8 @@ void PhysicsEngine::Collisions(bhBody* b, bhBody* b2)
 	else
 		newSpeed = newSpeed * 0.9f;
 
-	b->SetLinearVelocity(newSpeed);
+	if (b2->type != BodyType::SENSOR)
+		b->SetLinearVelocity(newSpeed);
 }
 
 void PhysicsEngine::AddBody(bhBody* b)

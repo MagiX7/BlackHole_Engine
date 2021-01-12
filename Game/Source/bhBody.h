@@ -8,6 +8,7 @@ enum class BodyType
 	DYNAMIC,
 	STATIC,
 	NO_GRAVITY,
+	SENSOR,
 };
 
 class bhBody
