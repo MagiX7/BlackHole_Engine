@@ -28,7 +28,7 @@ bhVec2 PhysicsEngine::ForceGravity(float gravity, float mass1, float mass2, floa
 	return forceGravity;
 }
 
-bhVec2 PhysicsEngine::ForceGravity(bhBody& body1)
+void PhysicsEngine::ForceGravity(bhBody& body1)
 {
 	/*bhVec2 forceGravity;
 
@@ -41,21 +41,29 @@ bhVec2 PhysicsEngine::ForceGravity(bhBody& body1)
 	
 	forceGravity.x = direction.x * gravityFormule;
 	forceGravity.y = direction.y * gravityFormule;*/
-	float gravity1 = 5.0f;
-	float gravity2 = 0.0f;
-	float gravity3 = -2.0f;
-	LOG(" NAVE POS X %f POS Y %f ", body1.GetPosition().x, body1.GetPosition().y);
-	if (body1.GetPosition().y < PIXEL_TO_METERS(-5000) && body1.GetPosition().y >= PIXEL_TO_METERS(0))
+	
+	float gravity1 = 0.4f;  // Earth
+	float gravity2 = 0.0f;  // Void
+	float gravity3 = -2.0f; // Moon
+	
+	
+	if (body1.GetPosition().y > PIXEL_TO_METERS(-5000) && body1.GetPosition().y <= PIXEL_TO_METERS(250))
 	{
-
+		LOG("ON FIRST IF=====================")
 		float b = gravity1;
-		float m = (-gravity1) / PIXEL_TO_METERS(5000);
+		float m = (gravity1) / PIXEL_TO_METERS(5000);
 		float forceGravity = m * body1.GetPosition().y + b;
-
+		
+		LOG("%f", forceGravity);
+		
 		body1.AddForce(bhVec2(0, forceGravity));
 	}
-
-	return bhVec2(1.0f,2.0f);
+	else if (body1.GetPosition().y > PIXEL_TO_METERS(-251) && body1.GetPosition().y <= PIXEL_TO_METERS(-6000))
+	{
+		LOG("ON SECOND IF===================")
+	}
+	else
+		LOG("NO IF==========================")
 }
 
 bhVec2 PhysicsEngine::Gravity()

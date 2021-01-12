@@ -192,7 +192,7 @@ update_status Spaceship::Update(float dt)
 
 
 	//LOG("%f  %f", body->GetPosition().x, body->GetPosition().y);
-	LOG("%f  %f", body->GetLinearVelocity().x, body->GetLinearVelocity().y);
+	/*LOG("%f  %f", body->GetLinearVelocity().x, body->GetLinearVelocity().y);*/
 
 	if (fuel < 0) fuel = 0;
 

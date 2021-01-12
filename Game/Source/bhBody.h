@@ -51,8 +51,8 @@ public:
 
 	void AddForce(bhVec2 f)
 	{
-		force += f;
-		acceleration = force / mass;
+		//force += f;
+		acceleration = f / mass;
 	}
 	
 	void AddMomentum(bhVec2 v)
