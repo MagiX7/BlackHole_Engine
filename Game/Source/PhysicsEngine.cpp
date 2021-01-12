@@ -28,21 +28,34 @@ bhVec2 PhysicsEngine::ForceGravity(float gravity, float mass1, float mass2, floa
 	return forceGravity;
 }
 
-bhVec2 PhysicsEngine::ForceGravity(float gravity, bhBody& body1, bhBody& body2, bhVec2 direction)
+bhVec2 PhysicsEngine::ForceGravity(bhBody& body1)
 {
-	bhVec2 forceGravity;
+	/*bhVec2 forceGravity;
 
 	bhVec2 distance = {};
 	distance = body2.GetPosition() - body1.GetPosition();
-
+	float distanceMod = sqrt((distance.x*distance.x) + (distance.y*distance.y));
 	
-
-	float gravityFormule = (gravity * (body1.GetBodyMass() * body2.GetBodyMass()) / (23.0f * 23.0f));
-
+	
+	float gravityFormule = (gravity * (body1.GetBodyMass() * body2.GetBodyMass()) / (distanceMod * distanceMod));
+	
 	forceGravity.x = direction.x * gravityFormule;
-	forceGravity.y = direction.y * gravityFormule;
+	forceGravity.y = direction.y * gravityFormule;*/
+	float gravity1 = 5.0f;
+	float gravity2 = 0.0f;
+	float gravity3 = -2.0f;
+	LOG(" NAVE POS X %f POS Y %f ", body1.GetPosition().x, body1.GetPosition().y);
+	if (body1.GetPosition().y < PIXEL_TO_METERS(-5000) && body1.GetPosition().y >= PIXEL_TO_METERS(0))
+	{
 
-	return forceGravity;
+		float b = gravity1;
+		float m = (-gravity1) / PIXEL_TO_METERS(5000);
+		float forceGravity = m * body1.GetPosition().y + b;
+
+		body1.AddForce(bhVec2(0, forceGravity));
+	}
+
+	return bhVec2(1.0f,2.0f);
 }
 
 bhVec2 PhysicsEngine::Gravity()
@@ -104,8 +117,11 @@ void PhysicsEngine::Step(float dt)
 	p2List_item<bhBody*>* item = bodyList.getFirst();
 	while (item != nullptr)
 	{
-		if(item->data->type == BodyType::DYNAMIC && item->data->IsActive())
-			Integrator(item->data->GetPosition(), item->data->GetLinearVelocity(), item->data->GetAcceleration() + gravity, dt);
+		if (item->data->type == BodyType::DYNAMIC && item->data->IsActive())
+		{
+			ForceGravity(*item->data);
+			Integrator(item->data->GetPosition(), item->data->GetLinearVelocity(), item->data->GetAcceleration() /*+ gravity*/, dt);
+		}
 
 		else if(item->data->type == BodyType::NO_GRAVITY && item->data->IsActive())
 			Integrator(item->data->GetPosition(), item->data->GetLinearVelocity(), item->data->GetAcceleration(), dt);

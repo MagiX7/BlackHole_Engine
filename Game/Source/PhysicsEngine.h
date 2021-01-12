@@ -13,7 +13,7 @@ public:
 	~PhysicsEngine();
 
 	bhVec2 ForceGravity(float gravity, float mass1, float mass2, float distance, bhVec2 direction);
-	bhVec2 ForceGravity(float gravity, bhBody& body1, bhBody& body2, bhVec2 direction);
+	bhVec2 ForceGravity(bhBody& body1);
 
 
 	bhVec2 Gravity();
@@ -42,6 +42,7 @@ private:
 	float aeroLift;
 	float hydroBuoy;
 	float hydroDrag;
+
 
 	p2List<bhBody*> bodyList;
 

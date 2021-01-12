@@ -17,9 +17,11 @@ public:
 	update_status PostUpdate() override;
 	bool CleanUp() override;
 
+
 public:
 	bhBody* floor;
 	bhBody* floor2;
 
 	SDL_Texture* bg;
+
 };

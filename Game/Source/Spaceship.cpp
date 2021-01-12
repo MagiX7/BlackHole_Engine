@@ -111,7 +111,8 @@ update_status Spaceship::Update(float dt)
 			currentAnim = &idleAnim;
 		}
 	}
-
+	float er = body->GetBodyGravity();
+	
 	if (app->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT && -body->GetLinearVelocity().y < body->GetMaxLinearVelocity().y && fuel > 0)
 	{
 		if (currentAnim != &engineOnAnim)
