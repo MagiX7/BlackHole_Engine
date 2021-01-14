@@ -89,7 +89,6 @@ bool Spaceship::Start()
 update_status Spaceship::PreUpdate()
 {
 
-
 	return update_status::UPDATE_CONTINUE;
 }
 
@@ -105,15 +104,15 @@ update_status Spaceship::Update(float dt)
 	{
 		HandleInput(dt);
 
+		if ((app->physics->GetWorld()->Intersection(body, app->scene->earth) || app->physics->GetWorld()->Intersection(body, app->scene->moon)) &&
+			fabs(body->GetLinearVelocity().y) > 2)
+		{
+			Dead();
+		}
+
 		if (app->asteroidManager->CheckCollision(body) == true)
 		{
-			health = 0;
-			body->SetLinearVelocity(0, 0);
-			if (currentAnim != &explosionAnim)
-			{
-				explosionAnim.Reset();
-				currentAnim = &explosionAnim;
-			}
+			Dead();
 		}
 
 		p2List_item <Astronaut*>* item = app->astronautManager->astronautsList.getFirst();
@@ -182,7 +181,6 @@ bool Spaceship::CleanUp()
 	app->tex->UnLoad(scoreTexture);
 	app->physics->DestroyBody(body);
 
-
 	return true;
 }
 
@@ -246,16 +244,15 @@ void Spaceship::HandleInput(float dt)
 	{
 		body->Rotate(-2);
 	}
+}
 
-	if ((app->physics->GetWorld()->Intersection(body, app->scene->earth) || app->physics->GetWorld()->Intersection(body, app->scene->moon)) &&
-		fabs(body->GetLinearVelocity().y) > 2)
+void Spaceship::Dead()
+{
+	health = 0;
+	body->SetLinearVelocity(0, 0);
+	if (currentAnim != &explosionAnim)
 	{
-		health = 0;
-		body->SetLinearVelocity(0, 0);
-		if (currentAnim != &explosionAnim)
-		{
-			explosionAnim.Reset();
-			currentAnim = &explosionAnim;
-		}
+		explosionAnim.Reset();
+		currentAnim = &explosionAnim;
 	}
 }

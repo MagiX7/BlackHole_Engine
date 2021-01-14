@@ -42,6 +42,12 @@ bool Scene::Start()
 	app->astronautManager->Start();
 
 	app->asteroidManager->CreateAsteroid(20.5f, bhVec2(500, -800));
+	app->asteroidManager->CreateAsteroid(20.5f, bhVec2(300, -1400));
+	app->asteroidManager->CreateAsteroid(20.5f, bhVec2(700, -2000));
+	app->asteroidManager->CreateAsteroid(20.5f, bhVec2(500, -2600));
+	app->asteroidManager->CreateAsteroid(20.5f, bhVec2(300, -3200));
+	app->asteroidManager->CreateAsteroid(20.5f, bhVec2(700, -3800));
+
 	app->asteroidManager->Start();
 
 	bg = app->tex->Load("Assets/Textures/bg.png");

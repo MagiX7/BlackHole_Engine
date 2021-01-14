@@ -65,11 +65,23 @@ update_status Render::Update(float dt)
 	if(app->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
 		app->render->camera.x -= speed;
 	
+	camera.y = METERS_TO_PIXELS(-app->spaceship->GetBody()->GetPosition().y + SCREEN_HEIGHT / 2 + offset);
 
 	camera.x = 0;
-	camera.y = METERS_TO_PIXELS(-app->spaceship->GetBody()->GetPosition().y + SCREEN_HEIGHT/2);
-	if (app->render->camera.y <= 300) app->render->camera.y = 300;
-	else if (app->render->camera.y >= 12500) app->render->camera.y = 12500;
+
+	if (app->spaceship->GetBody()->GetLinearVelocity().y < 0)
+	{
+		if (offset < 200) offset += 150 * dt;
+	}
+	if (app->spaceship->GetBody()->GetLinearVelocity().y > 0)
+	{
+		if (offset > -200) offset -= 150 * dt;
+	}
+
+	if (app->render->camera.y <= 400) app->render->camera.y = 400;
+	if (app->render->camera.y >= 12500) app->render->camera.y = 12500;
+
+	LOG("POSITION %d %d=========================================================", camera.x, camera.y);
 
 	return update_status::UPDATE_CONTINUE;
 }
