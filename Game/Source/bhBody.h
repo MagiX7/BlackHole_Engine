@@ -26,6 +26,7 @@ private:
 	double angle;
 	SString name;
 	bool active;
+	bhVec2 momentum;
 
 public:
 	BodyType type;
@@ -46,6 +47,7 @@ public:
 		mass = 0.0f;
 		bodyGravity = 0.0f;
 		angle = 0.0f;
+		momentum = bhVec2(0.0f, 0.0f);
 	}
 
 	virtual ~bhBody() {};
@@ -56,9 +58,11 @@ public:
 		acceleration = f / mass;
 	}
 	
-	void AddMomentum(bhVec2 v)
+	void AddMomentum(bhVec2 momentum)
 	{
-		linearV += v;
+		//linearV += v;
+		linearV.x += momentum.x / mass;
+		linearV.y += momentum.y / mass;
 	}
 
 	// Rotate a body. NOTE: ang must be on DEGREES.

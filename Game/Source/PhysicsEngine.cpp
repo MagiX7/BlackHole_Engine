@@ -30,39 +30,27 @@ bhVec2 PhysicsEngine::ForceGravity(float gravity, float mass1, float mass2, floa
 
 void PhysicsEngine::ForceGravity(bhBody& body1)
 {
-	/*bhVec2 forceGravity;
-
-	bhVec2 distance = {};
-	distance = body2.GetPosition() - body1.GetPosition();
-	float distanceMod = sqrt((distance.x*distance.x) + (distance.y*distance.y));
-	
-	
-	float gravityFormule = (gravity * (body1.GetBodyMass() * body2.GetBodyMass()) / (distanceMod * distanceMod));
-	
-	forceGravity.x = direction.x * gravityFormule;
-	forceGravity.y = direction.y * gravityFormule;*/
-	
-	float gravity1 = 0.4f;  // Earth
-	float gravity2 = 0.0f;  // Void
-	float gravity3 = -0.08f; // Moon
+	float gravity = 0.0f;
 
 	if (body1.GetPosition().y > PIXEL_TO_METERS(-5000) && body1.GetPosition().y <= PIXEL_TO_METERS(250))
 	{
-		LOG("ON FIRST IF=====================");
-		float b = gravity1;
-		float m = (gravity1) / PIXEL_TO_METERS(5000);
+		//LOG("ON FIRST IF=====================");
+		gravity = 10.0f;
+		float b = gravity;
+		float m = (gravity) / PIXEL_TO_METERS(5000);
 		float forceGravity = m * body1.GetPosition().y + b;
 		
 		bhVec2 drag = AeroDrag(&body1);
 
 		body1.AddForce(bhVec2(0, forceGravity + drag.y));
-		LOG("%f", forceGravity);
+		//LOG("%f", forceGravity);
 	}
 	else if (body1.GetPosition().y < PIXEL_TO_METERS(-5001) && body1.GetPosition().y >= PIXEL_TO_METERS(-9000))
 	{
-		LOG("ON SECOND IF===================")
-		float b = gravity2;
-		float m = (gravity2) / PIXEL_TO_METERS(9000);
+		//LOG("ON SECOND IF===================")
+		gravity = 0.0f;
+		float b = gravity;
+		float m = (gravity) / PIXEL_TO_METERS(9000);
 		float forceGravity = m * body1.GetPosition().y + b;
 
 		body1.AddForce(bhVec2(0, forceGravity));
@@ -70,10 +58,10 @@ void PhysicsEngine::ForceGravity(bhBody& body1)
 	}
 	else if (body1.GetPosition().y < PIXEL_TO_METERS(-9001) && body1.GetPosition().y >= PIXEL_TO_METERS(-13000))
 	{
-		LOG("ON THIRD IF=====================")
-
-		float b = gravity3;
-		float m = (gravity3) / PIXEL_TO_METERS(9000-13000);
+		//LOG("ON THIRD IF=====================")
+		gravity = -7.08f;
+		float b = gravity;
+		float m = (gravity) / PIXEL_TO_METERS(9000-13000);
 		float forceGravity = m * body1.GetPosition().y + b;
 
 		bhVec2 drag = AeroDrag(&body1);
@@ -82,7 +70,7 @@ void PhysicsEngine::ForceGravity(bhBody& body1)
 	}
 	else
 	{
-		LOG("NO IF==========================")
+		//LOG("NO IF==========================")
 	}
 }
 

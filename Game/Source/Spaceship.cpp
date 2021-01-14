@@ -63,9 +63,9 @@ bool Spaceship::Start()
 {
 	body = app->physics->CreateBody("spaceship", BodyType::DYNAMIC);
 	
-	body->SetPosition(bhVec2(PIXEL_TO_METERS(500), PIXEL_TO_METERS(0)));
+	body->SetPosition(bhVec2(PIXEL_TO_METERS(500), PIXEL_TO_METERS(-12000)));
 	body->SetLinearVelocity(bhVec2(PIXEL_TO_METERS(0), PIXEL_TO_METERS(0)));
-	body->SetMass(0.1);
+	body->SetMass(10);
 	body->SetRadius(PIXEL_TO_METERS(18));
 	body->SetMaxLinearVelocity(bhVec2(PIXEL_TO_METERS(500), PIXEL_TO_METERS(500)));
 	body->SetBodyAngle(0);
@@ -135,6 +135,7 @@ update_status Spaceship::Update(float dt)
 		}
 	}
 
+	LOG("%f  %f", METERS_TO_PIXELS(body->GetPosition().x), METERS_TO_PIXELS(body->GetPosition().y));
 
 	//LOG("%f  %f", body->GetPosition().x, body->GetPosition().y);
 	/*LOG("%f  %f", body->GetLinearVelocity().x, body->GetLinearVelocity().y);*/
@@ -217,7 +218,7 @@ void Spaceship::HandleInput(float dt)
 		{*/
 		double angle = body->GetBodyAngle();
 		bhVec2 mom = bhVec2(cos(angle - 90 * M_PI / 180), sin(angle - 90 * M_PI / 180));
-		body->AddMomentum(bhVec2(PIXEL_TO_METERS(mom.x * dt * 350), PIXEL_TO_METERS(mom.y * dt * 350)));
+		body->AddMomentum(bhVec2(PIXEL_TO_METERS(mom.x * dt * 1000), PIXEL_TO_METERS(mom.y * dt * 1000)));
 		//fuel -= (1.2f * dt);
 	//}
 	}
@@ -240,7 +241,8 @@ void Spaceship::HandleInput(float dt)
 		body->Rotate(-2);
 	}
 
-	if (app->physics->GetWorld()->Intersection(body, app->scene->floor) && fabs(body->GetLinearVelocity().y) > 2)
+	if ((app->physics->GetWorld()->Intersection(body, app->scene->earth) || app->physics->GetWorld()->Intersection(body, app->scene->moon)) &&
+		fabs(body->GetLinearVelocity().y) > 2)
 	{
 		health = 0;
 		body->SetLinearVelocity(0, 0);

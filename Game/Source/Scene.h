@@ -19,8 +19,8 @@ public:
 
 
 public:
-	bhBody* floor;
-	bhBody* floor2;
+	bhBody* earth;
+	bhBody* moon;
 
 	SDL_Texture* bg;
 
