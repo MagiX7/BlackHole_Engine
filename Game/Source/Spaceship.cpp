@@ -63,7 +63,7 @@ bool Spaceship::Start()
 {
 	body = app->physics->CreateBody("spaceship", BodyType::DYNAMIC);
 	
-	body->SetPosition(bhVec2(PIXEL_TO_METERS(500), PIXEL_TO_METERS(-12000)));
+	body->SetPosition(bhVec2(PIXEL_TO_METERS(500), PIXEL_TO_METERS(270)));
 	body->SetLinearVelocity(bhVec2(PIXEL_TO_METERS(0), PIXEL_TO_METERS(0)));
 	body->SetMass(10);
 	body->SetRadius(PIXEL_TO_METERS(18));
@@ -95,6 +95,9 @@ update_status Spaceship::PreUpdate()
 
 update_status Spaceship::Update(float dt)
 {
+	if (body->GetPosition().x < PIXEL_TO_METERS(-7)) body->SetPosition(bhVec2(PIXEL_TO_METERS(1040), body->GetPosition().y));
+	else if(body->GetPosition().x > PIXEL_TO_METERS(1040)) body->SetPosition(bhVec2(PIXEL_TO_METERS(-7), body->GetPosition().y));
+
 	engineOnAnim.speed = 200 * dt;
 	explosionAnim.speed = 400 * dt;
 
@@ -145,6 +148,7 @@ update_status Spaceship::Update(float dt)
 	currentAnim->Update(dt);
 
 	sprintf_s(scoreAstronautsText , 4, "%d", astronautsCollected);
+	sprintf_s(fuelText, 8, "%d", (int)fuel);
 
 	return update_status::UPDATE_CONTINUE;
 }
@@ -168,6 +172,8 @@ void Spaceship::Draw()
 	app->fonts->drawText(63, 25, fontsIndex, "x");
 	app->render->DrawTexture(scoreTexture, 20 + app->render->camera.x, 20 - (app->render->camera.y), NULL);
 
+	app->fonts->drawText(15, 75, fontsIndex, "Fuel");
+	app->fonts->drawText(170, 75, fontsIndex, fuelText);
 }
 
 bool Spaceship::CleanUp()
@@ -214,13 +220,13 @@ void Spaceship::HandleInput(float dt)
 			currentAnim = &engineOnAnim;
 		}
 
-		/*if (-body->GetLinearVelocity().y < body->GetMaxLinearVelocity().y && fuel > 0)
-		{*/
+		if (-body->GetLinearVelocity().y < body->GetMaxLinearVelocity().y && fuel > 0)
+		{
 		double angle = body->GetBodyAngle();
 		bhVec2 mom = bhVec2(cos(angle - 90 * M_PI / 180), sin(angle - 90 * M_PI / 180));
 		body->AddMomentum(bhVec2(PIXEL_TO_METERS(mom.x * dt * 1000), PIXEL_TO_METERS(mom.y * dt * 1000)));
-		//fuel -= (1.2f * dt);
-	//}
+		fuel -= (1.2f * dt);
+		}
 	}
 	if (app->input->GetKey(SDL_SCANCODE_W) == KEY_UP)
 	{

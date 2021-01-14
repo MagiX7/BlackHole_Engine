@@ -55,4 +55,6 @@ private:
 	int scoreFx = 0;
 	SDL_Texture* scoreTexture;
 
+	char fuelText[3] = { "\0" };
+
 };
