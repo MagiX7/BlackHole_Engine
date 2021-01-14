@@ -54,8 +54,17 @@ public:
 	{
 		bhVec2 aux = bhVec2(x, y);
 		float l = sqrt(pow(aux.x, 2) + pow(aux.y, 2));
-		aux = aux / l;
-		return aux;
+		if (l != 0)
+		{
+			aux = aux / l;
+			return aux;
+		}
+		else return { 0,0 };
+	}
+
+	float GetNorm()
+	{
+		return sqrt(pow(x, 2) + pow(y, 2));
 	}
 
 	float Dot(bhVec2& v)

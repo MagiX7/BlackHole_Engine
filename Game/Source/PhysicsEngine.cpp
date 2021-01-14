@@ -70,7 +70,7 @@ void PhysicsEngine::ForceGravity(bhBody& body1)
 	}
 	else if (body1.GetPosition().y < PIXEL_TO_METERS(-9001) && body1.GetPosition().y >= PIXEL_TO_METERS(-13000))
 	{
-		LOG("ON THIRD IF")
+		LOG("ON THIRD IF=====================")
 
 		float b = gravity3;
 		float m = (gravity3) / PIXEL_TO_METERS(9000-13000);
@@ -93,25 +93,26 @@ bhVec2 PhysicsEngine::Gravity()
 
 bhVec2 PhysicsEngine::AeroDrag(bhBody* b)
 {
-	float density = b->GetBodyMass() /*b->*/;
+	//float density = b->GetBodyMass() /*b->*/;
 
-	// Re = (Vs*Lc)/v
-	// Where Re is Reynolds number
-	// Vs is characteristic fluid velocity
-	// v is kinematic viscosity 
+	//float area = M_PI * b->GetBodyRadius() * b->GetBodyRadius();
+	//area /= 2;
+	//float x = aeroDrag * area * ((density * (b->GetLinearVelocity().x * b->GetLinearVelocity().x)) / 2);
+	//float y = aeroDrag * area * ((density * (b->GetLinearVelocity().y * b->GetLinearVelocity().y)) / 2);
+	//
+	//bhVec2 dragForce = bhVec2(x, y);
 
+	float v = b->GetLinearVelocity().GetNorm();
 	float area = M_PI * b->GetBodyRadius() * b->GetBodyRadius();
-	float Lc = sqrt(area);
-	float reynolds = (1.5 /* Air velocity*/ * Lc) / 13.3f /*air viscosity*/;
-	
 	area /= 2;
-	float x = aeroDrag * area * ((density * (b->GetLinearVelocity().x * b->GetLinearVelocity().x)) / 2);
-	float y = aeroDrag * area * ((density * (b->GetLinearVelocity().y * b->GetLinearVelocity().y)) / 2);
 
-	
-	bhVec2 dragForce = bhVec2(x, y);
+	float drag;
+	drag = (0.32f * 0.2f * v * v * area) / 2;
 
-	return dragForce;
+	bhVec2 dir = b->GetLinearVelocity().Normalize().Negate();
+
+	bhVec2 dragVec = dir * drag;
+	return dragVec;
 }
 
 bhVec2 PhysicsEngine::AeroLift(bhBody* b)

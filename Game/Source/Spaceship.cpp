@@ -98,92 +98,35 @@ update_status Spaceship::Update(float dt)
 	engineOnAnim.speed = 200 * dt;
 	explosionAnim.speed = 400 * dt;
 
-	if (app->input->GetKey(SDL_SCANCODE_E) == KEY_DOWN)
+	if (health > 0)
 	{
-		if (currentAnim != &flyAnim)
+		HandleInput(dt);
+
+		if (app->asteroidManager->CheckCollision(body) == true)
 		{
-			flyAnim.Reset();
-			currentAnim = &flyAnim;
-		}
-		else if (currentAnim != &idleAnim)
-		{
-			idleAnim.Reset();
-			currentAnim = &idleAnim;
-		}
-	}
-	float er = body->GetBodyGravity();
-	
-	if (app->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT)
-	{
-		if (currentAnim != &engineOnAnim)
-		{
-			engineOnAnim.Reset();
-			currentAnim = &engineOnAnim;
+			health = 0;
+			body->SetLinearVelocity(0, 0);
+			if (currentAnim != &explosionAnim)
+			{
+				explosionAnim.Reset();
+				currentAnim = &explosionAnim;
+			}
 		}
 
-		/*if (-body->GetLinearVelocity().y < body->GetMaxLinearVelocity().y && fuel > 0)
-		{*/
-			double angle = body->GetBodyAngle();
-			bhVec2 mom = bhVec2(cos(angle - 90 * M_PI / 180), sin(angle - 90 * M_PI / 180));
-			body->AddMomentum(bhVec2(PIXEL_TO_METERS(mom.x * dt * 250), PIXEL_TO_METERS(mom.y * dt * 250)));
-			//fuel -= (1.2f * dt);
-		//}
-	}
-	if (app->input->GetKey(SDL_SCANCODE_W) == KEY_UP)
-	{
-		if (currentAnim != &flyAnim)
+		p2List_item <Astronaut*>* item = app->astronautManager->astronautsList.getFirst();
+
+		while (item != nullptr)
 		{
-			flyAnim.Reset();
-			currentAnim = &flyAnim;
+			if (app->physics->GetWorld()->Intersection(body, item->data->GetBody()))
+			{
+				app->astronautManager->DeleteAstronaut(item->data->GetBody());
+				AddScore();
+			}
+
+			item = item->next;
 		}
 	}
-
-	if (app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT && body->GetLinearVelocity().x < body->GetMaxLinearVelocity().x)
-	{
-		body->Rotate(2);
-	}
-
-	if (app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT && -body->GetLinearVelocity().x < body->GetMaxLinearVelocity().x)
-	{
-		body->Rotate(-2);
-	}
-
-	if (app->physics->GetWorld()->Intersection(body, app->scene->floor) && fabs(body->GetLinearVelocity().y) > 2)
-	{
-		health = 0;
-		body->SetLinearVelocity(0, 0);
-		if (currentAnim != &explosionAnim)
-		{
-			explosionAnim.Reset();
-			currentAnim = &explosionAnim;
-		}
-	}
-
-	if (app->asteroidManager->CheckCollision(body) == true)
-	{
-		health = 0;
-		body->SetLinearVelocity(0, 0);
-		if (currentAnim != &explosionAnim)
-		{
-			explosionAnim.Reset();
-			currentAnim = &explosionAnim;
-		}
-	}
-
-	p2List_item <Astronaut*>* item = app->astronautManager->astronautsList.getFirst();
-
-	while (item != nullptr)
-	{
-		if (app->physics->GetWorld()->Intersection(body, item->data->GetBody()))
-		{
-			app->astronautManager->DeleteAstronaut(item->data->GetBody());
-			AddScore();
-		}
-
-		item = item->next;
-	}
-
-	if (health <= 0)
+	else if (health <= 0)
 	{
 		if (explosionAnim.HasFinished())
 		{
@@ -244,4 +187,67 @@ void Spaceship::AddScore()
 {
 	astronautsCollected++;
 	app->audio->PlayFx(scoreFx);
+}
+
+void Spaceship::HandleInput(float dt)
+{
+	if (app->input->GetKey(SDL_SCANCODE_E) == KEY_DOWN)
+	{
+		if (currentAnim != &flyAnim)
+		{
+			flyAnim.Reset();
+			currentAnim = &flyAnim;
+		}
+		else if (currentAnim != &idleAnim)
+		{
+			idleAnim.Reset();
+			currentAnim = &idleAnim;
+		}
+	}
+
+	if (app->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT)
+	{
+		if (currentAnim != &engineOnAnim)
+		{
+			engineOnAnim.Reset();
+			currentAnim = &engineOnAnim;
+		}
+
+		/*if (-body->GetLinearVelocity().y < body->GetMaxLinearVelocity().y && fuel > 0)
+		{*/
+		double angle = body->GetBodyAngle();
+		bhVec2 mom = bhVec2(cos(angle - 90 * M_PI / 180), sin(angle - 90 * M_PI / 180));
+		body->AddMomentum(bhVec2(PIXEL_TO_METERS(mom.x * dt * 350), PIXEL_TO_METERS(mom.y * dt * 350)));
+		//fuel -= (1.2f * dt);
+	//}
+	}
+	if (app->input->GetKey(SDL_SCANCODE_W) == KEY_UP)
+	{
+		if (currentAnim != &flyAnim)
+		{
+			flyAnim.Reset();
+			currentAnim = &flyAnim;
+		}
+	}
+
+	if (app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT && body->GetLinearVelocity().x < body->GetMaxLinearVelocity().x)
+	{
+		body->Rotate(2);
+	}
+
+	if (app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT && -body->GetLinearVelocity().x < body->GetMaxLinearVelocity().x)
+	{
+		body->Rotate(-2);
+	}
+
+	if (app->physics->GetWorld()->Intersection(body, app->scene->floor) && fabs(body->GetLinearVelocity().y) > 2)
+	{
+		health = 0;
+		body->SetLinearVelocity(0, 0);
+		if (currentAnim != &explosionAnim)
+		{
+			explosionAnim.Reset();
+			currentAnim = &explosionAnim;
+		}
+	}
 }

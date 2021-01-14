@@ -28,7 +28,7 @@ public:
 	void LaunchMissile();
 	void AddScore();
 
-
+	void HandleInput(float dt);
 public:
 	float health = 100.0f;
 	float fuel = 0.0f;
