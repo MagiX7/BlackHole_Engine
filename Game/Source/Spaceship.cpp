@@ -63,13 +63,14 @@ bool Spaceship::Start()
 {
 	body = app->physics->CreateBody("spaceship", BodyType::DYNAMIC);
 	
-	body->SetPosition(bhVec2(PIXEL_TO_METERS(500), PIXEL_TO_METERS(270)));
+	body->SetPosition(bhVec2(PIXEL_TO_METERS(500), PIXEL_TO_METERS(170)));
 	body->SetLinearVelocity(bhVec2(PIXEL_TO_METERS(0), PIXEL_TO_METERS(0)));
 	body->SetMass(10);
 	body->SetRadius(PIXEL_TO_METERS(18));
 	body->SetMaxLinearVelocity(bhVec2(PIXEL_TO_METERS(500), PIXEL_TO_METERS(500)));
 	body->SetBodyAngle(0);
 	fuel = 50.0f;
+	health = 100;
 
 	astronautsCollected = 0;
 	
@@ -134,7 +135,9 @@ update_status Spaceship::Update(float dt)
 		{
 			body->SetActive(false);
 			CleanUp();
+			Start();
 		}
+
 	}
 
 	LOG("%f  %f", METERS_TO_PIXELS(body->GetPosition().x), METERS_TO_PIXELS(body->GetPosition().y));
