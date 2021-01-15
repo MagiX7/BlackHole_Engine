@@ -1,27 +1,36 @@
 #pragma once
 
 #include "Module.h"
+#include "Scenes.h"
 #include "Astronaut.h"
 
 class bhBody;
+class Spaceship;
+class AstronautManager;
+class AsteroidManager;
 
-class Scene : public Module
+struct SDL_Texture;
+
+class Scene : public Scenes
 {
 public:
-	Scene(App* parent, bool startEnabled = true);
-	~Scene();
+	Scene(App* parent);
+	virtual ~Scene();
 
-	bool Start() override;
-	update_status PreUpdate() override;
-	update_status Update(float dt) override;
-	update_status PostUpdate() override;
-	bool CleanUp() override;
+	bool Load(Texture* tex, SDL_Texture* bg) override;
+	update_status Update(Input* input, float dt) override;
+	update_status Draw(Render* ren) override;
+	bool Unload(Texture* tex) override;
 
 
 public:
 	bhBody* earth;
 	bhBody* moon;
 
-	SDL_Texture* bg;
+	Spaceship* spaceship;
 
+	SDL_Texture* bg;
+	App* app;
+	AsteroidManager* asteroidManager;
+	AstronautManager* astronautManager;
 };

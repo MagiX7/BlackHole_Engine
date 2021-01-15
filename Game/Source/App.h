@@ -9,12 +9,9 @@
 #include "Input.h"
 #include "Fonts.h"
 #include "Audio.h"
-#include "Scene.h"
+#include "SceneManager.h"
 #include "Render.h"
 #include "Texture.h"
-#include "AstronautManager.h"
-#include "AsteroidManager.h"
-#include "Spaceship.h"
 #include "Physics.h"
 
 class App
@@ -23,13 +20,10 @@ public:
 	Window* window;
 	Input* input;
 	Audio* audio;
-	Scene* scene;
+	SceneManager* sceneManager;
 	Render* render;
 	Texture* tex;
-	Spaceship* spaceship;
 	Physics* physics;
-	AstronautManager* astronautManager;
-	AsteroidManager* asteroidManager;
 	Fonts* fonts;
 
 private:

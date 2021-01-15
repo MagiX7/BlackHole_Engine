@@ -50,11 +50,17 @@
     <ClCompile Include="Source\Collider.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Scene.cpp">
-      <Filter>Modules</Filter>
-    </ClCompile>
     <ClCompile Include="Source\PhysicsEngine.cpp">
       <Filter>Physics Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Scene.cpp">
+      <Filter>Modules\Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\SceneManager.cpp">
+      <Filter>Modules\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\SceneTitle.cpp">
+      <Filter>Modules\Scenes</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -139,11 +145,20 @@
     <ClInclude Include="Source\Collider.h">
       <Filter>Utils</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Scene.h">
-      <Filter>Modules</Filter>
-    </ClInclude>
     <ClInclude Include="Source\PhysicsEngine.h">
       <Filter>Physics Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Scene.h">
+      <Filter>Modules\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\SceneManager.h">
+      <Filter>Modules\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Scenes.h">
+      <Filter>Modules\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\SceneTitle.h">
+      <Filter>Modules\Scenes</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -164,6 +179,9 @@
     </Filter>
     <Filter Include="Physics Engine">
       <UniqueIdentifier>{a5317353-749a-4bcf-9b40-4230bb03553e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Modules\Scenes">
+      <UniqueIdentifier>{bb8a417f-218e-4c8d-b168-2303f0a80bb6}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

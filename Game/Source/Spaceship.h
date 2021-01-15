@@ -2,18 +2,19 @@
 
 #include "bhBody.h"
 #include "Animation.h"
+#include "Scene.h"
 
-class SDL_Texture;
+struct SDL_Texture;
 
-class Spaceship : public Module
+class Spaceship
 {
 public:
-	Spaceship(App* app, bool start_enabled = true);
+	Spaceship(App* app, Scene* gameplay);
 	~Spaceship();
 
 	bool Start();
 	update_status PreUpdate();
-	update_status Update(float dt);
+	update_status Update(float dt, AsteroidManager* asteroid, AstronautManager* astronaut);
 	void Draw();
 	bool CleanUp();
 
@@ -58,4 +59,6 @@ private:
 
 	char fuelText[3] = { "\0" };
 
+	App* app;
+	Scene* scene;
 };

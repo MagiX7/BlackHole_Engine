@@ -4,16 +4,12 @@
 #include "Physics.h"
 
 
-
-AstronautManager::AstronautManager(App* app, bool start_enabled): Module(app, start_enabled)
+AstronautManager::AstronautManager()
 {
-
 }
 
 bool AstronautManager::Start()
 {
-	astronautTexture = app->tex->Load("Assets/Textures/astronaut.png");
-	
 	p2List_item<Astronaut*>* item = astronautsList.getFirst();
 
 	while (item != nullptr)
@@ -23,13 +19,10 @@ bool AstronautManager::Start()
 		item = item->next;
 	}
 
-
-
 	return true;
 }
 
-
-update_status AstronautManager::Update(float dt)
+bool AstronautManager::Update(float dt)
 {
 	p2List_item<Astronaut*>* item = astronautsList.getFirst();
 
@@ -40,16 +33,12 @@ update_status AstronautManager::Update(float dt)
 		item = item->next;
 	}
 
-	return update_status::UPDATE_CONTINUE;
+	return true;
 }
 
-update_status AstronautManager::PostUpdate()
+bool AstronautManager::CleanUp(Texture* tex)
 {
-	return update_status::UPDATE_CONTINUE;
-}
-
-bool AstronautManager::CleanUp()
-{
+	LOG("Unloading Astronaut Manager");
 	p2List_item<Astronaut*>* item = astronautsList.getFirst();
 
 	while (item != nullptr)
@@ -59,28 +48,29 @@ bool AstronautManager::CleanUp()
 		item = item->next;
 	}
 	
-	app->tex->UnLoad(astronautTexture);
+	tex->UnLoad(astronautTexture);
+	astronautsList.clear();
 
-	return false;
+	return true;
 }
 
-void AstronautManager::Draw()
+void AstronautManager::Draw(Render* render)
 {
 	p2List_item<Astronaut*>* item = astronautsList.getFirst();
 
 	while (item != nullptr)
 	{
-		app->render->DrawTexture(item->data->texture, METERS_TO_PIXELS(item->data->GetBody()->GetPosition().x - 15), METERS_TO_PIXELS(item->data->GetBody()->GetPosition().y - 15), NULL, 1.0f, item->data->GetBody()->GetBodyAngle() * 180 / M_PI);
-		app->render->DrawCircle(METERS_TO_PIXELS(item->data->GetBody()->GetPosition().x), METERS_TO_PIXELS(item->data->GetBody()->GetPosition().y), METERS_TO_PIXELS(item->data->GetBody()->GetBodyRadius()), 255, 0, 0);
+		render->DrawTexture(item->data->texture, METERS_TO_PIXELS(item->data->GetBody()->GetPosition().x - 15), METERS_TO_PIXELS(item->data->GetBody()->GetPosition().y - 15), NULL, 1.0f, item->data->GetBody()->GetBodyAngle() * 180 / M_PI);
+		render->DrawCircle(METERS_TO_PIXELS(item->data->GetBody()->GetPosition().x), METERS_TO_PIXELS(item->data->GetBody()->GetPosition().y), METERS_TO_PIXELS(item->data->GetBody()->GetBodyRadius()), 255, 0, 0);
 		
 		item = item->next;
 	}
 }
 
-Astronaut* AstronautManager::CreateAstronaut(int radius, bhVec2 initialPos)
+Astronaut* AstronautManager::CreateAstronaut(int radius, bhVec2 initialPos, Physics* physics)
 {
 	Astronaut* astronaut = new Astronaut();
-	bhBody* astronautBody = app->physics->CreateBody("astronaut", BodyType::SENSOR);
+	bhBody* astronautBody = physics->CreateBody("astronaut", BodyType::SENSOR);
 	initialPos.x = PIXEL_TO_METERS(initialPos.x);
 	initialPos.y = PIXEL_TO_METERS(initialPos.y);
 	astronaut->SetInitialPos(initialPos);
@@ -95,7 +85,7 @@ Astronaut* AstronautManager::CreateAstronaut(int radius, bhVec2 initialPos)
 	return astronaut;
 }
 
-void AstronautManager::DeleteAstronaut(Astronaut* astronaut)
+void AstronautManager::DeleteAstronaut(Astronaut* astronaut, Physics* physics)
 {
 	p2List_item<Astronaut*>* item = astronautsList.getFirst();
 
@@ -103,7 +93,7 @@ void AstronautManager::DeleteAstronaut(Astronaut* astronaut)
 	{
 		if (item->data == astronaut)
 		{
-			app->physics->DestroyBody(item->data->GetBody());
+			physics->DestroyBody(item->data->GetBody());
 			delete item->data;
 			astronautsList.del(item);
 		}
@@ -113,7 +103,7 @@ void AstronautManager::DeleteAstronaut(Astronaut* astronaut)
 
 }
 
-void AstronautManager::DeleteAstronaut(bhBody* astronaut)
+void AstronautManager::DeleteAstronaut(bhBody* astronaut, Physics* physics)
 {
 	p2List_item<Astronaut*>* item = astronautsList.getFirst();
 
@@ -121,11 +111,16 @@ void AstronautManager::DeleteAstronaut(bhBody* astronaut)
 	{
 		if (item->data->GetBody() == astronaut)
 		{
-			app->physics->DestroyBody(item->data->GetBody());
+			physics->DestroyBody(item->data->GetBody());
 			delete item->data;
 			astronautsList.del(item);
 		}
 
 		item = item->next;
 	}
+}
+
+void AstronautManager::SetTexture(Texture* tex)
+{
+	astronautTexture = tex->Load("Assets/Textures/astronaut.png");
 }

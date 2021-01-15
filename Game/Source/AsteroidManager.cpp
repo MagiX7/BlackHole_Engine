@@ -3,7 +3,7 @@
 #include "AsteroidManager.h"
 #include "Physics.h"
 
-AsteroidManager::AsteroidManager(App* parent, bool startEnabled) : Module(parent, startEnabled)
+AsteroidManager::AsteroidManager()
 {
 }
 
@@ -13,8 +13,6 @@ AsteroidManager::~AsteroidManager()
 
 bool AsteroidManager::Start()
 {
-	texture = app->tex->Load("Assets/Textures/Asteroid.png");
-
 	p2List_item<Asteroid*>* item = asteroidList.getFirst();
 
 	while (item != nullptr)
@@ -27,7 +25,7 @@ bool AsteroidManager::Start()
 	return true;
 }
 
-update_status AsteroidManager::Update(float dt)
+bool AsteroidManager::Update(float dt)
 {
 	p2List_item<Asteroid*>* item = asteroidList.getFirst();
 
@@ -38,25 +36,26 @@ update_status AsteroidManager::Update(float dt)
 		item = item->next;
 	}
 
-	return update_status::UPDATE_CONTINUE;
+	return true;
 }
 
-void AsteroidManager::Draw()
+void AsteroidManager::Draw(Render* render)
 {
 	p2List_item<Asteroid*>* item = asteroidList.getFirst();
 
 	while (item != nullptr)
 	{
 		float rad = METERS_TO_PIXELS(item->data->GetBody()->GetBodyRadius());
-		app->render->DrawTexture(item->data->texture, METERS_TO_PIXELS(item->data->GetBody()->GetPosition().x - rad), METERS_TO_PIXELS(item->data->GetBody()->GetPosition().y - rad), NULL);
-		app->render->DrawCircle(METERS_TO_PIXELS(item->data->GetBody()->GetPosition().x), METERS_TO_PIXELS(item->data->GetBody()->GetPosition().y), rad, 255, 0, 0);
+		render->DrawTexture(item->data->texture, METERS_TO_PIXELS(item->data->GetBody()->GetPosition().x - rad), METERS_TO_PIXELS(item->data->GetBody()->GetPosition().y - rad), NULL);
+		render->DrawCircle(METERS_TO_PIXELS(item->data->GetBody()->GetPosition().x), METERS_TO_PIXELS(item->data->GetBody()->GetPosition().y), rad, 255, 0, 0);
 
 		item = item->next;
 	}
 }
 
-bool AsteroidManager::CleanUp()
+bool AsteroidManager::CleanUp(Texture* tex)
 {
+	LOG("Unloading Asteroid Manager");
 	p2List_item<Asteroid*>* item = asteroidList.getFirst();
 
 	while (item != nullptr)
@@ -66,13 +65,16 @@ bool AsteroidManager::CleanUp()
 		item = item->next;
 	}
 
+	tex->UnLoad(texture);
+	asteroidList.clear();
+
 	return true;
 }
 
-Asteroid* AsteroidManager::CreateAsteroid(int radius, bhVec2 position)
+Asteroid* AsteroidManager::CreateAsteroid(int radius, bhVec2 position, Physics* physics)
 {
 	Asteroid* asteroid = new Asteroid();
-	bhBody* asteroidBody = app->physics->CreateBody("asteroid", BodyType::NO_GRAVITY);
+	bhBody* asteroidBody = physics->CreateBody("asteroid", BodyType::NO_GRAVITY);
 	position.x = PIXEL_TO_METERS(position.x);
 	position.y = PIXEL_TO_METERS(position.y);
 	asteroidBody->SetRadius(PIXEL_TO_METERS(radius));
@@ -101,13 +103,18 @@ void AsteroidManager::DestroyAsteroid(Asteroid* ast)
 	}
 }
 
-bool AsteroidManager::CheckCollision(bhBody* body)
+void AsteroidManager::SetTexture(Texture* tex)
+{
+	texture = tex->Load("Assets/Textures/Asteroid.png");
+}
+
+bool AsteroidManager::CheckCollision(bhBody* body, Physics* physics)
 {
 	p2List_item<Asteroid*>* item = asteroidList.getFirst();
 
 	while (item != nullptr)
 	{
-		if (app->physics->GetWorld()->Intersection(body, item->data->GetBody()))
+		if (physics->GetWorld()->Intersection(body, item->data->GetBody()))
 		{
 			return true;
 		}

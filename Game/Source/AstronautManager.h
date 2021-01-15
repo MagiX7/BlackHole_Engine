@@ -9,21 +9,21 @@
 
 class SDL_Texture;
 
-class AstronautManager : public Module
+class AstronautManager
 {
 public:
-	AstronautManager(App* app, bool start_enabled = true);
+	AstronautManager();
 	~AstronautManager(){}
 
-	bool Start() override;
-	update_status Update(float dt) override;
-	update_status PostUpdate() override;
-	bool CleanUp() override;
-	void Draw();
+	bool Start();
+	bool Update(float dt);
+	bool CleanUp(Texture* tex);
+	void Draw(Render* ren);
 
-	Astronaut* CreateAstronaut(int radius, bhVec2 initialPos);
-	void DeleteAstronaut(Astronaut* astronaut);
-	void DeleteAstronaut(bhBody* astronaut);
+	Astronaut* CreateAstronaut(int radius, bhVec2 initialPos, Physics* physics);
+	void DeleteAstronaut(Astronaut* astronaut, Physics* physics);
+	void DeleteAstronaut(bhBody* astronaut, Physics* physics);
+	void SetTexture(Texture* tex);
 
 	p2List<Astronaut*> astronautsList;
 

@@ -53,35 +53,13 @@ update_status Render::Update(float dt)
 {
 	int speed = 10;
 
-	if(app->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
-		app->render->camera.y += speed;
+	if(app->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT) camera.y += speed;
 
-	if(app->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT)
-		app->render->camera.y -= speed;
+	if(app->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT) camera.y -= speed;
 
-	if(app->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT)
-		app->render->camera.x += speed;
+	if(app->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT) camera.x += speed;
 
-	if(app->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
-		app->render->camera.x -= speed;
-	
-	camera.y = METERS_TO_PIXELS(-app->spaceship->GetBody()->GetPosition().y + SCREEN_HEIGHT / 2 + offset);
-
-	camera.x = 0;
-
-	if (app->spaceship->GetBody()->GetLinearVelocity().y < 0)
-	{
-		if (offset < 200) offset += 150 * dt;
-	}
-	if (app->spaceship->GetBody()->GetLinearVelocity().y > 0)
-	{
-		if (offset > -200) offset -= 150 * dt;
-	}
-
-	if (app->render->camera.y <= 400) app->render->camera.y = 400;
-	if (app->render->camera.y >= 12500) app->render->camera.y = 12500;
-
-	LOG("POSITION %d %d=========================================================", camera.x, camera.y);
+	if(app->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT) camera.x -= speed;
 
 	return update_status::UPDATE_CONTINUE;
 }

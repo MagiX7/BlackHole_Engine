@@ -5,26 +5,29 @@
 #include "p2List.h"
 
 class SDL_Texture;
+class Physics;
 
-class AsteroidManager : public Module
+class AsteroidManager
 {
 public:
-	AsteroidManager(App* parent, bool startEnabled = true);
+	AsteroidManager();
 	~AsteroidManager();
 
-	bool Start() override;
-	update_status Update(float dt) override;
-	void Draw();
-	bool CleanUp() override;
+	bool Start();
+	bool Update(float dt);
+	void Draw(Render* render);
+	bool CleanUp(Texture* tex);
 
-	Asteroid* CreateAsteroid(int radius, bhVec2 position);
+	Asteroid* CreateAsteroid(int radius, bhVec2 position, Physics* physics);
 	void DestroyAsteroid(Asteroid* ast);
+	void SetTexture(Texture* tex);
 
-	bool CheckCollision(bhBody* body);
+	bool CheckCollision(bhBody* body, Physics* physics);
 	
 public:
 
 	p2List<Asteroid*> asteroidList;
 
 	SDL_Texture* texture;
+	App* app;
 };

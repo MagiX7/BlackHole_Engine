@@ -2,10 +2,12 @@
 #include "Texture.h"
 #include "Render.h"
 #include "Physics.h"
+#include "AsteroidManager.h"
+#include "AstronautManager.h"
 
 #include "Spaceship.h"
 
-Spaceship::Spaceship(App* app, bool start_enabled) : Module(app, start_enabled)
+Spaceship::Spaceship(App* parent, Scene* gameplay)
 {
 	//idleAnim.PushBack({ 11,13, 18,15 });
 
@@ -53,6 +55,8 @@ Spaceship::Spaceship(App* app, bool start_enabled) : Module(app, start_enabled)
 	explosionAnim.PushBack({ 206,156,58,52 });
 	explosionAnim.loop = false;
 
+	this->app = parent;
+	this->scene = gameplay;
 }
 
 Spaceship::~Spaceship()
@@ -63,12 +67,13 @@ bool Spaceship::Start()
 {
 	body = app->physics->CreateBody("spaceship", BodyType::DYNAMIC);
 	
-	body->SetPosition(bhVec2(PIXEL_TO_METERS(500), PIXEL_TO_METERS(170)));
+	body->SetPosition(bhVec2(PIXEL_TO_METERS(500), PIXEL_TO_METERS(-300)));
 	body->SetLinearVelocity(bhVec2(PIXEL_TO_METERS(0), PIXEL_TO_METERS(0)));
 	body->SetMass(10);
 	body->SetRadius(PIXEL_TO_METERS(18));
 	body->SetMaxLinearVelocity(bhVec2(PIXEL_TO_METERS(500), PIXEL_TO_METERS(500)));
 	body->SetBodyAngle(0);
+
 	fuel = 50.0f;
 	health = 100;
 
@@ -79,7 +84,6 @@ bool Spaceship::Start()
 	texture = app->tex->Load("Assets/Textures/Spaceship/sheet.png");
 	scoreFx = app->audio->LoadFx("Assets/Audio/pickup_fx.wav");
 	scoreTexture = app->tex->Load("Assets/Textures/astronaut_score.png");
-
 
 	char lookupTable[] = { "0123456789?ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!    " };
 	fontsIndex = app->fonts->Load("Assets/Textures/fonts.png", lookupTable, 1);
@@ -93,7 +97,7 @@ update_status Spaceship::PreUpdate()
 	return update_status::UPDATE_CONTINUE;
 }
 
-update_status Spaceship::Update(float dt)
+update_status Spaceship::Update(float dt, AsteroidManager* asteroid, AstronautManager* astronaut)
 {
 	if (body->GetPosition().x < PIXEL_TO_METERS(-7)) body->SetPosition(bhVec2(PIXEL_TO_METERS(1040), body->GetPosition().y));
 	else if(body->GetPosition().x > PIXEL_TO_METERS(1040)) body->SetPosition(bhVec2(PIXEL_TO_METERS(-7), body->GetPosition().y));
@@ -105,24 +109,24 @@ update_status Spaceship::Update(float dt)
 	{
 		HandleInput(dt);
 
-		if ((app->physics->GetWorld()->Intersection(body, app->scene->earth) || app->physics->GetWorld()->Intersection(body, app->scene->moon)) &&
+		if ((app->physics->GetWorld()->Intersection(body, scene->earth) || app->physics->GetWorld()->Intersection(body, scene->moon)) &&
 			fabs(body->GetLinearVelocity().y) > 2)
 		{
 			Dead();
 		}
 
-		if (app->asteroidManager->CheckCollision(body) == true)
+		if (asteroid->CheckCollision(body, app->physics) == true)
 		{
 			Dead();
 		}
 
-		p2List_item <Astronaut*>* item = app->astronautManager->astronautsList.getFirst();
+		p2List_item <Astronaut*>* item = astronaut->astronautsList.getFirst();
 
 		while (item != nullptr)
 		{
 			if (app->physics->GetWorld()->Intersection(body, item->data->GetBody()))
 			{
-				app->astronautManager->DeleteAstronaut(item->data->GetBody());
+				astronaut->DeleteAstronaut(item->data->GetBody(), app->physics);
 				AddScore();
 			}
 
@@ -131,13 +135,11 @@ update_status Spaceship::Update(float dt)
 	}
 	else if (health <= 0)
 	{
+		body->SetLinearVelocity(0, 0);
 		if (explosionAnim.HasFinished())
 		{
 			body->SetActive(false);
-			CleanUp();
-			Start();
 		}
-
 	}
 
 	LOG("%f  %f", METERS_TO_PIXELS(body->GetPosition().x), METERS_TO_PIXELS(body->GetPosition().y));
@@ -161,11 +163,10 @@ void Spaceship::Draw()
 	if(currentAnim == &explosionAnim)
 		app->render->DrawTexture(texture, METERS_TO_PIXELS(body->GetPosition().x - 28), METERS_TO_PIXELS(body->GetPosition().y - 25), &currentAnim->GetCurrentFrame(), 1.0f, body->GetBodyAngle() * 180 / M_PI);
 	else
-
-	app->render->DrawTexture(texture, METERS_TO_PIXELS(body->GetPosition().x - 18), METERS_TO_PIXELS(body->GetPosition().y - 15), &currentAnim->GetCurrentFrame(), 1.0f, body->GetBodyAngle() * 180 / M_PI);
+		app->render->DrawTexture(texture, METERS_TO_PIXELS(body->GetPosition().x - 18), METERS_TO_PIXELS(body->GetPosition().y - 15), &currentAnim->GetCurrentFrame(), 1.0f, body->GetBodyAngle() * 180 / M_PI);
 	
-	if (missile != nullptr)
-		app->render->DrawQuad({ (int)body->GetPosition().x, (int)body->GetPosition().y, 2,8 }, 255, 0, 0, 200);
+	//if (missile != nullptr)
+	//	app->render->DrawQuad({ (int)body->GetPosition().x, (int)body->GetPosition().y, 2,8 }, 255, 0, 0, 200);
 
 	// Draw collider
 	app->render->DrawCircle(METERS_TO_PIXELS(body->GetPosition().x), METERS_TO_PIXELS(body->GetPosition().y), METERS_TO_PIXELS(body->GetBodyRadius()), 255, 0, 0);
@@ -223,10 +224,10 @@ void Spaceship::HandleInput(float dt)
 
 		if (-body->GetLinearVelocity().y < body->GetMaxLinearVelocity().y && fuel > 0)
 		{
-		double angle = body->GetBodyAngle();
-		bhVec2 mom = bhVec2(cos(angle - 90 * M_PI / 180), sin(angle - 90 * M_PI / 180));
-		body->AddMomentum(bhVec2(PIXEL_TO_METERS(mom.x * dt * 1000), PIXEL_TO_METERS(mom.y * dt * 1000)));
-		fuel -= (1.2f * dt);
+			double angle = body->GetBodyAngle();
+			bhVec2 mom = bhVec2(cos(angle - 90 * M_PI / 180), sin(angle - 90 * M_PI / 180));
+			body->AddMomentum(bhVec2(PIXEL_TO_METERS(mom.x * dt * 1000), PIXEL_TO_METERS(mom.y * dt * 1000)));
+			fuel -= (1.2f * dt);
 		}
 	}
 	if (app->input->GetKey(SDL_SCANCODE_W) == KEY_UP)
@@ -251,10 +252,10 @@ void Spaceship::HandleInput(float dt)
 
 void Spaceship::Dead()
 {
-	health = 0;
-	body->SetLinearVelocity(0, 0);
 	if (currentAnim != &explosionAnim)
 	{
+		health = 0;
+		body->SetLinearVelocity(0, 0);
 		explosionAnim.Reset();
 		currentAnim = &explosionAnim;
 	}
