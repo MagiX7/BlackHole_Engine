@@ -55,7 +55,7 @@ public:
 	void AddForce(bhVec2 f)
 	{
 		//force += f;
-		acceleration = f / mass;
+		acceleration += f / mass;
 	}
 	
 	void AddMomentum(bhVec2 momentum)
@@ -134,6 +134,11 @@ public:
 		angle = a;
 	}
 	
+	void SetAcceleration(bhVec2 acc)
+	{
+		acceleration.x = acc.x;
+		acceleration.y = acc.y;
+	}
 	// ===================================================
 	//					Getters
 	// ===================================================

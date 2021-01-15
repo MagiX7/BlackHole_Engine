@@ -76,6 +76,8 @@ update_status Scene::PostUpdate()
 	app->spaceship->Draw();
 	app->astronautManager->Draw();
 	app->asteroidManager->Draw();
+
+	app->render->DrawQuad(SDL_Rect{ 0,-800, 2000, 2 }, 255, 0, 0);
 		
 	app->render->DrawCircle(METERS_TO_PIXELS(earth->GetPosition().x), METERS_TO_PIXELS(earth->GetPosition().y), METERS_TO_PIXELS(earth->GetBodyRadius()), 255, 0, 0);
 	app->render->DrawCircle(METERS_TO_PIXELS(moon->GetPosition().x), METERS_TO_PIXELS(moon->GetPosition().y), METERS_TO_PIXELS(moon->GetBodyRadius()), 255, 0, 0);

@@ -6,7 +6,6 @@
 
 PhysicsEngine::PhysicsEngine()
 {
-	gravity = bhVec2(PIXEL_TO_METERS(0), PIXEL_TO_METERS(100));
 	aeroDrag = 0.01f;
 	aeroLift = 0.3f;
 	hydroDrag = 0.3f;
@@ -39,11 +38,13 @@ void PhysicsEngine::ForceGravity(bhBody& body1)
 		float b = gravity;
 		float m = (gravity) / PIXEL_TO_METERS(5000);
 		float forceGravity = m * body1.GetPosition().y + b;
-		
 		bhVec2 drag = AeroDrag(&body1);
 
-		body1.AddForce(bhVec2(0, forceGravity + drag.y));
-		//LOG("%f", forceGravity);
+		body1.AddForce(bhVec2(drag));
+		body1.AddForce(bhVec2(0, forceGravity));
+
+		LOG("FORCE GRAVITY %f", forceGravity);
+		LOG("DRAG FORCE %f", drag.y);
 	}
 	else if (body1.GetPosition().y < PIXEL_TO_METERS(-5001) && body1.GetPosition().y >= PIXEL_TO_METERS(-9000))
 	{
@@ -81,25 +82,19 @@ bhVec2 PhysicsEngine::Gravity()
 
 bhVec2 PhysicsEngine::AeroDrag(bhBody* b)
 {
-	//float density = b->GetBodyMass() /*b->*/;
+	bhVec2 dragVec = { 0,0 };
+	if (b->GetPosition().y < PIXEL_TO_METERS(-800))
+	{
+		float v = b->GetLinearVelocity().GetNorm();
+		float area = M_PI * b->GetBodyRadius() * b->GetBodyRadius() / 2;
 
-	//float area = M_PI * b->GetBodyRadius() * b->GetBodyRadius();
-	//area /= 2;
-	//float x = aeroDrag * area * ((density * (b->GetLinearVelocity().x * b->GetLinearVelocity().x)) / 2);
-	//float y = aeroDrag * area * ((density * (b->GetLinearVelocity().y * b->GetLinearVelocity().y)) / 2);
-	//
-	//bhVec2 dragForce = bhVec2(x, y);
+		float drag = (0.6f * area * (2.5f * v * v)) / 2;
 
-	float v = b->GetLinearVelocity().GetNorm();
-	float area = M_PI * b->GetBodyRadius() * b->GetBodyRadius();
-	area /= 2;
+		bhVec2 dir = b->GetLinearVelocity().Normalize().Negate();
 
-	float drag;
-	drag = (0.32f * 0.2f * v * v * area) / 2;
-
-	bhVec2 dir = b->GetLinearVelocity().Normalize().Negate();
-
-	bhVec2 dragVec = dir * drag;
+		dragVec = dir * drag;
+	}
+	
 	return dragVec;
 }
 
@@ -119,23 +114,105 @@ bhVec2 PhysicsEngine::AeroLift(bhBody* b)
 
 bhVec2 PhysicsEngine::HydroBuoy(bhBody* b)
 {
-	bhVec2 hydroBuoyForce;
+	bhVec2 hydroBuoyForce = { 0,0 };
+
+	bhVec2 waterLevel = { 0,PIXEL_TO_METERS(-800) };
+
+	if (b->GetPosition().y >= waterLevel.y)
+	{
+		float angle = 0.0f;
+
+		if ((b->GetPosition().y - waterLevel.y) > b->GetBodyRadius())
+		{
+			angle = 360.0f * M_PI / 180;
+		}
+		else
+		{
+			angle = 2 * acos((b->GetPosition().y - b->GetBodyRadius() - waterLevel.y) / b->GetBodyRadius());
+		}
+
+		LOG("Cantidad sumergida %f", (angle * 180 / M_PI));
+
+		if (angle >= 360.0f * M_PI / 180)
+		{
+	
+			float areaSummerged = ((pow(b->GetBodyRadius(), 2.0f) / 2) * (angle - sin(angle)));
+
+			float pression = (b->GetPosition().y - waterLevel.y) * 2.5f;
+
+			float Fpression = pression * areaSummerged / 2;
+
+			bhVec2 direction = bhVec2(0, waterLevel.y - b->GetPosition().y).Normalize();
+
+			float density = 3.0f;
+			float gravity = 10.0f;
+
+			float forceBuoyancy = density * 10.0f * areaSummerged;
+			hydroBuoyForce = direction * forceBuoyancy;
+
+			bhVec2 fPression = direction * Fpression;
+
+			b->AddForce(fPression);
+			b->AddForce(hydroBuoyForce);
+			bhVec2 dragForce = HydroDrag(b);
+			b->AddForce(dragForce);
+
+			LOG("PRESSION %f  %f", fPression.x, fPression.y);
+			LOG("HYDROFORCE %f  %f", hydroBuoyForce.x, hydroBuoyForce.y);
+			LOG("DRAG HYDRO %f  %f", dragForce.x, dragForce.y);
+
+		}
+		else
+		{
+
+			float areaSummerged = ((pow(b->GetBodyRadius(), 2.0f) / 2) * (angle - sin(angle)));
+
+			bhVec2 direction = b->GetLinearVelocity().Normalize().Negate();
+
+			float density = 3.0f;
+
+			float forceBuoyancy = density * 10.0f * areaSummerged;
+			hydroBuoyForce = direction * forceBuoyancy;
+			b->AddForce(hydroBuoyForce);
+			bhVec2 dragForce = HydroDrag(b);
+			b->AddForce(dragForce);
+		}
+
+
+	}
 
 	return hydroBuoyForce;
+
+
 }
 
 bhVec2 PhysicsEngine::HydroDrag(bhBody* b)
 {
-	float density = b->GetBodyMass() /*b->*/;
+	bhVec2 waterLevel = { 0,PIXEL_TO_METERS(-800) };
 
+//	return hydroDragForce;
 	bhVec2 hydroDragForce;
 
-	float x = hydroDrag /* Area*/ * ((density * (b->GetLinearVelocity().x * b->GetLinearVelocity().x)) / 2);
-	float y = hydroDrag /* Area*/ * ((density * (b->GetLinearVelocity().y * b->GetLinearVelocity().y)) / 2);
+	// Drag coefficient
+	float dragCoef = 7.0f;
 
-	hydroDragForce = bhVec2(x, y);
+	// Area affected
+	float area = M_PI * b->GetBodyRadius() * b->GetBodyRadius() / 2;
 
-	return hydroDragForce;
+	// Density of the fluid
+	float waterDensity = 3.0f;
+
+	// Current velocity of the object
+	float velocity = b->GetLinearVelocity().GetNorm();
+
+	// Calculate drag force
+	float forceDrag = dragCoef * area * (waterDensity * (velocity * velocity)) / 2;
+	
+	bhVec2 direction = b->GetLinearVelocity().Normalize().Negate();
+
+	bhVec2 dragVec = direction * forceDrag;
+
+	return dragVec;
 }
 
 void PhysicsEngine::Step(float dt)
@@ -145,7 +222,9 @@ void PhysicsEngine::Step(float dt)
 	{
 		if (item->data->type == BodyType::DYNAMIC && item->data->IsActive())
 		{
+			item->data->SetAcceleration(bhVec2(0,0));
 			ForceGravity(*item->data);
+			HydroBuoy(item->data);
 			Integrator(item->data->GetPosition(), item->data->GetLinearVelocity(), item->data->GetAcceleration() /*+ gravity*/, dt);
 		}
 		else if(item->data->type == BodyType::NO_GRAVITY && item->data->IsActive())
