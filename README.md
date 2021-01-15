@@ -2,7 +2,9 @@
 
 ## Description
 
-{project description}
+This is a small videogame project where you control an U.F.O, your mission is to travel to Earth, grab as many astronauts as you can before running out of fuel, then, finally, go back to the moon to experiment with them and eat them.
+
+This project is made to practice how to implement our own physics engine, with an integrator, forces and such. 
 
 ## Key Features
 
@@ -13,15 +15,14 @@
  
 ## Controls
 
- - {ControlsScheme}
+ - Use W,A,S,D to move your U.F.O player.
 
 ## Developers
 
- - {Dev01} - {Role(s)}
- - {Dev02} - {Role(s)}
- - {Dev03} - {Role(s)}
- - {Dev04} - {Role(s)}
- - {Dev05} - {Role(s)}
+ - Lucas Pérez - https://github.com/LucasPG14 - Programmer, physicist, designer.
+ - David López - https://github.com/MagiX7 - Programmer, physicist, designer.
+ - Denis Deconinck - https://github.com/Denisdrk6 - Programmer, physicist, designer.
+ - Oriol Bernal - https://github.com/UriKurae - Programmer, physicist, designer.
 
 ## License
 
