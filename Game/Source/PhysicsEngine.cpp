@@ -84,21 +84,29 @@ bhVec2 PhysicsEngine::Gravity()
 
 bhVec2 PhysicsEngine::AeroDrag(bhBody* b)
 {
-	// TODO canviar a variables
-	// TODO canviar a pendent per que la atmosfera cada vegada fa menys dens l'aire, una mica menys que el camp gravitatori de la terra
-	bhVec2 dragVec = { 0,0 };
+	bhVec2 dragVec = {};
 	if (b->GetPosition().y < PIXEL_TO_METERS(-800))
 	{
-		float v = b->GetLinearVelocity().GetNorm();
+		// Drag coefficient
+		float dragCoef = 7.0f;
+
+		// Area affected
 		float area = M_PI * b->GetBodyRadius() * b->GetBodyRadius() / 2;
 
-		float drag = (0.6f * area * (2.5f * v * v)) / 2;
+		// Density of the fluid
+		float airDensity = 2.5f;
 
-		bhVec2 dir = b->GetLinearVelocity().Normalize().Negate();
+		// Current velocity of the object
+		float velocity = b->GetLinearVelocity().GetNorm();
 
-		dragVec = dir * drag;
+		// Calculate drag force
+		float forceDrag = dragCoef * area * (airDensity * (velocity * velocity)) / 2;
+
+		bhVec2 direction = b->GetLinearVelocity().Normalize().Negate();
+
+		bhVec2 dragVec = direction * forceDrag;
 	}
-	
+
 	return dragVec;
 }
 

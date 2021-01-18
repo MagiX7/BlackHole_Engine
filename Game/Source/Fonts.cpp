@@ -51,7 +51,7 @@ int Fonts::Load(const char* texture_path, const char* characters, uint rows)
 	font.texture = tex;
 	font.rows = rows;
 
-	// TODO 1: Finish storing font data
+	
 	app->tex->GetSize(font.texture, font.char_w, font.char_h);
 	// totalLength ---	length of the lookup table
 	font.totalLength = strlen(characters);
@@ -105,7 +105,7 @@ void Fonts::drawText(int x, int y, int font_index, const char* text) const
 	for (uint i = 0; i < len; ++i)
 	{
 		uint charIndex = 0;
-		// TODO 2: Find the character in the table, its position in the texture and then Blit
+		
 		for (uint j = 0; j < font->totalLength; ++j)
 		{
 			if (font->table[j] == text[i])

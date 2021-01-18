@@ -31,11 +31,6 @@ bool Scene::Load(Texture* tex, SDL_Texture* texture)
 	y = -12895;
 	moon->SetPosition(bhVec2(PIXEL_TO_METERS(x + 0.8f), PIXEL_TO_METERS(y)));
 
-	//astronaut = app->physics->CreateBody("astronaut");
-	//astronaut->SetRadius(PIXEL_TO_METERS(15));
-	//astronaut->SetPosition(bhVec2(PIXEL_TO_METERS(700), PIXEL_TO_METERS(0)));
-	//astronautTexture = app->tex->Load("Assets/Textures/astronaut.png");
-
 	spaceship = new Spaceship(app, this);
 	spaceship->Start();
 	
@@ -55,13 +50,12 @@ bool Scene::Load(Texture* tex, SDL_Texture* texture)
 	asteroidManager = new AsteroidManager();
 	asteroidManager->SetTexture(tex);
 
-	// TODO recolocar asteroides un poco más arriba
-	asteroidManager->CreateAsteroid(20.5f, bhVec2(500, -800), app->physics);
-	asteroidManager->CreateAsteroid(20.5f, bhVec2(300, -1400), app->physics);
-	asteroidManager->CreateAsteroid(20.5f, bhVec2(700, -2000), app->physics);
-	asteroidManager->CreateAsteroid(20.5f, bhVec2(500, -2600), app->physics);
-	asteroidManager->CreateAsteroid(20.5f, bhVec2(300, -3200), app->physics);
-	asteroidManager->CreateAsteroid(20.5f, bhVec2(700, -3800), app->physics);
+	asteroidManager->CreateAsteroid(20.5f, bhVec2(500, -2500), app->physics);
+	asteroidManager->CreateAsteroid(20.5f, bhVec2(300, -3000), app->physics);
+	asteroidManager->CreateAsteroid(20.5f, bhVec2(700, -3500), app->physics);
+	asteroidManager->CreateAsteroid(20.5f, bhVec2(500, -4000), app->physics);
+	asteroidManager->CreateAsteroid(20.5f, bhVec2(300, -4500), app->physics);
+	asteroidManager->CreateAsteroid(20.5f, bhVec2(700, -5000), app->physics);
 
 	asteroidManager->Start();
 
