@@ -55,12 +55,13 @@ bool Scene::Load(Texture* tex, SDL_Texture* texture)
 	asteroidManager = new AsteroidManager();
 	asteroidManager->SetTexture(tex);
 
-	//asteroidManager->CreateAsteroid(20.5f, bhVec2(500, -800), app->physics);
-	//asteroidManager->CreateAsteroid(20.5f, bhVec2(300, -1400), app->physics);
-	//asteroidManager->CreateAsteroid(20.5f, bhVec2(700, -2000), app->physics);
-	//asteroidManager->CreateAsteroid(20.5f, bhVec2(500, -2600), app->physics);
-	//asteroidManager->CreateAsteroid(20.5f, bhVec2(300, -3200), app->physics);
-	//asteroidManager->CreateAsteroid(20.5f, bhVec2(700, -3800), app->physics);
+	// TODO recolocar asteroides un poco más arriba
+	asteroidManager->CreateAsteroid(20.5f, bhVec2(500, -800), app->physics);
+	asteroidManager->CreateAsteroid(20.5f, bhVec2(300, -1400), app->physics);
+	asteroidManager->CreateAsteroid(20.5f, bhVec2(700, -2000), app->physics);
+	asteroidManager->CreateAsteroid(20.5f, bhVec2(500, -2600), app->physics);
+	asteroidManager->CreateAsteroid(20.5f, bhVec2(300, -3200), app->physics);
+	asteroidManager->CreateAsteroid(20.5f, bhVec2(700, -3800), app->physics);
 
 	asteroidManager->Start();
 

@@ -52,15 +52,16 @@ public:
 
 	virtual ~bhBody() {};
 
-	void AddForce(bhVec2 f)
+	void AddForce(bhVec2 f) // Must change name of function (For conventions)
 	{
-		//force += f;
+		// Force += blabla
 		acceleration += f / mass;
 	}
 	
 	void AddMomentum(bhVec2 momentum)
 	{
-		//linearV += v;
+		// TODO implementar aixo amb forçes també
+		// esta be pero cuidao (Realment tindria que ser amb forçes) provar a implementar les dues (Amb força també, per provar)
 		linearV.x += momentum.x / mass;
 		linearV.y += momentum.y / mass;
 	}

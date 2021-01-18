@@ -65,6 +65,8 @@ void PhysicsEngine::ForceGravity(bhBody& body1)
 		float m = (gravity) / PIXEL_TO_METERS(9000-13000);
 		float forceGravity = m * body1.GetPosition().y + b;
 
+		// TODO 
+		//en principi la lluna no te atmosfera
 		bhVec2 drag = AeroDrag(&body1);
 		body1.AddForce(bhVec2(0, forceGravity + drag.y));
 		LOG("%f", forceGravity);
@@ -82,6 +84,8 @@ bhVec2 PhysicsEngine::Gravity()
 
 bhVec2 PhysicsEngine::AeroDrag(bhBody* b)
 {
+	// TODO canviar a variables
+	// TODO canviar a pendent per que la atmosfera cada vegada fa menys dens l'aire, una mica menys que el camp gravitatori de la terra
 	bhVec2 dragVec = { 0,0 };
 	if (b->GetPosition().y < PIXEL_TO_METERS(-800))
 	{
@@ -190,6 +194,7 @@ bhVec2 PhysicsEngine::HydroDrag(bhBody* b)
 {
 	bhVec2 waterLevel = { 0,PIXEL_TO_METERS(-800) };
 
+	//TODO Canviar la formula de hydrodrag, aquesta es la de aerodrag
 //	return hydroDragForce;
 	bhVec2 hydroDragForce;
 
@@ -225,7 +230,7 @@ void PhysicsEngine::Step(float dt)
 			item->data->SetAcceleration(bhVec2(0,0));
 			ForceGravity(*item->data);
 			HydroBuoy(item->data);
-			Integrator(item->data->GetPosition(), item->data->GetLinearVelocity(), item->data->GetAcceleration() /*+ gravity*/, dt);
+			Integrator(item->data->GetPosition(), item->data->GetLinearVelocity(), item->data->GetAcceleration(), dt);
 		}
 		else if(item->data->type == BodyType::NO_GRAVITY && item->data->IsActive())
 			Integrator(item->data->GetPosition(), item->data->GetLinearVelocity(), item->data->GetAcceleration(), dt);
