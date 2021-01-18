@@ -176,7 +176,6 @@ bhVec2 PhysicsEngine::HydroBuoy(bhBody* b)
 		}
 		else
 		{
-
 			float areaSummerged = ((pow(b->GetBodyRadius(), 2.0f) / 2) * (angle - sin(angle)));
 
 			bhVec2 direction = b->GetLinearVelocity().Normalize().Negate();
@@ -189,40 +188,28 @@ bhVec2 PhysicsEngine::HydroBuoy(bhBody* b)
 			bhVec2 dragForce = HydroDrag(b);
 			b->AddForce(dragForce);
 		}
-
-
 	}
 
 	return hydroBuoyForce;
-
-
 }
 
 bhVec2 PhysicsEngine::HydroDrag(bhBody* b)
 {
-	bhVec2 waterLevel = { 0,PIXEL_TO_METERS(-800) };
-
-	//TODO Canviar la formula de hydrodrag, aquesta es la de aerodrag
-//	return hydroDragForce;
 	bhVec2 hydroDragForce;
 
-	// Drag coefficient
-	float dragCoef = 7.0f;
-
-	// Area affected
-	float area = M_PI * b->GetBodyRadius() * b->GetBodyRadius() / 2;
-
-	// Density of the fluid
-	float waterDensity = 3.0f;
+	// Velocity friction coefficient
+	float velocityCoef = 15.0f;
 
 	// Current velocity of the object
 	float velocity = b->GetLinearVelocity().GetNorm();
 
 	// Calculate drag force
-	float forceDrag = dragCoef * area * (waterDensity * (velocity * velocity)) / 2;
+	float forceDrag = velocityCoef * velocity;
 	
+	// We get the direction of the body itself (Negate it, because drag always goes backwards from the velocity)
 	bhVec2 direction = b->GetLinearVelocity().Normalize().Negate();
 
+	// Multiply the force itself to the direction already calculated in the linea bove
 	bhVec2 dragVec = direction * forceDrag;
 
 	return dragVec;
@@ -236,8 +223,10 @@ void PhysicsEngine::Step(float dt)
 		if (item->data->type == BodyType::DYNAMIC && item->data->IsActive())
 		{
 			item->data->SetAcceleration(bhVec2(0,0));
+			item->data->ResetForce();
 			ForceGravity(*item->data);
 			HydroBuoy(item->data);
+			item->data->ApplyNewtonSecondLaw();
 			Integrator(item->data->GetPosition(), item->data->GetLinearVelocity(), item->data->GetAcceleration(), dt);
 		}
 		else if(item->data->type == BodyType::NO_GRAVITY && item->data->IsActive())

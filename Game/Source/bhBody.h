@@ -54,10 +54,21 @@ public:
 
 	void AddForce(bhVec2 f) // Must change name of function (For conventions)
 	{
-		// Force += blabla
-		acceleration += f / mass;
+		force += f;
 	}
 	
+	void ApplyNewtonSecondLaw()
+	{
+		acceleration += force / mass;
+	}
+
+
+	void ResetForce()
+	{
+		force.x = 0;
+		force.y = 0;
+	}
+
 	void AddMomentum(bhVec2 momentum)
 	{
 		// TODO implementar aixo amb forçes també
@@ -140,6 +151,7 @@ public:
 		acceleration.x = acc.x;
 		acceleration.y = acc.y;
 	}
+
 	// ===================================================
 	//					Getters
 	// ===================================================
