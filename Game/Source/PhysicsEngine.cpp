@@ -158,7 +158,7 @@ bhVec2 PhysicsEngine::HydroBuoy(bhBody* b)
 			float areaSummerged = ((pow(b->GetBodyRadius(), 2.0f) / 2) * (angle - sin(angle)));
 
 			// The pression will vary with the position of the body, if the body is very far below it will have more pression
-			float pression = (b->GetPosition().y - waterLevel.y) * 2.5f;
+			float pression = (b->GetPosition().y - waterLevel.y) * 1.25f;
 
 			// We only calculate the pression in half of the body since it's a circle
 			float areaPression = pression * areaSummerged / 2;
@@ -187,7 +187,7 @@ bhVec2 PhysicsEngine::HydroBuoy(bhBody* b)
 			// All the statements below are the same like the ones above, but applied to the other angle
 			float areaSummerged = ((pow(b->GetBodyRadius(), 2.0f) / 2) * (angle - sin(angle)));
 
-			float pression = (b->GetPosition().y - waterLevel.y) * 2.5f;
+			float pression = (b->GetPosition().y - waterLevel.y) * 1.25f;
 
 			float areaPression = pression * areaSummerged / 2;
 
