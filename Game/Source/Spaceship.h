@@ -65,4 +65,7 @@ private:
 
 	App* app;
 	SceneGameplay* scene;
+
+
+	int astronautFx;
 };

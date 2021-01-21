@@ -59,7 +59,7 @@ bool SceneGameplay::Load(Texture* tex, SDL_Texture* texture)
 
 	asteroidManager->Start();
 
-	waterDropFx = app->audio->LoadFx("Assets/Audio/waterdrop.wav");
+	waterDropFx = app->audio->LoadFx("Assets/Audio/waterdrop_1.wav");
 	waterDropPlayOnce = false;
 
 	bg = texture;

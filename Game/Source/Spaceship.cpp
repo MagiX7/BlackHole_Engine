@@ -90,6 +90,8 @@ bool Spaceship::Start()
 	char lookupTable[] = { "0123456789?ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!    " };
 	fontsIndex = app->fonts->Load("Assets/Textures/fonts.png", lookupTable, 1);
 
+	astronautFx = app->audio->LoadFx("Assets/Audio/astronaut_fx.wav");
+
 	return true;
 }
 
@@ -126,17 +128,16 @@ update_status Spaceship::Update(float dt, AsteroidManager* asteroid, AstronautMa
 			Dead();
 		}
 
-		p2List_item <Astronaut*>* item = astronaut->astronautsList.getFirst();
-
-		while (item != nullptr)
+		if (astronaut->CheckCollision(body, app->physics) == true)
 		{
-			if (app->physics->GetWorld()->Intersection(body, item->data->GetBody()))
+			AddScore();
+			int num = rand() % 10;
+			if (num >= 5)
 			{
-				astronaut->DeleteAstronaut(item->data->GetBody(), app->physics);
-				AddScore();
+				app->audio->PlayFx(astronautFx);
+				LOG("NUMBER %d", num);
 			}
-
-			item = item->next;
+			
 		}
 	}
 	else if (health <= 0)

@@ -24,10 +24,12 @@ public:
 	void DeleteAstronaut(Astronaut* astronaut, Physics* physics);
 	void DeleteAstronaut(bhBody* astronaut, Physics* physics);
 	void SetTexture(Texture* tex);
+	bool CheckCollision(bhBody* body, Physics* physics);
 
 	p2List<Astronaut*> astronautsList;
 
 private:
 
 	SDL_Texture* astronautTexture;
+
 };

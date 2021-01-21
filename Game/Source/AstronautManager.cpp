@@ -124,3 +124,21 @@ void AstronautManager::SetTexture(Texture* tex)
 {
 	astronautTexture = tex->Load("Assets/Textures/astronaut.png");
 }
+
+
+bool AstronautManager::CheckCollision(bhBody* body, Physics* physics)
+{
+	p2List_item<Astronaut*>* item = astronautsList.getFirst();
+
+	while (item != nullptr)
+	{
+		if (physics->GetWorld()->Intersection(body, item->data->GetBody()))
+		{
+			DeleteAstronaut(item->data->GetBody(), physics);
+			return true;
+		}
+		item = item->next;
+	}
+
+	return false;
+}
