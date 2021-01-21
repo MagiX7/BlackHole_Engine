@@ -6,10 +6,14 @@
 
 struct SDL_Texture;
 
+class AsteroidManager;
+class AstronautManager;
+class SceneGameplay;
+
 class Spaceship
 {
 public:
-	Spaceship(App* app, Scene* gameplay);
+	Spaceship(App* app, SceneGameplay* gameplay);
 	~Spaceship();
 
 	bool Start();
@@ -60,5 +64,5 @@ private:
 	char fuelText[3] = { "\0" };
 
 	App* app;
-	Scene* scene;
+	SceneGameplay* scene;
 };

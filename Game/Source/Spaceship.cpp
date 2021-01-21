@@ -6,8 +6,10 @@
 #include "AstronautManager.h"
 
 #include "Spaceship.h"
+#include "SceneGameplay.h"
 
-Spaceship::Spaceship(App* parent, Scene* gameplay)
+
+Spaceship::Spaceship(App* parent, SceneGameplay* gameplay)
 {
 	//idleAnim.PushBack({ 11,13, 18,15 });
 
@@ -99,6 +101,10 @@ update_status Spaceship::PreUpdate()
 
 update_status Spaceship::Update(float dt, AsteroidManager* asteroid, AstronautManager* astronaut)
 {
+	body->ResetForce();
+	body->SetAcceleration(bhVec2(0, 0));
+
+
 	if (body->GetPosition().x < PIXEL_TO_METERS(-7)) body->SetPosition(bhVec2(PIXEL_TO_METERS(1040), body->GetPosition().y));
 	else if(body->GetPosition().x > PIXEL_TO_METERS(1040)) body->SetPosition(bhVec2(PIXEL_TO_METERS(-7), body->GetPosition().y));
 
@@ -143,9 +149,6 @@ update_status Spaceship::Update(float dt, AsteroidManager* asteroid, AstronautMa
 	}
 
 	LOG("%f  %f", METERS_TO_PIXELS(body->GetPosition().x), METERS_TO_PIXELS(body->GetPosition().y));
-
-	//LOG("%f  %f", body->GetPosition().x, body->GetPosition().y);
-	/*LOG("%f  %f", body->GetLinearVelocity().x, body->GetLinearVelocity().y);*/
 
 	if (fuel < 0) fuel = 0;
 
@@ -214,6 +217,10 @@ void Spaceship::HandleInput(float dt)
 		}
 	}
 
+	//======================================
+	
+	// Movement input
+
 	if (app->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT)
 	{
 		if (currentAnim != &engineOnAnim)
@@ -226,10 +233,13 @@ void Spaceship::HandleInput(float dt)
 		{
 			double angle = body->GetBodyAngle();
 			bhVec2 mom = bhVec2(cos(angle - 90 * M_PI / 180), sin(angle - 90 * M_PI / 180));
+			
 			body->AddMomentum(bhVec2(PIXEL_TO_METERS(mom.x * dt * 1000), PIXEL_TO_METERS(mom.y * dt * 1000)));
+			
 			fuel -= (1.2f * dt);
 		}
 	}
+
 	if (app->input->GetKey(SDL_SCANCODE_W) == KEY_UP)
 	{
 		if (currentAnim != &flyAnim)
@@ -248,6 +258,51 @@ void Spaceship::HandleInput(float dt)
 	{
 		body->Rotate(-2);
 	}
+
+	
+	//==============================================
+	// Add Momentum with force
+
+	if (app->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
+	{
+		if(currentAnim != &engineOnAnim)
+		{
+			engineOnAnim.Reset();
+			currentAnim = &engineOnAnim;
+		}
+
+		if (-body->GetLinearVelocity().y < body->GetMaxLinearVelocity().y && fuel > 0)
+		{
+			double angle = body->GetBodyAngle();
+			bhVec2 mom = bhVec2(cos(angle - 90 * M_PI / 180), sin(angle - 90 * M_PI / 180));
+			
+			bhVec2 f = { (float)mom.x * 100, (float)mom.y * 100 };
+			body->AddMomentumWithForce(bhVec2(PIXEL_TO_METERS(f.x * dt), PIXEL_TO_METERS(f.y * dt)), dt);
+			
+			fuel -= (1.2f * dt);
+		}
+	}
+	if (app->input->GetKey(SDL_SCANCODE_UP) == KEY_UP)
+	{
+		if (currentAnim != &flyAnim)
+		{
+			flyAnim.Reset();
+			currentAnim = &flyAnim;
+		}
+	}
+
+	if (app->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT && body->GetLinearVelocity().x < body->GetMaxLinearVelocity().x)
+	{
+		body->Rotate(2);
+	}
+
+	if (app->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT && -body->GetLinearVelocity().x < body->GetMaxLinearVelocity().x)
+	{
+		body->Rotate(-2);
+	}
+
+
+
 }
 
 void Spaceship::Dead()

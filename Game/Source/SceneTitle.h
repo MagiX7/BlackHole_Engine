@@ -1,10 +1,10 @@
 #pragma once
 
-#include "Scenes.h"
+#include "Scene.h"
 
 struct SDL_Texture;
 
-class SceneTitle : public Scenes
+class SceneTitle : public Scene
 {
 public:
 	SceneTitle();

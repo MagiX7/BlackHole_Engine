@@ -53,13 +53,16 @@
     <ClCompile Include="Source\PhysicsEngine.cpp">
       <Filter>Physics Engine</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Scene.cpp">
-      <Filter>Modules\Scenes</Filter>
-    </ClCompile>
     <ClCompile Include="Source\SceneManager.cpp">
       <Filter>Modules\Core</Filter>
     </ClCompile>
     <ClCompile Include="Source\SceneTitle.cpp">
+      <Filter>Modules\Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\SceneDead.cpp">
+      <Filter>Modules\Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\SceneGameplay.cpp">
       <Filter>Modules\Scenes</Filter>
     </ClCompile>
   </ItemGroup>
@@ -148,16 +151,19 @@
     <ClInclude Include="Source\PhysicsEngine.h">
       <Filter>Physics Engine</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Scene.h">
-      <Filter>Modules\Scenes</Filter>
-    </ClInclude>
     <ClInclude Include="Source\SceneManager.h">
       <Filter>Modules\Core</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Scenes.h">
+    <ClInclude Include="Source\SceneTitle.h">
       <Filter>Modules\Scenes</Filter>
     </ClInclude>
-    <ClInclude Include="Source\SceneTitle.h">
+    <ClInclude Include="Source\SceneDead.h">
+      <Filter>Modules\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\SceneGameplay.h">
+      <Filter>Modules\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Scene.h">
       <Filter>Modules\Scenes</Filter>
     </ClInclude>
   </ItemGroup>

@@ -53,13 +53,13 @@ update_status Render::Update(float dt)
 {
 	int speed = 10;
 
-	if(app->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT) camera.y += speed;
+	/*if(app->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT) camera.y += speed;
 
 	if(app->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT) camera.y -= speed;
 
 	if(app->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT) camera.x += speed;
 
-	if(app->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT) camera.x -= speed;
+	if(app->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT) camera.x -= speed;*/
 
 	return update_status::UPDATE_CONTINUE;
 }

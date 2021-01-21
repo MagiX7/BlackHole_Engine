@@ -1,24 +1,24 @@
 #include "App.h"
 #include "Texture.h"
-#include "Scenes.h"
+#include "Scene.h"
 #include "Spaceship.h"
 #include "AsteroidManager.h"
 #include "AstronautManager.h"
 
 #include "bhBody.h"
-#include "Scene.h"
+#include "SceneGameplay.h"
 
 
-Scene::Scene(App* parent)
+SceneGameplay::SceneGameplay(App* parent)
 {
 	this->app = parent;
 }
 
-Scene::~Scene()
+SceneGameplay::~SceneGameplay()
 {
 }
 
-bool Scene::Load(Texture* tex, SDL_Texture* texture)
+bool SceneGameplay::Load(Texture* tex, SDL_Texture* texture)
 {
 	earth = app->physics->CreateBody("earth", BodyType::STATIC);
 	earth->SetRadius(PIXEL_TO_METERS(1000));
@@ -67,7 +67,7 @@ bool Scene::Load(Texture* tex, SDL_Texture* texture)
 	return true;
 }
 
-update_status Scene::Update(Input* input, float dt)
+update_status SceneGameplay::Update(Input* input, float dt)
 {
 	//LOG("==========================");
 	spaceship->Update(dt, asteroidManager, astronautManager);
@@ -90,7 +90,9 @@ update_status Scene::Update(Input* input, float dt)
 	}
 
 	if (!spaceship->GetBody()->IsActive()) 
-		TransitionToScene(SceneType::INTRO);
+		TransitionToScene(SceneType::ENDING);
+
+	if (app->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN) TransitionToScene(SceneType::ENDING);
 
 	if (app->render->camera.y <= 400) app->render->camera.y = 400;
 	if (app->render->camera.y >= 12500) app->render->camera.y = 12500;
@@ -100,7 +102,7 @@ update_status Scene::Update(Input* input, float dt)
 	return update_status::UPDATE_CONTINUE;
 }
 
-update_status Scene::Draw(Render* ren)
+update_status SceneGameplay::Draw(Render* ren)
 {
 	ren->DrawTexture(bg, 0, -12500, NULL);
 	astronautManager->Draw(ren);
@@ -115,7 +117,7 @@ update_status Scene::Draw(Render* ren)
 	return update_status::UPDATE_CONTINUE;
 }
 
-bool Scene::Unload(Texture* tex)
+bool SceneGameplay::Unload(Texture* tex)
 {
 	bool ret = true;
 	LOG("Unloading Gameplay Scene");

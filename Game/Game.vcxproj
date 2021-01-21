@@ -109,7 +109,8 @@
     <ClCompile Include="Source\PhysicsEngine.cpp" />
     <ClCompile Include="Source\Physics.cpp" />
     <ClCompile Include="Source\Render.cpp" />
-    <ClCompile Include="Source\Scene.cpp" />
+    <ClCompile Include="Source\SceneGameplay.cpp" />
+    <ClCompile Include="Source\SceneDead.cpp" />
     <ClCompile Include="Source\SceneManager.cpp" />
     <ClCompile Include="Source\SceneTitle.cpp" />
     <ClCompile Include="Source\Spaceship.cpp" />
@@ -139,9 +140,10 @@
     <ClCompile Include="Source\App.cpp" />
     <ClInclude Include="Source\Point.h" />
     <ClInclude Include="Source\Render.h" />
-    <ClInclude Include="Source\Scene.h" />
+    <ClInclude Include="Source\SceneGameplay.h" />
+    <ClInclude Include="Source\SceneDead.h" />
     <ClInclude Include="Source\SceneManager.h" />
-    <ClInclude Include="Source\Scenes.h" />
+    <ClInclude Include="Source\Scene.h" />
     <ClInclude Include="Source\SceneTitle.h" />
     <ClInclude Include="Source\Spaceship.h" />
     <ClInclude Include="Source\SString.h" />

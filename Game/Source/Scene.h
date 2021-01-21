@@ -1,36 +1,49 @@
 #pragma once
 
-#include "Module.h"
-#include "Scenes.h"
-#include "Astronaut.h"
+#include "Globals.h"
 
-class bhBody;
-class Spaceship;
-class AstronautManager;
-class AsteroidManager;
+enum class SceneType
+{
+	INTRO,
+	GAMEPLAY,
+	ENDING
+};
 
-struct SDL_Texture;
+class Texture;
+class Render;
+class Input;
 
-class Scene : public Scenes
+class SDL_Texture;
+
+class Scene
 {
 public:
-	Scene(App* parent);
-	virtual ~Scene();
+	Scene() {}
 
-	bool Load(Texture* tex, SDL_Texture* bg) override;
-	update_status Update(Input* input, float dt) override;
-	update_status Draw(Render* ren) override;
-	bool Unload(Texture* tex) override;
+	// Destructor
+	virtual ~Scene() {};
 
+	// Called before the first frame
+	virtual bool Load(Texture* tex, SDL_Texture* bg) { return true; }
+
+	// Called each loop iteration
+	virtual update_status Update(Input* input, float dt) { return update_status::UPDATE_CONTINUE; }
+
+	// Called before all updates
+	virtual update_status Draw(Render* ren) { return update_status::UPDATE_CONTINUE; }
+
+	// Called before quitting
+	virtual bool Unload(Texture* tex) { return true; }
+
+	void TransitionToScene(SceneType scene)
+	{
+		transitionRequired = true;
+		nextScene = scene;
+	}
 
 public:
-	bhBody* earth;
-	bhBody* moon;
+	bool active = false;
 
-	Spaceship* spaceship;
-
-	SDL_Texture* bg;
-	App* app;
-	AsteroidManager* asteroidManager;
-	AstronautManager* astronautManager;
+	bool transitionRequired = false;
+	SceneType nextScene;
 };

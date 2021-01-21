@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Module.h"
-#include "Scenes.h"
+#include "Scene.h"
 
 class SceneManager : public Module
 {
@@ -15,8 +15,8 @@ public:
 	bool CleanUp() override;
 
 private:
-	Scenes* current;
-	Scenes* next;
+	Scene* current;
+	Scene* next;
 
 	bool onTransition;
 	bool fadeOutCompleted;
