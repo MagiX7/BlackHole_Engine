@@ -128,65 +128,82 @@ bhVec2 PhysicsEngine::HydroBuoy(bhBody* b)
 {
 	bhVec2 hydroBuoyForce = { 0,0 };
 
+	// Variable that stores the water level that we want, for comfort
 	bhVec2 waterLevel = { 0,PIXEL_TO_METERS(-800) };
 
-	if (b->GetPosition().y >= waterLevel.y)
+	// Store gravity and density in variables for better understanding
+	float gravity = 10.0f;
+
+	float density = 10.0f;
+
+	// First we have to check if the body is starting to touch the water level
+	if (b->GetPosition().y + b->GetBodyRadius() >= waterLevel.y)
 	{
 		float angle = 0.0f;
 
+		// We have 2 posible options, if we are fully inside the water, the angle is simply 360, this way we don't have to waste time calculating.
+		// otherwise, we will calculate the angle with the formula.
 		if ((b->GetPosition().y - waterLevel.y) > b->GetBodyRadius())
 		{
 			angle = 360.0f * M_PI / 180;
 		}
 		else
 		{
-			angle = 2 * acos((b->GetPosition().y - b->GetBodyRadius() - waterLevel.y) / b->GetBodyRadius());
+			angle = 2 * acos((waterLevel.y - b->GetPosition().y) / b->GetBodyRadius());
 		}
-
-		LOG("Cantidad sumergida %f", (angle * 180 / M_PI));
 
 		if (angle >= 360.0f * M_PI / 180)
 		{
-	
+			//  We calculate the area summerged with the formula
+			float areaSummerged = ((pow(b->GetBodyRadius(), 2.0f) / 2) * (angle - sin(angle)));
+
+			// The pression will vary with the position of the body, if the body is very far below it will have more pression
+			float pression = (b->GetPosition().y - waterLevel.y) * 2.5f;
+
+			// We only calculate the pression in half of the body since it's a circle
+			float areaPression = pression * areaSummerged / 2;
+
+			// The direction of the buoyancy will always go upwards
+			bhVec2 direction = bhVec2(0, waterLevel.y - b->GetPosition().y).Normalize();
+
+
+			// Finally we apply the force buoyancy formula
+			float forceBuoyancy = density * gravity * areaSummerged;
+
+			// We apply it to the direction we want, which is normalized
+			hydroBuoyForce = direction * forceBuoyancy;
+
+			// We do the same with the force of the pression
+			bhVec2 forcePression = direction * areaPression;
+
+			// Finally we add all the forces we need, in this case, we need the hydro drag force, buoyancy and the force of the pression
+			b->AddForce(forcePression);
+			b->AddForce(hydroBuoyForce);
+			bhVec2 hydroDragForce = HydroDrag(b);
+			b->AddForce(hydroDragForce);
+		}
+		else
+		{
+			// All the statements below are the same like the ones above, but applied to the other angle
 			float areaSummerged = ((pow(b->GetBodyRadius(), 2.0f) / 2) * (angle - sin(angle)));
 
 			float pression = (b->GetPosition().y - waterLevel.y) * 2.5f;
 
-			float Fpression = pression * areaSummerged / 2;
+			float areaPression = pression * areaSummerged / 2;
 
-			bhVec2 direction = bhVec2(0, waterLevel.y - b->GetPosition().y).Normalize();
+			bhVec2 direction = { 0, (float)(waterLevel.y - b->GetPosition().y - b->GetBodyRadius()) };
+			direction.Normalize();
 
-			float density = 3.0f;
-			float gravity = 10.0f;
-
-			float forceBuoyancy = density * 10.0f * areaSummerged;
+			float forceBuoyancy = density * gravity * areaSummerged;
 			hydroBuoyForce = direction * forceBuoyancy;
+			
+			bhVec2 forcePression = direction * areaPression;
 
-			bhVec2 fPression = direction * Fpression;
 
-			b->AddForce(fPression);
+			b->AddForce(forcePression);
 			b->AddForce(hydroBuoyForce);
-			bhVec2 dragForce = HydroDrag(b);
-			b->AddForce(dragForce);
-
-			LOG("PRESSION %f  %f", fPression.x, fPression.y);
-			LOG("HYDROFORCE %f  %f", hydroBuoyForce.x, hydroBuoyForce.y);
-			LOG("DRAG HYDRO %f  %f", dragForce.x, dragForce.y);
-
-		}
-		else
-		{
-			float areaSummerged = ((pow(b->GetBodyRadius(), 2.0f) / 2) * (angle - sin(angle)));
-
-			bhVec2 direction = b->GetLinearVelocity().Normalize().Negate();
-
-			float density = 3.0f;
-
-			float forceBuoyancy = density * 10.0f * areaSummerged;
-			hydroBuoyForce = direction * forceBuoyancy;
-			b->AddForce(hydroBuoyForce);
-			bhVec2 dragForce = HydroDrag(b);
-			b->AddForce(dragForce);
+			bhVec2 hydroDragForce = HydroDrag(b);
+			b->AddForce(hydroDragForce);
 		}
 	}
 

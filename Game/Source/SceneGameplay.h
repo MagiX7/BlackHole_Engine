@@ -33,4 +33,7 @@ public:
 	App* app;
 	AsteroidManager* asteroidManager;
 	AstronautManager* astronautManager;
+
+	int waterDropFx;
+	bool waterDropPlayOnce;
 };

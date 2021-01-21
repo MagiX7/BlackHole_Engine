@@ -59,6 +59,9 @@ bool SceneGameplay::Load(Texture* tex, SDL_Texture* texture)
 
 	asteroidManager->Start();
 
+	waterDropFx = app->audio->LoadFx("Assets/Audio/waterdrop.wav");
+	waterDropPlayOnce = false;
+
 	bg = texture;
 	app->audio->PlayMusic("Assets/Audio/earth_scene.ogg");
 
@@ -96,6 +99,16 @@ update_status SceneGameplay::Update(Input* input, float dt)
 
 	if (app->render->camera.y <= 400) app->render->camera.y = 400;
 	if (app->render->camera.y >= 12500) app->render->camera.y = 12500;
+
+	if (spaceship->GetBody()->GetPosition().y >= PIXEL_TO_METERS(-800) && waterDropPlayOnce == false)
+	{
+		app->audio->PlayFx(waterDropFx);
+		waterDropPlayOnce = true;
+	}
+	else if (spaceship->GetBody()->GetPosition().y + spaceship->GetBody()->GetBodyRadius() < PIXEL_TO_METERS(-800))
+	{
+		waterDropPlayOnce = false;
+	}
 
 	LOG("POSITION %d %d=========================================================", app->render->camera.x, app->render->camera.y);
 

@@ -20,7 +20,7 @@ private:
 	float radius;
 	float angularV;
 	bhVec2 acceleration;
-	bhVec2 force;
+	bhVec2 totalForce;
 	float mass;
 	float bodyGravity;
 	double angle;
@@ -43,7 +43,7 @@ public:
 		maxLinearV = bhVec2(0.0f, 0.0f);
 		//angularV = bhVec2(0.0f, 0.0f);
 		acceleration = bhVec2(0.0f, 0.0f);
-		force = bhVec2(0.0f, 0.0f);
+		totalForce = bhVec2(0.0f, 0.0f);
 		mass = 0.0f;
 		bodyGravity = 0.0f;
 		angle = 0.0f;
@@ -54,19 +54,19 @@ public:
 
 	void AddForce(bhVec2 f)
 	{
-		force += f;
+		totalForce += f;
 	}
 	
 	void ApplyNewtonSecondLaw()
 	{
-		acceleration = force / mass;
+		acceleration = totalForce / mass;
 	}
 
 
 	void ResetForce()
 	{
-		force.x = 0;
-		force.y = 0;
+		totalForce.x = 0;
+		totalForce.y = 0;
 	}
 
 	void AddMomentum(bhVec2 momentum)
@@ -80,7 +80,7 @@ public:
 	void AddMomentumWithForce(bhVec2 v, float dt)
 	{
 		bhVec2 momentum = (v * mass) / dt;
-		force += momentum;
+		totalForce += momentum;
 		//force += p / mass;
 	}
 
