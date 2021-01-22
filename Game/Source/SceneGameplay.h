@@ -28,6 +28,7 @@ public:
 	bhBody* moon;
 
 	Spaceship* spaceship;
+	bool relaunchSpaceship = false;
 
 	SDL_Texture* bg;
 	App* app;

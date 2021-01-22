@@ -1,14 +1,26 @@
 #pragma once
 
-#include "bhBody.h"
-#include "Animation.h"
 #include "Scene.h"
 
-struct SDL_Texture;
+#include "bhBody.h"
+#include "Animation.h"
+
+#include "SDL/include/SDL_rect.h"
+
+class SDL_Texture;
 
 class AsteroidManager;
 class AstronautManager;
 class SceneGameplay;
+
+struct Missile
+{
+	bhVec2 position = { 0,0 };
+	bhVec2 direction = { 0,0 };
+	int damage = 50;
+	SDL_Rect collider = { (int)position.x,(int)position.y,5,5 };
+};
+
 
 class Spaceship
 {
@@ -27,10 +39,13 @@ public:
 		return body;
 	}
 
-	void AddHealth(float h) { health += h; }
-	void AddFuel(float f) { fuel += f; }
-	void AddAmmo(int a) { ammo += a; }
-	void LaunchMissile();
+	void AddHealth(float h);
+	void AddFuel(float f);
+	void AddAmmo(int a);
+
+	float GetFuel();
+
+	void CreateMissile();
 	void AddScore();
 
 	void HandleInput(float dt);
@@ -52,7 +67,7 @@ private:
 	Animation explosionAnim;
 
 	bhBody* body;
-	bhBody* missile;
+	p2List<Missile*> missiles;
 
 	int fontsIndex;
 

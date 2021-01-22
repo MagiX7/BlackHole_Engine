@@ -43,8 +43,8 @@ void PhysicsEngine::ForceGravity(bhBody& body1)
 		body1.AddForce(bhVec2(drag));
 		body1.AddForce(bhVec2(0, forceGravity));
 
-		LOG("FORCE GRAVITY %f", forceGravity);
-		LOG("DRAG FORCE %f", drag.y);
+		//LOG("FORCE GRAVITY %f", forceGravity);
+		//LOG("DRAG FORCE %f", drag.y);
 	}
 	else if (body1.GetPosition().y < PIXEL_TO_METERS(-5001) && body1.GetPosition().y >= PIXEL_TO_METERS(-9000))
 	{
@@ -55,7 +55,7 @@ void PhysicsEngine::ForceGravity(bhBody& body1)
 		float forceGravity = m * body1.GetPosition().y + b;
 
 		body1.AddForce(bhVec2(0, forceGravity));
-		LOG("%f", forceGravity);
+		//LOG("%f", forceGravity);
 	}
 	else if (body1.GetPosition().y < PIXEL_TO_METERS(-9001) && body1.GetPosition().y >= PIXEL_TO_METERS(-13000))
 	{
@@ -69,7 +69,7 @@ void PhysicsEngine::ForceGravity(bhBody& body1)
 		//en principi la lluna no te atmosfera
 		bhVec2 drag = AeroDrag(&body1);
 		body1.AddForce(bhVec2(0, forceGravity + drag.y));
-		LOG("%f", forceGravity);
+		//LOG("%f", forceGravity);
 	}
 	else
 	{
@@ -234,6 +234,8 @@ bhVec2 PhysicsEngine::HydroDrag(bhBody* b)
 
 void PhysicsEngine::Step(float dt)
 {
+	// Forces + Integrator ====================================
+
 	p2List_item<bhBody*>* item = bodyList.getFirst();
 	while (item != nullptr)
 	{
@@ -254,10 +256,7 @@ void PhysicsEngine::Step(float dt)
 		item = item->next;
 	}
 
-	/*else if (app->spaceship->GetBody()->GetPosition().y <= 0)
-		gravity.y = 9.81f - ((app->scene->floor->GetPosition().y - app->spaceship->GetBody()->GetPosition().y) / 9.81f);*/
-
-	//LOG("gravity = %f", gravity.y);
+	// Collisions ====================================
 
 	for (p2List_item<bhBody*>* item = bodyList.getFirst(); item != nullptr; item = item->next)
 	{
@@ -302,11 +301,11 @@ void PhysicsEngine::Collisions(bhBody* b, bhBody* b2)
 	// We now multiply the speed for the direction so the spaceship knows the direction where it has to go to
 	newSpeed = dir * speed;
 
-	if (b2->GetName() == "floor")
+	//if (b2->GetName() == "floor")
 		newSpeed = newSpeed * 0.6f;
 	
-	else
-		newSpeed = newSpeed * 0.9f;
+	//else
+	//	newSpeed = newSpeed * 0.9f;
 
 	if (b2->type != BodyType::SENSOR)
 		b->SetLinearVelocity(newSpeed);

@@ -154,4 +154,9 @@ public:
 	{
 		return (x < v.x) && (y < v.y);
 	}
+
+	bool operator== (bhVec2 v)
+	{
+		return (x == v.x) && (y == v.y);
+	}
 };

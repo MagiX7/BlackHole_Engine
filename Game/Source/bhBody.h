@@ -14,18 +14,16 @@ enum class BodyType
 class bhBody
 {
 private:
+	SString name;
+	bool active;
 	bhVec2 position;
 	bhVec2 linearV;
-	bhVec2 maxLinearV;
 	float radius;
-	float angularV;
 	bhVec2 acceleration;
 	bhVec2 totalForce;
 	float mass;
 	float bodyGravity;
 	double angle;
-	SString name;
-	bool active;
 	bhVec2 momentum;
 
 public:
@@ -40,8 +38,6 @@ public:
 		active = act;
 		position = bhVec2(0.0f, 0.0f);
 		linearV = bhVec2(0.0f, 0.0f);
-		maxLinearV = bhVec2(0.0f, 0.0f);
-		//angularV = bhVec2(0.0f, 0.0f);
 		acceleration = bhVec2(0.0f, 0.0f);
 		totalForce = bhVec2(0.0f, 0.0f);
 		mass = 0.0f;
@@ -131,17 +127,6 @@ public:
 		linearV.y = y;
 	}
 
-	void SetMaxLinearVelocity(bhVec2 v)
-	{
-		maxLinearV = v;
-	}
-
-	// Set body angluar speed
-	void SetAngularVelocity(bhVec2 v)
-	{
-		//angularV += v;
-	}
-
 	// Set body radius
 	void SetRadius(float rad)
 	{
@@ -173,11 +158,6 @@ public:
 	inline bhVec2& GetLinearVelocity()
 	{
 		return linearV;
-	}
-
-	inline bhVec2& GetMaxLinearVelocity()
-	{
-		return maxLinearV;
 	}
 
 	// Get the body angular velocity
@@ -219,5 +199,10 @@ public:
 	inline SString& GetName()
 	{
 		return name;
+	}
+
+	inline bhVec2& GetTotalForce()
+	{
+		return totalForce;
 	}
 };
