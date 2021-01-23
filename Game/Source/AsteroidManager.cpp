@@ -123,3 +123,21 @@ bool AsteroidManager::CheckCollision(bhBody* body, Physics* physics)
 
 	return false;
 }
+
+bool AsteroidManager::CheckCollision(SDL_Rect rect, Physics* physics)
+{
+	p2List_item<Asteroid*>* item = asteroidList.getFirst();
+
+	while (item != nullptr)
+	{
+		if (physics->GetWorld()->Intersection(rect, item->data->GetBody()))
+		{
+			physics->DestroyBody(item->data->GetBody());
+			asteroidList.del(item);
+			return true;
+		}
+		item = item->next;
+	}
+
+	return false;
+}

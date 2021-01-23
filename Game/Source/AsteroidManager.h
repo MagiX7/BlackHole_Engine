@@ -23,6 +23,7 @@ public:
 	void SetTexture(Texture* tex);
 
 	bool CheckCollision(bhBody* body, Physics* physics);
+	bool CheckCollision(SDL_Rect rect, Physics* physics);
 	
 public:
 

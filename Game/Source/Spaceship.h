@@ -19,6 +19,7 @@ struct Missile
 	bhVec2 direction = { 0,0 };
 	int damage = 50;
 	SDL_Rect collider = { (int)position.x,(int)position.y,5,5 };
+	float angle;
 };
 
 
@@ -59,6 +60,7 @@ public:
 private:
 	
 	SDL_Texture* texture;
+	SDL_Texture* missileTexture;
 
 	Animation* currentAnim;
 	Animation idleAnim;
@@ -81,6 +83,9 @@ private:
 	App* app;
 	SceneGameplay* scene;
 
-
+	bool arrive;
 	int astronautFx;
+	uint missileFx;
+	uint asteroidFx;
+	uint astronautDie;
 };

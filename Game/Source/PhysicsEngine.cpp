@@ -38,10 +38,17 @@ void PhysicsEngine::ForceGravity(bhBody& body1)
 		float b = gravity;
 		float m = (gravity) / PIXEL_TO_METERS(5000);
 		float forceGravity = m * body1.GetPosition().y + b;
-		bhVec2 drag = AeroDrag(&body1);
+		bhVec2 drag = bhVec2(0, 0);
 
-		body1.AddForce(bhVec2(drag));
-		body1.AddForce(bhVec2(0, forceGravity));
+		if (body1.GetPosition().y > PIXEL_TO_METERS(-3000))
+		{
+			drag = AeroDrag(&body1);
+			float n = drag.y;
+			float m = (drag.y) / PIXEL_TO_METERS(3000);
+			float dragForce = m * body1.GetPosition().y + n;
+			drag.y = dragForce;
+		}
+		body1.AddForce(bhVec2(0, forceGravity + drag.y));
 
 		//LOG("FORCE GRAVITY %f", forceGravity);
 		//LOG("DRAG FORCE %f", drag.y);
@@ -65,11 +72,8 @@ void PhysicsEngine::ForceGravity(bhBody& body1)
 		float m = (gravity) / PIXEL_TO_METERS(9000-13000);
 		float forceGravity = m * body1.GetPosition().y + b;
 
-		// TODO 
-		//en principi la lluna no te atmosfera
-		bhVec2 drag = AeroDrag(&body1);
-		body1.AddForce(bhVec2(0, forceGravity + drag.y));
-		//LOG("%f", forceGravity);
+		body1.AddForce(bhVec2(0, forceGravity));
+		LOG("%f", forceGravity);
 	}
 	else
 	{
@@ -85,8 +89,8 @@ bhVec2 PhysicsEngine::Gravity()
 bhVec2 PhysicsEngine::AeroDrag(bhBody* b)
 {
 	bhVec2 dragVec = {};
-	if (b->GetPosition().y < PIXEL_TO_METERS(-800))
-	{
+	//if (b->GetPosition().y > PIXEL_TO_METERS(-800))
+	//{
 		// Drag coefficient
 		float dragCoef = 7.0f;
 
@@ -104,8 +108,8 @@ bhVec2 PhysicsEngine::AeroDrag(bhBody* b)
 
 		bhVec2 direction = b->GetLinearVelocity().Normalize().Negate();
 
-		bhVec2 dragVec = direction * forceDrag;
-	}
+		dragVec = direction * forceDrag;
+	//}
 
 	return dragVec;
 }
@@ -282,9 +286,20 @@ bool PhysicsEngine::Intersection(bhBody* b1, bhBody* b2)
 		return false;
 }
 
+bool PhysicsEngine::Intersection(SDL_Rect rect, bhBody* b2)
+{
+	float x = b2->GetPosition().x - (PIXEL_TO_METERS(rect.x) + (PIXEL_TO_METERS(rect.w) / 2));
+	float y = b2->GetPosition().y - (PIXEL_TO_METERS(rect.y) + (PIXEL_TO_METERS(rect.h) / 2));
+	float dist = sqrt(pow(x, 2) + pow(y, 2));
+
+	if (dist < (PIXEL_TO_METERS(rect.w) / 2) + b2->GetBodyRadius())
+		return true;
+	else
+		return false;
+}
+
 void PhysicsEngine::Collisions(bhBody* b, bhBody* b2)
 {
-	
 	// First we get the normal corresponding from the world to the body
 	bhVec2 dir = b->GetPosition() - b2->GetPosition();
 	bhVec2 dirNoNormalized = dir;

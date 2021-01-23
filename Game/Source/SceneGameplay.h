@@ -37,4 +37,5 @@ public:
 
 	int waterDropFx;
 	bool waterDropPlayOnce;
+	bool arriveMoon;
 };

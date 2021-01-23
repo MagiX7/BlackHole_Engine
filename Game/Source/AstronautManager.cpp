@@ -142,3 +142,19 @@ bool AstronautManager::CheckCollision(bhBody* body, Physics* physics)
 
 	return false;
 }
+
+bool AstronautManager::CheckCollision(SDL_Rect rect, Physics* physics)
+{
+	p2List_item<Astronaut*>* item = astronautsList.getFirst();
+
+	while (item != nullptr)
+	{
+		if (physics->GetWorld()->Intersection(rect, item->data->GetBody()))
+		{
+			DeleteAstronaut(item->data->GetBody(), physics);
+			return true;
+		}
+		item = item->next;
+	}
+	return false;
+}

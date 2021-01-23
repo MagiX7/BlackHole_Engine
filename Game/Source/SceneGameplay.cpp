@@ -68,6 +68,7 @@ bool SceneGameplay::Load(Texture* tex, SDL_Texture* texture)
 	app->audio->PlayMusic("Assets/Audio/earth_scene.ogg");
 
 	app->render->camera.y = 400;
+	arriveMoon = false;
 
 	return true;
 }
@@ -102,11 +103,14 @@ update_status SceneGameplay::Update(Input* input, float dt)
 		if (app->render->offset > -200) app->render->offset -= 150 * dt;
 	}
 
-	if (!spaceship->GetBody()->IsActive()) 
-		TransitionToScene(SceneType::ENDING);
+	if (!spaceship->GetBody()->IsActive()) TransitionToScene(SceneType::ENDING);
 
 	if (app->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN) TransitionToScene(SceneType::ENDING);
 
+	if (arriveMoon == true && app->physics->GetWorld()->Intersection(spaceship->GetBody(), earth))
+	{
+		TransitionToScene(SceneType::ENDING);
+	}
 
 	// Camera ========================================
 

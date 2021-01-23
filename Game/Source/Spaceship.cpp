@@ -85,6 +85,7 @@ bool Spaceship::Start()
 	currentAnim = &idleAnim;
 
 	texture = app->tex->Load("Assets/Textures/Spaceship/sheet.png");
+	missileTexture = app->tex->Load("Assets/Textures/missile.png");
 	scoreFx = app->audio->LoadFx("Assets/Audio/pickup_fx.wav");
 	scoreTexture = app->tex->Load("Assets/Textures/astronaut_score.png");
 
@@ -92,6 +93,9 @@ bool Spaceship::Start()
 	fontsIndex = app->fonts->Load("Assets/Textures/fonts.png", lookupTable, 1);
 
 	astronautFx = app->audio->LoadFx("Assets/Audio/astronaut_fx.wav");
+	astronautDie = app->audio->LoadFx("Assets/Audio/astronaut_die.wav");
+	asteroidFx = app->audio->LoadFx("Assets/Audio/explosion_asteroid.wav");
+	missileFx = app->audio->LoadFx("Assets/Audio/missile_fx.wav");
 
 	return true;
 }
@@ -118,9 +122,14 @@ update_status Spaceship::Update(float dt, AsteroidManager* asteroid, AstronautMa
 		HandleInput(dt);
 
 		if ((app->physics->GetWorld()->Intersection(body, scene->earth) || app->physics->GetWorld()->Intersection(body, scene->moon)) &&
-			fabs(body->GetLinearVelocity().y) > 0.5f || fabs(body->GetLinearVelocity().x) > 0.5f)
+			(fabs(body->GetLinearVelocity().y) > 5.0f || fabs(body->GetLinearVelocity().x) > 5.0f))
 		{
 			Dead();
+		}
+
+		if (app->physics->GetWorld()->Intersection(body, scene->moon) && fabs(body->GetLinearVelocity().y) < 5.0f)
+		{
+			scene->arriveMoon = true;
 		}
 
 		if (asteroid->CheckCollision(body, app->physics) == true)
@@ -133,6 +142,22 @@ update_status Spaceship::Update(float dt, AsteroidManager* asteroid, AstronautMa
 			AddScore();
 			int num = rand() % 10;
 			if (num >= 5) app->audio->PlayFx(astronautFx);			
+		}
+
+		p2List_item<Missile*>* item = missiles.getFirst();
+		while (item)
+		{
+			if (asteroid->CheckCollision(item->data->collider, app->physics))
+			{
+				app->audio->PlayFx(asteroidFx);
+				missiles.del(item);
+			}
+			if (astronaut->CheckCollision(item->data->collider, app->physics))
+			{
+				app->audio->PlayFx(astronautDie);
+				missiles.del(item);
+			}
+			item = item->next;
 		}
 	}
 	else if (health <= 0)
@@ -155,7 +180,6 @@ update_status Spaceship::Update(float dt, AsteroidManager* asteroid, AstronautMa
 			item = item->next;
 		}
 	}
-
 
 	LOG("POS ================= %f  %f", METERS_TO_PIXELS(body->GetPosition().x), METERS_TO_PIXELS(body->GetPosition().y));
 
@@ -186,6 +210,7 @@ void Spaceship::Draw()
 		p2List_item<Missile*>* item = missiles.getFirst();
 		while (item != nullptr)
 		{
+			//app->render->DrawTexture(missileTexture, item->data->collider.x, item->data->collider.y, NULL, 1.0f, item->data->direction.y);
 			app->render->DrawQuad(item->data->collider, 255, 0, 0, 255);
 			item = item->next;
 		}
@@ -209,7 +234,7 @@ bool Spaceship::CleanUp()
 	app->tex->UnLoad(scoreTexture);
 	app->physics->DestroyBody(body);
 
-	if (missiles.count() > 0)missiles.clear();
+	if (missiles.count() > 0) missiles.clear();
 
 	return true;
 }
@@ -225,6 +250,8 @@ void Spaceship::CreateMissile()
 	float dirNorm = sqrt(missile->direction.x * missile->direction.x + missile->direction.y * missile->direction.y);
 	missile->direction.x /= dirNorm;
 	missile->direction.y /= dirNorm;
+	missile->angle = body->GetBodyAngle();
+	app->audio->PlayFx(missileFx);
 
 	missiles.add(missile);
 }
@@ -232,8 +259,7 @@ void Spaceship::CreateMissile()
 void Spaceship::HandleInput(float dt)
 {
 	// Create missiles
-	if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
-		CreateMissile();
+	if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) CreateMissile();
 
 	if (app->input->GetKey(SDL_SCANCODE_E) == KEY_DOWN)
 	{
@@ -278,17 +304,10 @@ void Spaceship::HandleInput(float dt)
 		}
 	}
 
-	if (app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
-	{
-		body->Rotate(2);
-	}
+	if (app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT || app->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT) body->Rotate(2);
 
-	if (app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
-	{
-		body->Rotate(-2);
-	}
+	if (app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT || app->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT) body->Rotate(-2);
 
-	
 	//==============================================
 	// Add Momentum with force
 
@@ -299,7 +318,6 @@ void Spaceship::HandleInput(float dt)
 			engineOnAnim.Reset();
 			currentAnim = &engineOnAnim;
 		}
-
 
 		double angle = body->GetBodyAngle();
 		bhVec2 mom = bhVec2(cos(angle - 90 * M_PI / 180), sin(angle - 90 * M_PI / 180));
@@ -316,16 +334,6 @@ void Spaceship::HandleInput(float dt)
 			flyAnim.Reset();
 			currentAnim = &flyAnim;
 		}
-	}
-
-	if (app->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
-	{
-		body->Rotate(2);
-	}
-
-	if (app->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT)
-	{
-		body->Rotate(-2);
 	}
 }
 

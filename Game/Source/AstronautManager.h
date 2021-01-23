@@ -25,6 +25,7 @@ public:
 	void DeleteAstronaut(bhBody* astronaut, Physics* physics);
 	void SetTexture(Texture* tex);
 	bool CheckCollision(bhBody* body, Physics* physics);
+	bool CheckCollision(SDL_Rect rect, Physics* physics);
 
 	p2List<Astronaut*> astronautsList;
 

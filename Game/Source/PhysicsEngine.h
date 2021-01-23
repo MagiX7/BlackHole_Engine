@@ -5,6 +5,7 @@
 #include "bhBody.h"
 
 class bhVec2;
+struct SDL_Rect;
 
 class PhysicsEngine
 {
@@ -25,6 +26,7 @@ public:
 	void Step(float dt);
 
 	bool Intersection(bhBody* b1, bhBody* b2);
+	bool Intersection(SDL_Rect rect, bhBody* b2);
 	void Collisions(bhBody* b, bhBody* b2);
 
 
