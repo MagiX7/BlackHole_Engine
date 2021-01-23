@@ -6,9 +6,6 @@
 
 PhysicsEngine::PhysicsEngine()
 {
-	//aeroDrag = 0.01f;
-	//aeroLift = 0.3f;
-	//hydroDrag = 0.3f;
 }
 
 PhysicsEngine::~PhysicsEngine()
@@ -114,31 +111,39 @@ bhVec2 PhysicsEngine::AeroDrag(bhBody* b)
 	return dragVec;
 }
 
-//bhVec2 PhysicsEngine::AeroLift(bhBody* b)
-//{
-//	float density = b->GetBodyMass() /*volumen*/;
-//
-//	bhVec2 liftForce;
-//
-//	float x = (density * (b->GetLinearVelocity().x * b->GetLinearVelocity().x) / 2) * aeroLift; /*area*/
-//	float y = (density * (b->GetLinearVelocity().y * b->GetLinearVelocity().y) / 2) * aeroLift; /*area*/
-//
-//	liftForce = bhVec2(x, y);
-//
-//	return liftForce;
-//}
-
-bhVec2 PhysicsEngine::HydroBuoy(bhBody* b)
+bhVec2 PhysicsEngine::AeroLift(bhBody* b)
 {
-	bhVec2 hydroBuoyForce = { 0,0 };
+	bhVec2 aeroLiftForce = { 0,0 };
 
+	// Density of the air
+	float airDensity = 2.5f;
+
+	// Velocity of the body
+	float velocity = b->GetLinearVelocity().GetNorm();
+
+	// Area for the wing
+	float areaWing = M_PI * b->GetBodyRadius() * b->GetBodyRadius() / 2;
+
+	// Lift coefficient (FUYM)
+	float liftCoefficient = 1.5f;
+
+	// Formula
+	float AeroLiftForce = 0.5 * airDensity * velocity * velocity * areaWing * liftCoefficient;
+	
+	// Current velocity
+	bhVec2 direction = b->GetLinearVelocity().Normalize();
+
+	aeroLiftForce = direction * AeroLiftForce;
+
+	return aeroLiftForce;
+
+}
+
+bhVec2 PhysicsEngine::WaterPressure(bhBody* b)
+{
+	bhVec2 forcePressure = { 0,0 };
 	// Variable that stores the water level that we want, for comfort
 	bhVec2 waterLevel = { 0,PIXEL_TO_METERS(-800) };
-
-	// Store gravity and density in variables for better understanding
-	float gravity = 10.0f;
-
-	float density = 10.0f;
 
 	// First we have to check if the body is starting to touch the water level
 	if (b->GetPosition().y + b->GetBodyRadius() >= waterLevel.y)
@@ -162,14 +167,77 @@ bhVec2 PhysicsEngine::HydroBuoy(bhBody* b)
 			float areaSummerged = ((pow(b->GetBodyRadius(), 2.0f) / 2) * (angle - sin(angle)));
 
 			// The pression will vary with the position of the body, if the body is very far below it will have more pression
-			float pression = (b->GetPosition().y - waterLevel.y) * 1.25f;
+			float pressure = (b->GetPosition().y - waterLevel.y) * 2.0f;
 
-			// We only calculate the pression in half of the body since it's a circle
-			float areaPression = pression * areaSummerged / 2;
+			// We only calculate the pressure in half of the body since it's a circle
+			float areaPressure = pressure * areaSummerged / 2;
+
+			// The direction of the pressure will always go upwards
+			bhVec2 direction = bhVec2(0, waterLevel.y - b->GetPosition().y).Normalize();
+
+			// We do the same with the force of the pressure
+			forcePressure = direction * areaPressure;
+
+			// Finally we add pressure Force
+			b->AddForce(forcePressure);
+		}
+		else
+		{
+			// All the statements below are the same like the ones above, but applied to the other angle
+			float areaSummerged = ((pow(b->GetBodyRadius(), 2.0f) / 2) * (angle - sin(angle)));
+
+			float pressure = (b->GetPosition().y - waterLevel.y) * 2.0f;
+
+			float areaPressure = pressure * areaSummerged / 2;
+
+			bhVec2 direction = { 0, (float)(waterLevel.y - b->GetPosition().y - b->GetBodyRadius()) };
+			direction.Normalize();
+
+			forcePressure = direction * areaPressure;
+
+			b->AddForce(forcePressure);
+		}
+	}
+
+
+	return forcePressure;
+}
+
+bhVec2 PhysicsEngine::HydroBuoy(bhBody* b)
+{
+	bhVec2 hydroBuoyForce = { 0,0 };
+
+	// Variable that stores the water level that we want, for comfort
+	bhVec2 waterLevel = { 0,PIXEL_TO_METERS(-800) };
+
+	// Store gravity and density in variables for better understanding
+	float gravity = 10.0f;
+
+	float density = 4.0f;
+
+	// First we have to check if the body is starting to touch the water level
+	if (b->GetPosition().y + b->GetBodyRadius() >= waterLevel.y)
+	{
+		float angle = 0.0f;
+
+		// We have 2 posible options, if we are fully inside the water, the angle is simply 360, this way we don't have to waste time calculating.
+		// otherwise, we will calculate the angle with the formula.
+		if ((b->GetPosition().y - waterLevel.y) > b->GetBodyRadius())
+		{
+			angle = 360.0f * M_PI / 180;
+		}
+		else
+		{
+			angle = 2 * acos((waterLevel.y - b->GetPosition().y) / b->GetBodyRadius());
+		}
+
+		if (angle >= 360.0f * M_PI / 180)
+		{
+			//  We calculate the area summerged with the formula
+			float areaSummerged = ((pow(b->GetBodyRadius(), 2.0f) / 2) * (angle - sin(angle)));
 
 			// The direction of the buoyancy will always go upwards
 			bhVec2 direction = bhVec2(0, waterLevel.y - b->GetPosition().y).Normalize();
-
 
 			// Finally we apply the force buoyancy formula
 			float forceBuoyancy = density * gravity * areaSummerged;
@@ -177,11 +245,7 @@ bhVec2 PhysicsEngine::HydroBuoy(bhBody* b)
 			// We apply it to the direction we want, which is normalized
 			hydroBuoyForce = direction * forceBuoyancy;
 
-			// We do the same with the force of the pression
-			bhVec2 forcePression = direction * areaPression;
-
-			// Finally we add all the forces we need, in this case, we need the hydro drag force, buoyancy and the force of the pression
-			b->AddForce(forcePression);
+			// Finally we add all the forces we need, in this case, we need the hydro drag force, buoyancy.
 			b->AddForce(hydroBuoyForce);
 			bhVec2 hydroDragForce = HydroDrag(b);
 			b->AddForce(hydroDragForce);
@@ -191,20 +255,12 @@ bhVec2 PhysicsEngine::HydroBuoy(bhBody* b)
 			// All the statements below are the same like the ones above, but applied to the other angle
 			float areaSummerged = ((pow(b->GetBodyRadius(), 2.0f) / 2) * (angle - sin(angle)));
 
-			float pression = (b->GetPosition().y - waterLevel.y) * 1.25f;
-
-			float areaPression = pression * areaSummerged / 2;
-
 			bhVec2 direction = { 0, (float)(waterLevel.y - b->GetPosition().y - b->GetBodyRadius()) };
 			direction.Normalize();
 
 			float forceBuoyancy = density * gravity * areaSummerged;
 			hydroBuoyForce = direction * forceBuoyancy;
-			
-			bhVec2 forcePression = direction * areaPression;
 
-
-			b->AddForce(forcePression);
 			b->AddForce(hydroBuoyForce);
 			bhVec2 hydroDragForce = HydroDrag(b);
 			b->AddForce(hydroDragForce);
@@ -216,10 +272,8 @@ bhVec2 PhysicsEngine::HydroBuoy(bhBody* b)
 
 bhVec2 PhysicsEngine::HydroDrag(bhBody* b)
 {
-	bhVec2 hydroDragForce;
-
 	// Velocity friction coefficient
-	float velocityCoef = 15.0f;
+	float velocityCoef = 6.0f;
 
 	// Current velocity of the object
 	float velocity = b->GetLinearVelocity().GetNorm();
@@ -249,6 +303,7 @@ void PhysicsEngine::Step(float dt)
 			item->data->ResetForce();
 			ForceGravity(*item->data);
 			HydroBuoy(item->data);
+			WaterPressure(item->data);
 			item->data->ApplyNewtonSecondLaw();
 			Integrator(item->data->GetPosition(), item->data->GetLinearVelocity(), item->data->GetAcceleration(), dt);
 		}
@@ -310,22 +365,14 @@ void PhysicsEngine::Collisions(bhBody* b, bhBody* b2)
 	dir = dir.Normalize();
 	
 	// We get the actual velocity of the spaceship
-	bhVec2 newSpeed = b->GetLinearVelocity();
-
 	// We get the speed as a float
-	float speed = sqrt((newSpeed.x * newSpeed.x) + (newSpeed.y * newSpeed.y));
+	float speed = b->GetLinearVelocity().GetNorm();
 
 	// We now multiply the speed for the direction so the spaceship knows the direction where it has to go to
-	newSpeed = dir * speed;
-
-	//if (b2->GetName() == "floor")
-		newSpeed = newSpeed * 0.6f;
-	
-	//else
-	//	newSpeed = newSpeed * 0.9f;
+	bhVec2 velocity = dir * speed * 0.6f;
 
 	if (b2->type != BodyType::SENSOR)
-		b->SetLinearVelocity(newSpeed);
+		b->SetLinearVelocity(velocity);
 }
 
 void PhysicsEngine::AddBody(bhBody* b)

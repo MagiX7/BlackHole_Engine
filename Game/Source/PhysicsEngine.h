@@ -19,9 +19,10 @@ public:
 
 	bhVec2 Gravity();
 	bhVec2 AeroDrag(bhBody* b);
-	//bhVec2 AeroLift(bhBody* b);
+	bhVec2 AeroLift(bhBody* b);
 	bhVec2 HydroBuoy(bhBody* b);
 	bhVec2 HydroDrag(bhBody* b);
+	bhVec2 WaterPressure(bhBody* b);
 
 	void Step(float dt);
 
