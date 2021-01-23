@@ -23,7 +23,7 @@ SceneDead::~SceneDead()
 {
 }
 
-bool SceneDead::Load(Texture* tex, SDL_Texture* t)
+bool SceneDead::Load(Texture* tex)
 {
 	bg = tex->Load("Assets/Textures/lose.png");
 	textureFire = tex->Load("Assets/Textures/Fires/fire2.png");

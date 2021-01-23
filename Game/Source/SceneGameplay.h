@@ -17,7 +17,7 @@ public:
 	SceneGameplay(App* parent);
 	virtual ~SceneGameplay();
 
-	bool Load(Texture* tex, SDL_Texture* bg) override;
+	bool Load(Texture* tex) override;
 	update_status Update(Input* input, float dt) override;
 	update_status Draw(Render* ren) override;
 	bool Unload(Texture* tex) override;
@@ -30,7 +30,8 @@ public:
 	Spaceship* spaceship;
 	bool relaunchSpaceship = false;
 
-	SDL_Texture* bg;
+	SDL_Texture* bgTop;
+	SDL_Texture* bgBottom;
 	App* app;
 	AsteroidManager* asteroidManager;
 	AstronautManager* astronautManager;

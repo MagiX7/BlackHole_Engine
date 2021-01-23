@@ -6,9 +6,9 @@
 
 PhysicsEngine::PhysicsEngine()
 {
-	aeroDrag = 0.01f;
-	aeroLift = 0.3f;
-	hydroDrag = 0.3f;
+	//aeroDrag = 0.01f;
+	//aeroLift = 0.3f;
+	//hydroDrag = 0.3f;
 }
 
 PhysicsEngine::~PhysicsEngine()
@@ -53,17 +53,17 @@ void PhysicsEngine::ForceGravity(bhBody& body1)
 		//LOG("FORCE GRAVITY %f", forceGravity);
 		//LOG("DRAG FORCE %f", drag.y);
 	}
-	else if (body1.GetPosition().y < PIXEL_TO_METERS(-5001) && body1.GetPosition().y >= PIXEL_TO_METERS(-9000))
-	{
-		//LOG("ON SECOND IF===================")
-		gravity = 0.0f;
-		float b = gravity;
-		float m = (gravity) / PIXEL_TO_METERS(9000);
-		float forceGravity = m * body1.GetPosition().y + b;
+	//else if (body1.GetPosition().y < PIXEL_TO_METERS(-5001) && body1.GetPosition().y >= PIXEL_TO_METERS(-9000))
+	//{
+	//	//LOG("ON SECOND IF===================")
+	//	gravity = 0.0f;
+	//	float b = gravity;
+	//	float m = (gravity) / PIXEL_TO_METERS(9000);
+	//	float forceGravity = m * body1.GetPosition().y + b;
 
-		body1.AddForce(bhVec2(0, forceGravity));
-		//LOG("%f", forceGravity);
-	}
+	//	body1.AddForce(bhVec2(0, forceGravity));
+	//	//LOG("%f", forceGravity);
+	//}
 	else if (body1.GetPosition().y < PIXEL_TO_METERS(-9001) && body1.GetPosition().y >= PIXEL_TO_METERS(-13000))
 	{
 		//LOG("ON THIRD IF=====================")
@@ -88,7 +88,7 @@ bhVec2 PhysicsEngine::Gravity()
 
 bhVec2 PhysicsEngine::AeroDrag(bhBody* b)
 {
-	bhVec2 dragVec = {};
+	bhVec2 dragVec = { 0,0 };
 	//if (b->GetPosition().y > PIXEL_TO_METERS(-800))
 	//{
 		// Drag coefficient
@@ -114,19 +114,19 @@ bhVec2 PhysicsEngine::AeroDrag(bhBody* b)
 	return dragVec;
 }
 
-bhVec2 PhysicsEngine::AeroLift(bhBody* b)
-{
-	float density = b->GetBodyMass() /*volumen*/;
-
-	bhVec2 liftForce;
-
-	float x = (density * (b->GetLinearVelocity().x * b->GetLinearVelocity().x) / 2) * aeroLift; /*area*/
-	float y = (density * (b->GetLinearVelocity().y * b->GetLinearVelocity().y) / 2) * aeroLift; /*area*/
-
-	liftForce = bhVec2(x, y);
-
-	return liftForce;
-}
+//bhVec2 PhysicsEngine::AeroLift(bhBody* b)
+//{
+//	float density = b->GetBodyMass() /*volumen*/;
+//
+//	bhVec2 liftForce;
+//
+//	float x = (density * (b->GetLinearVelocity().x * b->GetLinearVelocity().x) / 2) * aeroLift; /*area*/
+//	float y = (density * (b->GetLinearVelocity().y * b->GetLinearVelocity().y) / 2) * aeroLift; /*area*/
+//
+//	liftForce = bhVec2(x, y);
+//
+//	return liftForce;
+//}
 
 bhVec2 PhysicsEngine::HydroBuoy(bhBody* b)
 {
@@ -266,9 +266,12 @@ void PhysicsEngine::Step(float dt)
 	{
 		for (p2List_item<bhBody*>* item2 = item->next; item2 != nullptr; item2 = item2->next)
 		{
-			if (Intersection(item->data, item2->data) && item->data->IsActive())
+			if (item->data->GetName() != "missile" && item2->data->GetName() != "missile")
 			{
-				Collisions(item->data, item2->data);
+				if (Intersection(item->data, item2->data) && item->data->IsActive())
+				{
+ 					Collisions(item->data, item2->data);
+				}
 			}
 		}
 	}
@@ -302,7 +305,6 @@ void PhysicsEngine::Collisions(bhBody* b, bhBody* b2)
 {
 	// First we get the normal corresponding from the world to the body
 	bhVec2 dir = b->GetPosition() - b2->GetPosition();
-	bhVec2 dirNoNormalized = dir;
 
 	// We normalize the vector, since we only want the direction
 	dir = dir.Normalize();
@@ -348,12 +350,10 @@ void PhysicsEngine::DeleteBody(bhBody* b)
 
 void PhysicsEngine::Integrator(bhVec2& pos, bhVec2& v, bhVec2& a, float dt)
 {
-
 	// Velocity-Verlet
 	pos.x += v.x * dt + 0.5 * a.x * dt * dt;
 	pos.y += v.y * dt + 0.5 * a.y * dt * dt;
 
 	v.x += a.x * dt;
 	v.y += a.y * dt;
-
 }

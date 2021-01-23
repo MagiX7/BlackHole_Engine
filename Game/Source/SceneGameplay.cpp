@@ -18,7 +18,7 @@ SceneGameplay::~SceneGameplay()
 {
 }
 
-bool SceneGameplay::Load(Texture* tex, SDL_Texture* texture)
+bool SceneGameplay::Load(Texture* tex)
 {
 	earth = app->physics->CreateBody("earth", BodyType::STATIC);
 	earth->SetRadius(PIXEL_TO_METERS(1000));
@@ -64,7 +64,9 @@ bool SceneGameplay::Load(Texture* tex, SDL_Texture* texture)
 	waterDropFx = app->audio->LoadFx("Assets/Audio/waterdrop_1.wav");
 	waterDropPlayOnce = false;
 
-	bg = texture;
+	bgTop = tex->Load("Assets/Textures/bg_top.png");
+	bgBottom = tex->Load("Assets/Textures/bg_bottom.png");
+
 	app->audio->PlayMusic("Assets/Audio/earth_scene.ogg");
 
 	app->render->camera.y = 400;
@@ -75,19 +77,16 @@ bool SceneGameplay::Load(Texture* tex, SDL_Texture* texture)
 
 update_status SceneGameplay::Update(Input* input, float dt)
 {
-	//LOG("==========================");
-
 	spaceship->Update(dt, asteroidManager, astronautManager);
 
 	if (app->physics->GetWorld()->Intersection(spaceship->GetBody(),moon) && spaceship->GetBody()->GetLinearVelocity().y <= 0.2f)
 	{
-		if (spaceship->GetFuel() <= 50.0f)
+		if (spaceship->GetFuel() <= 100.0f)
 			spaceship->AddFuel(1.2f * dt);
 	}
 
 	asteroidManager->Update(dt);
 	astronautManager->Update(dt);
-	//LOG("MUNDO %f  %f", floor->GetPosition().x, floor->GetPosition().y);
 
 	app->render->camera.y = METERS_TO_PIXELS(-spaceship->GetBody()->GetPosition().y + SCREEN_HEIGHT / 2 + app->render->offset);
 
@@ -136,7 +135,9 @@ update_status SceneGameplay::Update(Input* input, float dt)
 
 update_status SceneGameplay::Draw(Render* ren)
 {
-	ren->DrawTexture(bg, 0, -12500, NULL);
+	ren->DrawTexture(bgTop, 0, -12500, NULL);
+	ren->DrawTexture(bgBottom, 0, -6000, NULL);
+
 	astronautManager->Draw(ren);
 	asteroidManager->Draw(ren);
 	spaceship->Draw();

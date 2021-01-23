@@ -15,11 +15,14 @@ class SceneGameplay;
 
 struct Missile
 {
-	bhVec2 position = { 0,0 };
+	//bhVec2 position = { 0,0 };
 	bhVec2 direction = { 0,0 };
 	int damage = 50;
-	SDL_Rect collider = { (int)position.x,(int)position.y,5,5 };
-	float angle;
+	//SDL_Rect collider = { (int)position.x,(int)position.y,12,30 };
+	//float angle; // In RADS
+	bhBody* body;
+
+	Animation animMine;
 };
 
 

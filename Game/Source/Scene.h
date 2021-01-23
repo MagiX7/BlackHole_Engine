@@ -24,7 +24,7 @@ public:
 	virtual ~Scene() {};
 
 	// Called before the first frame
-	virtual bool Load(Texture* tex, SDL_Texture* bg) { return true; }
+	virtual bool Load(Texture* tex) { return true; }
 
 	// Called each loop iteration
 	virtual update_status Update(Input* input, float dt) { return update_status::UPDATE_CONTINUE; }

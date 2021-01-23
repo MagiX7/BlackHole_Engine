@@ -14,7 +14,7 @@ public:
 	SceneDead();
 	virtual ~SceneDead();
 
-	bool Load(Texture* tex, SDL_Texture* bg) override;
+	bool Load(Texture* tex) override;
 	update_status Update(Input* input, float dt) override;
 	update_status Draw(Render* ren) override;
 	bool UnLoad(Texture* tex);

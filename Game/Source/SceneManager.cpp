@@ -25,7 +25,7 @@ bool SceneManager::Start()
 	bool ret = true;
 
 	current = new SceneTitle();
-	current->Load(app->tex, texture);
+	current->Load(app->tex);
 
 	next = nullptr;
 
@@ -79,7 +79,7 @@ update_status SceneManager::Update(float dt)
 				transitionAlpha = 1.0f;
 
 				current->Unload(app->tex);	// Unload current screen
-				next->Load(app->tex, texture);	// Load next screen
+				next->Load(app->tex);	// Load next screen
 
 				current = nullptr;	// Free current pointer
 				current = next;		// Assign next pointer

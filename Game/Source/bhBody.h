@@ -73,9 +73,9 @@ public:
 		linearV.y += momentum.y / mass;
 	}
 
-	void AddMomentumWithForce(bhVec2 v, float dt)
+	void AddMomentumWithForce(bhVec2 v)
 	{
-		bhVec2 momentum = (v * mass) / dt;
+		bhVec2 momentum = (v * mass)/* / dt*/;
 		totalForce += momentum;
 		//force += p / mass;
 	}

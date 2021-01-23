@@ -11,7 +11,7 @@ SceneTitle::~SceneTitle()
 {
 }
 
-bool SceneTitle::Load(Texture* tex, SDL_Texture* texture)
+bool SceneTitle::Load(Texture* tex)
 {
 	LOG("Loading Title Scene");
 

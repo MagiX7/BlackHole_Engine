@@ -8,7 +8,7 @@
 #include "Spaceship.h"
 #include "SceneGameplay.h"
 
-#define MISSILE_SPEED 500
+#define MISSILE_SPEED 5
 
 Spaceship::Spaceship(App* parent, SceneGameplay* gameplay)
 {
@@ -85,7 +85,7 @@ bool Spaceship::Start()
 	currentAnim = &idleAnim;
 
 	texture = app->tex->Load("Assets/Textures/Spaceship/sheet.png");
-	missileTexture = app->tex->Load("Assets/Textures/missile.png");
+	missileTexture = app->tex->Load("Assets/Textures/mine.png");
 	scoreFx = app->audio->LoadFx("Assets/Audio/pickup_fx.wav");
 	scoreTexture = app->tex->Load("Assets/Textures/astronaut_score.png");
 
@@ -93,7 +93,7 @@ bool Spaceship::Start()
 	fontsIndex = app->fonts->Load("Assets/Textures/fonts.png", lookupTable, 1);
 
 	astronautFx = app->audio->LoadFx("Assets/Audio/astronaut_fx.wav");
-	astronautDie = app->audio->LoadFx("Assets/Audio/astronaut_die.wav");
+	astronautDie = app->audio->LoadFx("Assets/Audio/astronaut_dead.wav");
 	asteroidFx = app->audio->LoadFx("Assets/Audio/explosion_asteroid.wav");
 	missileFx = app->audio->LoadFx("Assets/Audio/missile_fx.wav");
 
@@ -147,12 +147,12 @@ update_status Spaceship::Update(float dt, AsteroidManager* asteroid, AstronautMa
 		p2List_item<Missile*>* item = missiles.getFirst();
 		while (item)
 		{
-			if (asteroid->CheckCollision(item->data->collider, app->physics))
+			if (asteroid->CheckCollision(item->data->body, app->physics))
 			{
 				app->audio->PlayFx(asteroidFx);
 				missiles.del(item);
 			}
-			if (astronaut->CheckCollision(item->data->collider, app->physics))
+			if (astronaut->CheckCollision(item->data->body, app->physics))
 			{
 				app->audio->PlayFx(astronautDie);
 				missiles.del(item);
@@ -172,11 +172,8 @@ update_status Spaceship::Update(float dt, AsteroidManager* asteroid, AstronautMa
 		p2List_item<Missile*>* item = missiles.getFirst();
 		while (item != nullptr)
 		{
-			item->data->position.x += item->data->direction.x * MISSILE_SPEED * dt;
-			item->data->position.y += item->data->direction.y * MISSILE_SPEED * dt;
-			item->data->collider.x = item->data->position.x;
-			item->data->collider.y = item->data->position.y;
-
+			item->data->animMine.speed = 200 * dt;
+			item->data->animMine.Update(dt);
 			item = item->next;
 		}
 	}
@@ -210,8 +207,8 @@ void Spaceship::Draw()
 		p2List_item<Missile*>* item = missiles.getFirst();
 		while (item != nullptr)
 		{
-			//app->render->DrawTexture(missileTexture, item->data->collider.x, item->data->collider.y, NULL, 1.0f, item->data->direction.y);
-			app->render->DrawQuad(item->data->collider, 255, 0, 0, 255);
+			app->render->DrawTexture(missileTexture, METERS_TO_PIXELS(item->data->body->GetPosition().x - 12), METERS_TO_PIXELS(item->data->body->GetPosition().y - 12), &item->data->animMine.GetCurrentFrame()/*, 1.0f, (item->data->body->GetBodyAngle() * RAD2DEG), 9.5f, 17.0f*/);
+			app->render->DrawCircle(METERS_TO_PIXELS(item->data->body->GetPosition().x), METERS_TO_PIXELS(item->data->body->GetPosition().y), METERS_TO_PIXELS(item->data->body->GetBodyRadius()), 255, 0, 0, 255);
 			item = item->next;
 		}
 	}
@@ -242,15 +239,30 @@ bool Spaceship::CleanUp()
 void Spaceship::CreateMissile()
 {
 	Missile* missile = new Missile();
-	float x = METERS_TO_PIXELS(body->GetPosition().x);
-	float y = METERS_TO_PIXELS(body->GetPosition().y);
-	missile->position = { x, y };
-	missile->direction = { (float)cos((body->GetBodyAngle())), (float)sin((body->GetBodyAngle())) };
+	missile->animMine.PushBack({ 1,1,24,24 });
+	missile->animMine.PushBack({ 27,1,24,24 });
+	missile->animMine.loop = true;
+
+	missile->body = app->physics->CreateBody("missile", BodyType::NO_GRAVITY);
+	
+	missile->body->SetRadius(0.2f);
+	float x = (body->GetPosition().x);
+	float y = (body->GetPosition().y);
+
+	missile->body->SetPosition(x, y);
+	missile->direction = { (float)cos((body->GetBodyAngle() - PI / 2)), (float)sin((body->GetBodyAngle() - PI / 2)) };
 
 	float dirNorm = sqrt(missile->direction.x * missile->direction.x + missile->direction.y * missile->direction.y);
 	missile->direction.x /= dirNorm;
 	missile->direction.y /= dirNorm;
-	missile->angle = body->GetBodyAngle();
+	missile->body->SetBodyAngle(body->GetBodyAngle());
+
+	// Better and new implementation?
+	//bhVec2 vel = { ((float)body->GetLinearVelocity().x + MISSILE_SPEED) * (float)missile->direction.x, ((float)body->GetLinearVelocity().y + MISSILE_SPEED) * (float)missile->direction.y };
+
+	bhVec2 v = { MISSILE_SPEED * (float)missile->direction.x, MISSILE_SPEED * (float)missile->direction.y };
+	missile->body->SetLinearVelocity(v);
+
 	app->audio->PlayFx(missileFx);
 
 	missiles.add(missile);
@@ -288,9 +300,9 @@ void Spaceship::HandleInput(float dt)
 		}
 
 		double angle = body->GetBodyAngle();
-		bhVec2 mom = bhVec2(cos(angle - 90 * M_PI / 180), sin(angle - 90 * M_PI / 180));
-			
-		body->AddMomentum(bhVec2(PIXEL_TO_METERS(mom.x * 10), PIXEL_TO_METERS(mom.y * 10)));
+		bhVec2 dir = bhVec2(cos(angle - 90 * M_PI / 180), sin(angle - 90 * M_PI / 180));
+		bhVec2 momentum = { 1000 * (float)dir.x, 1000 * (float)dir.y };    // 1000 stands for fuym because if not the spaceship doesnt fly
+		body->AddMomentum(bhVec2(PIXEL_TO_METERS(momentum.x * dt), PIXEL_TO_METERS(momentum.y * dt)));
 			
 		fuel -= (1.2f * dt);
 	}
@@ -323,7 +335,7 @@ void Spaceship::HandleInput(float dt)
 		bhVec2 mom = bhVec2(cos(angle - 90 * M_PI / 180), sin(angle - 90 * M_PI / 180));
 			
 		bhVec2 f = { (float)mom.x * 1000, (float)mom.y * 1000 };
-		body->AddMomentumWithForce(bhVec2(PIXEL_TO_METERS(f.x * dt), PIXEL_TO_METERS(f.y * dt)), dt);
+		body->AddMomentumWithForce(bhVec2(PIXEL_TO_METERS(f.x * dt), PIXEL_TO_METERS(f.y * dt)));
 
 		fuel -= (1.2f * dt);
 	}

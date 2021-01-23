@@ -19,7 +19,7 @@ public:
 
 	bhVec2 Gravity();
 	bhVec2 AeroDrag(bhBody* b);
-	bhVec2 AeroLift(bhBody* b);
+	//bhVec2 AeroLift(bhBody* b);
 	bhVec2 HydroBuoy(bhBody* b);
 	bhVec2 HydroDrag(bhBody* b);
 
@@ -40,10 +40,10 @@ private:
 private:
 
 	bhVec2 gravity;
-	float aeroDrag;
-	float aeroLift;
-	float hydroBuoy;
-	float hydroDrag;
+	//float aeroDrag;
+	//float aeroLift;
+	//float hydroBuoy;
+	//float hydroDrag;
 
 
 	p2List<bhBody*> bodyList;
