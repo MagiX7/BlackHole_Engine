@@ -253,19 +253,27 @@ void Spaceship::CreateMissile()
 	float y = (body->GetPosition().y);
 
 	missile->body->SetPosition(x, y);
-	missile->direction = { (float)cos((body->GetBodyAngle() - PI / 2)), (float)sin((body->GetBodyAngle() - PI / 2)) };
 	missile->spawnPosition = { x,y };
+	missile->direction = { (float)cos((body->GetBodyAngle() - PI / 2)), 0 };
+
+	if ((float)body->GetLinearVelocity().y >= 0) missile->direction.y = (float)sin((body->GetBodyAngle() - PI / 2));
+	else missile->direction.y = (float)-sin((body->GetBodyAngle() - PI / 2));
 
 	float dirNorm = sqrt(missile->direction.x * missile->direction.x + missile->direction.y * missile->direction.y);
 	missile->direction.x /= dirNorm;
 	missile->direction.y /= dirNorm;
+
 	missile->body->SetBodyAngle(body->GetBodyAngle());
 
 	// Better and new implementation?
-	//bhVec2 vel = { ((float)body->GetLinearVelocity().x + MISSILE_SPEED) * (float)missile->direction.x, ((float)body->GetLinearVelocity().y + MISSILE_SPEED) * (float)missile->direction.y };
+	bhVec2 auxVec;
+	if ((float)body->GetLinearVelocity().y >= 0) auxVec.y = (float)body->GetLinearVelocity().y + MISSILE_SPEED;
+	else auxVec.y = (float)body->GetLinearVelocity().y - MISSILE_SPEED;
 
-	bhVec2 v = { MISSILE_SPEED * (float)missile->direction.x, MISSILE_SPEED * (float)missile->direction.y };
-	missile->body->SetLinearVelocity(v);
+	bhVec2 vel = { ((float)body->GetLinearVelocity().x + MISSILE_SPEED) * (float)missile->direction.x, (float)auxVec.y * (float)missile->direction.y };
+
+	//bhVec2 v = { MISSILE_SPEED * (float)missile->direction.x, MISSILE_SPEED * (float)missile->direction.y };
+	missile->body->SetLinearVelocity(vel);
 
 	app->audio->PlayFx(missileFx);
 
