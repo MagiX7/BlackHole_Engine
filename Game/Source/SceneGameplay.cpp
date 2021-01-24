@@ -79,6 +79,7 @@ bool SceneGameplay::Load(Texture* tex)
 	app->render->camera.y = 12500;
 	arriveMoon = false;
 	arriveWater = false;
+	debug = false;
 
 	return true;
 }
@@ -114,7 +115,7 @@ update_status SceneGameplay::Update(Input* input, float dt)
 
 	if (arriveMoon && arriveWater) TransitionToScene(SceneType::WIN);
 
-	if (app->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN) TransitionToScene(SceneType::ENDING);
+	if (app->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN) debug = !debug;
 
 	// Camera ========================================
 
@@ -146,11 +147,11 @@ update_status SceneGameplay::Draw(Render* ren)
 	ren->DrawTexture(bgTop, 0, -12500, NULL);
 	ren->DrawTexture(bgBottom, 0, -6000, NULL);
 
-	astronautManager->Draw(ren);
-	asteroidManager->Draw(ren);
+	astronautManager->Draw(ren, debug);
+	asteroidManager->Draw(ren, debug);
 	spaceship->Draw();
 
-	ren->DrawCircle(METERS_TO_PIXELS(moon->GetPosition().x), METERS_TO_PIXELS(moon->GetPosition().y), METERS_TO_PIXELS(moon->GetBodyRadius()), 255, 0, 0);
+	if (debug) ren->DrawCircle(METERS_TO_PIXELS(moon->GetPosition().x), METERS_TO_PIXELS(moon->GetPosition().y), METERS_TO_PIXELS(moon->GetBodyRadius()), 255, 0, 0);
 	
 	return update_status::UPDATE_CONTINUE;
 }

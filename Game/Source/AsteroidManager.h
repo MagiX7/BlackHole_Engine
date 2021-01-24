@@ -15,7 +15,7 @@ public:
 
 	bool Start();
 	bool Update(float dt);
-	void Draw(Render* render);
+	void Draw(Render* render, bool debug);
 	bool CleanUp(Texture* tex);
 
 	Asteroid* CreateAsteroid(int radius, bhVec2 position, Physics* physics);

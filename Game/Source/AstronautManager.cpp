@@ -54,14 +54,14 @@ bool AstronautManager::CleanUp(Texture* tex)
 	return true;
 }
 
-void AstronautManager::Draw(Render* render)
+void AstronautManager::Draw(Render* render, bool debug)
 {
 	p2List_item<Astronaut*>* item = astronautsList.getFirst();
 
 	while (item != nullptr)
 	{
 		render->DrawTexture(item->data->texture, METERS_TO_PIXELS(item->data->GetBody()->GetPosition().x - 15), METERS_TO_PIXELS(item->data->GetBody()->GetPosition().y - 15), NULL, 1.0f, item->data->GetBody()->GetBodyAngle() * 180 / M_PI);
-		render->DrawCircle(METERS_TO_PIXELS(item->data->GetBody()->GetPosition().x), METERS_TO_PIXELS(item->data->GetBody()->GetPosition().y), METERS_TO_PIXELS(item->data->GetBody()->GetBodyRadius()), 255, 0, 0);
+		if (debug) render->DrawCircle(METERS_TO_PIXELS(item->data->GetBody()->GetPosition().x), METERS_TO_PIXELS(item->data->GetBody()->GetPosition().y), METERS_TO_PIXELS(item->data->GetBody()->GetBodyRadius()), 255, 0, 0);
 		
 		item = item->next;
 	}

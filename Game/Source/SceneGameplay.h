@@ -40,4 +40,5 @@ public:
 	bool waterDropPlayOnce;
 	bool arriveMoon;
 	bool arriveWater;
+	bool debug;
 };

@@ -39,7 +39,7 @@ bool AsteroidManager::Update(float dt)
 	return true;
 }
 
-void AsteroidManager::Draw(Render* render)
+void AsteroidManager::Draw(Render* render, bool debug)
 {
 	p2List_item<Asteroid*>* item = asteroidList.getFirst();
 
@@ -47,7 +47,7 @@ void AsteroidManager::Draw(Render* render)
 	{
 		float rad = METERS_TO_PIXELS(item->data->GetBody()->GetBodyRadius());
 		render->DrawTexture(item->data->texture, METERS_TO_PIXELS(item->data->GetBody()->GetPosition().x - rad), METERS_TO_PIXELS(item->data->GetBody()->GetPosition().y - rad), &item->data->dieAnim.GetCurrentFrame());
-		render->DrawCircle(METERS_TO_PIXELS(item->data->GetBody()->GetPosition().x), METERS_TO_PIXELS(item->data->GetBody()->GetPosition().y), rad, 255, 0, 0);
+		if (debug) render->DrawCircle(METERS_TO_PIXELS(item->data->GetBody()->GetPosition().x), METERS_TO_PIXELS(item->data->GetBody()->GetPosition().y), rad, 255, 0, 0);
 
 		item = item->next;
 	}

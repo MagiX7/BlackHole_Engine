@@ -209,13 +209,13 @@ void Spaceship::Draw()
 		while (item != nullptr)
 		{
 			app->render->DrawTexture(missileTexture, METERS_TO_PIXELS(item->data->body->GetPosition().x - 12), METERS_TO_PIXELS(item->data->body->GetPosition().y - 12), &item->data->animMine.GetCurrentFrame()/*, 1.0f, (item->data->body->GetBodyAngle() * RAD2DEG), 9.5f, 17.0f*/);
-			app->render->DrawCircle(METERS_TO_PIXELS(item->data->body->GetPosition().x), METERS_TO_PIXELS(item->data->body->GetPosition().y), METERS_TO_PIXELS(item->data->body->GetBodyRadius()), 255, 0, 0, 255);
+			if (scene->debug) app->render->DrawCircle(METERS_TO_PIXELS(item->data->body->GetPosition().x), METERS_TO_PIXELS(item->data->body->GetPosition().y), METERS_TO_PIXELS(item->data->body->GetBodyRadius()), 255, 0, 0, 255);
 			item = item->next;
 		}
 	}
 
 	// Draw collider =======================
-	app->render->DrawCircle(METERS_TO_PIXELS(body->GetPosition().x), METERS_TO_PIXELS(body->GetPosition().y), METERS_TO_PIXELS(body->GetBodyRadius()), 255, 0, 0);
+	if (scene->debug) app->render->DrawCircle(METERS_TO_PIXELS(body->GetPosition().x), METERS_TO_PIXELS(body->GetPosition().y), METERS_TO_PIXELS(body->GetBodyRadius()), 255, 0, 0);
 
 	// Draw text ===========================
 	app->fonts->drawText(80, 20, fontsIndex, scoreAstronautsText);

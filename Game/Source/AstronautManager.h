@@ -18,7 +18,7 @@ public:
 	bool Start();
 	bool Update(float dt);
 	bool CleanUp(Texture* tex);
-	void Draw(Render* ren);
+	void Draw(Render* ren, bool debug);
 
 	Astronaut* CreateAstronaut(int radius, bhVec2 initialPos, Physics* physics);
 	void DeleteAstronaut(Astronaut* astronaut, Physics* physics);
