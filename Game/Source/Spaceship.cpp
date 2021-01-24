@@ -4,7 +4,6 @@
 #include "Physics.h"
 #include "AsteroidManager.h"
 #include "AstronautManager.h"
-
 #include "Spaceship.h"
 #include "SceneGameplay.h"
 
@@ -184,11 +183,6 @@ update_status Spaceship::Update(float dt, AsteroidManager* asteroid, AstronautMa
 			item = item->next;
 		}
 	}
-
-	LOG("POS ================= %f  %f", METERS_TO_PIXELS(body->GetPosition().x), METERS_TO_PIXELS(body->GetPosition().y));
-
-	//LOG("%f  %f", body->GetLinearVelocity().x, body->GetLinearVelocity().y)
-	/*LOG("TOTAL FORCE ================================================= %f", body->GetTotalForce())*/
 
 	if (fuel < 0) fuel = 0;
 

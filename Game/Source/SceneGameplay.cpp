@@ -40,33 +40,38 @@ bool SceneGameplay::Load(Texture* tex)
 	astronautManager = new AstronautManager();
 	astronautManager->SetTexture(tex);
 
-	astronautManager->CreateAstronaut(15, bhVec2(700, -20), app->physics);
-	astronautManager->CreateAstronaut(15, bhVec2(400, -1000), app->physics);
-	astronautManager->CreateAstronaut(15, bhVec2(550, -1500), app->physics);
-	astronautManager->CreateAstronaut(15, bhVec2(700, -3000), app->physics);
-	astronautManager->CreateAstronaut(15, bhVec2(650, -4000), app->physics);
-	astronautManager->CreateAstronaut(15, bhVec2(660, -5000), app->physics);
-	astronautManager->CreateAstronaut(15, bhVec2(400, -6000), app->physics);
-	astronautManager->CreateAstronaut(15, bhVec2(600, -6200), app->physics);
-	astronautManager->CreateAstronaut(15, bhVec2(200, -6700), app->physics);
-	astronautManager->CreateAstronaut(15, bhVec2(650, -7200), app->physics);
+	astronautManager->CreateAstronaut(15, bhVec2(700, -2400), app->physics);
+	astronautManager->CreateAstronaut(15, bhVec2(400, -3200), app->physics);
+	astronautManager->CreateAstronaut(15, bhVec2(550, -4000), app->physics);
+	astronautManager->CreateAstronaut(15, bhVec2(700, -4800), app->physics);
+	astronautManager->CreateAstronaut(15, bhVec2(650, -5600), app->physics);
+	astronautManager->CreateAstronaut(15, bhVec2(660, -6400), app->physics);
+	astronautManager->CreateAstronaut(15, bhVec2(400, -7200), app->physics);
+	astronautManager->CreateAstronaut(15, bhVec2(600, -8000), app->physics);
+	astronautManager->CreateAstronaut(15, bhVec2(500, -8800), app->physics);
+	astronautManager->CreateAstronaut(15, bhVec2(100, -9600), app->physics);
+	astronautManager->CreateAstronaut(15, bhVec2(800, -10500), app->physics);
+	astronautManager->CreateAstronaut(15, bhVec2(500, -11000), app->physics);
+	
 
 	astronautManager->Start();
 
 	asteroidManager = new AsteroidManager();
 	asteroidManager->SetTexture(tex);
 
-	asteroidManager->CreateAsteroid(20.5f, bhVec2(500, -2500), app->physics);
-	asteroidManager->CreateAsteroid(20.5f, bhVec2(300, -3000), app->physics);
-	asteroidManager->CreateAsteroid(20.5f, bhVec2(700, -3500), app->physics);
-	asteroidManager->CreateAsteroid(20.5f, bhVec2(500, -4000), app->physics);
-	asteroidManager->CreateAsteroid(20.5f, bhVec2(300, -4500), app->physics);
-	asteroidManager->CreateAsteroid(20.5f, bhVec2(200, -5000), app->physics);
-	asteroidManager->CreateAsteroid(20.5f, bhVec2(500, -5500), app->physics);
-	asteroidManager->CreateAsteroid(20.5f, bhVec2(300, -6000), app->physics);
-	asteroidManager->CreateAsteroid(20.5f, bhVec2(200, -6500), app->physics);
-	asteroidManager->CreateAsteroid(20.5f, bhVec2(600, -6800), app->physics);
-	asteroidManager->CreateAsteroid(20.5f, bhVec2(400, -7200), app->physics);
+	asteroidManager->CreateAsteroid(20.5f, bhVec2(500, -3000), app->physics);
+	asteroidManager->CreateAsteroid(20.5f, bhVec2(300, -3500), app->physics);
+	asteroidManager->CreateAsteroid(20.5f, bhVec2(700, -4500), app->physics);
+	asteroidManager->CreateAsteroid(20.5f, bhVec2(500, -4700), app->physics);
+	asteroidManager->CreateAsteroid(20.5f, bhVec2(700, -5500), app->physics);
+	asteroidManager->CreateAsteroid(20.5f, bhVec2(500, -6000), app->physics);
+	asteroidManager->CreateAsteroid(20.5f, bhVec2(300, -7000), app->physics);
+	asteroidManager->CreateAsteroid(20.5f, bhVec2(200, -7700), app->physics);
+	asteroidManager->CreateAsteroid(20.5f, bhVec2(500, -8500), app->physics);
+	asteroidManager->CreateAsteroid(20.5f, bhVec2(300, -9300), app->physics);
+	asteroidManager->CreateAsteroid(20.5f, bhVec2(200, -10200), app->physics);
+	asteroidManager->CreateAsteroid(20.5f, bhVec2(600, -10900), app->physics);
+	asteroidManager->CreateAsteroid(20.5f, bhVec2(400, -11200), app->physics);
 
 	asteroidManager->Start();
 
