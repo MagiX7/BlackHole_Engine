@@ -1,4 +1,4 @@
-# {Nitro Fueled Spaceship Ultra Sonic}
+# Nitro Fueled Spaceship Ultra Sonic
 
 ## Description
 
