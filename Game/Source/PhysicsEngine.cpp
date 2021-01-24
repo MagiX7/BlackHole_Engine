@@ -50,31 +50,9 @@ void PhysicsEngine::ForceGravity(bhBody* body1)
 		float b = gravity;
 		float m = (gravity) / PIXEL_TO_METERS(5000);
 		float forceGravity = m * body1->GetPosition().y + b;
-		//bhVec2 drag = bhVec2(0, 0);
 
-		//if (body1.GetPosition().y > PIXEL_TO_METERS(-3000))
-		//{
-		//	drag = AeroDrag(&body1);
-		//	float n = drag.y;
-		//	float m = (drag.y) / PIXEL_TO_METERS(3000);
-		//	float dragForce = m * body1.GetPosition().y + n;
-		//	drag.y = dragForce;
-		//}
 		body1->AddForce(bhVec2(0, forceGravity));
-		//LOG("FORCE GRAVITY %f", forceGravity);
-		//LOG("DRAG FORCE %f", drag.y);
 	}
-	//else if (body1.GetPosition().y < PIXEL_TO_METERS(-5001) && body1.GetPosition().y >= PIXEL_TO_METERS(-9000))
-	//{
-	//	//LOG("ON SECOND IF===================")
-	//	gravity = 0.0f;
-	//	float b = gravity;
-	//	float m = (gravity) / PIXEL_TO_METERS(9000);
-	//	float forceGravity = m * body1.GetPosition().y + b;
-
-	//	body1.AddForce(bhVec2(0, forceGravity));
-	//	//LOG("%f", forceGravity);
-	//}
 	else if (body1->GetPosition().y < PIXEL_TO_METERS(-9001) && body1->GetPosition().y >= PIXEL_TO_METERS(-13000))
 	{
 		//LOG("ON THIRD IF=====================")
@@ -86,10 +64,6 @@ void PhysicsEngine::ForceGravity(bhBody* body1)
 		body1->AddForce(bhVec2(0, forceGravity));
 		LOG("%f", forceGravity);
 	}
-	//else
-	//{
-	//	//LOG("NO IF==========================")
-	//}
 }
 
 bhVec2 PhysicsEngine::Gravity()
@@ -103,7 +77,7 @@ bhVec2 PhysicsEngine::AeroDrag(bhBody* b)
 	if (b->GetPosition().y > PIXEL_TO_METERS(-3000))
 	{
 		// Drag coefficient
-		float dragCoef = 7.0f;
+		float dragCoef = 3.0f;
 
 		// Area affected
 		float area = M_PI * b->GetBodyRadius() * b->GetBodyRadius() / 2;
@@ -328,8 +302,6 @@ void PhysicsEngine::Step(float dt)
 	{
 		if (item->data->type == BodyType::DYNAMIC && item->data->IsActive())
 		{
-			item->data->SetAcceleration(bhVec2(0,0));
-			item->data->ResetForce();
 			ForceGravity(item->data);
 			AeroDrag(item->data);
 			HydroBuoy(item->data);
@@ -400,7 +372,7 @@ void PhysicsEngine::Collisions(bhBody* b, bhBody* b2)
 	float speed = b->GetLinearVelocity().GetNorm();
 
 	// We now multiply the speed for the direction so the spaceship knows the direction where it has to go to
-	bhVec2 velocity = dir * speed * 0.6f;
+	bhVec2 velocity = dir * speed * 0.3f;
 
 	if (b2->type != BodyType::SENSOR)
 		b->SetLinearVelocity(velocity);

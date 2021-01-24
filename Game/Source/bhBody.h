@@ -67,17 +67,14 @@ public:
 
 	void AddMomentum(bhVec2 momentum)
 	{
-		// TODO implementar aixo amb forçes també
-		// esta be pero cuidao (Realment hauria de que ser amb forçes) provar a implementar les dues (Amb força també, per provar)
 		linearV.x += momentum.x / mass;
 		linearV.y += momentum.y / mass;
 	}
 
 	void AddMomentumWithForce(bhVec2 v)
 	{
-		bhVec2 momentum = (v * mass)/* / dt*/;
+		bhVec2 momentum = (v * mass);
 		totalForce += momentum;
-		//force += p / mass;
 	}
 
 	// Rotate a body. NOTE: ang must be on DEGREES.

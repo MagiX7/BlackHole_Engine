@@ -6,6 +6,8 @@ This is a small videogame project where you control an U.F.O, your mission is to
 
 This project is made to practice how to implement our own physics engine, with an integrator, forces and such. 
 
+To win you will need to go to the Earth water and return to the Moon. 
+
 ## Key Features
 
  - You can throw mines. 
@@ -15,7 +17,8 @@ This project is made to practice how to implement our own physics engine, with a
  
 ## Controls
 
- - Use W,A,S,D to move your U.F.O player.
+ - Use W,A,D to move your U.F.O player with linear velocity.
+ - Use ARROW keys to move your U.F.O player with force.
  - F1 to show colliders.
  - SPACE to throw mines.
  - E to land.

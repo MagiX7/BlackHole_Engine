@@ -74,7 +74,6 @@ bool Spaceship::Start()
 	body->SetLinearVelocity(bhVec2(PIXEL_TO_METERS(0), PIXEL_TO_METERS(0)));
 	body->SetMass(10);
 	body->SetRadius(PIXEL_TO_METERS(18));
-	//body->SetMaxLinearVelocity(bhVec2(PIXEL_TO_METERS(500), PIXEL_TO_METERS(500)));
 	body->SetBodyAngle(-3.17);
 
 	fuel = 100.0f;
@@ -108,8 +107,8 @@ update_status Spaceship::PreUpdate()
 
 update_status Spaceship::Update(float dt, AsteroidManager* asteroid, AstronautManager* astronaut)
 {
-	//body->ResetForce();
-	//body->SetAcceleration(bhVec2(0, 0));
+	body->ResetForce();
+	body->SetAcceleration(bhVec2(0, 0));
 
 	if (body->GetPosition().x < PIXEL_TO_METERS(-7)) body->SetPosition(bhVec2(PIXEL_TO_METERS(1040), body->GetPosition().y));
 	else if(body->GetPosition().x > PIXEL_TO_METERS(1040)) body->SetPosition(bhVec2(PIXEL_TO_METERS(-7), body->GetPosition().y));
@@ -313,7 +312,7 @@ void Spaceship::HandleInput(float dt)
 
 		double angle = body->GetBodyAngle();
 		bhVec2 dir = bhVec2(cos(angle - 90 * M_PI / 180), sin(angle - 90 * M_PI / 180));
-		bhVec2 momentum = { 1000 * (float)dir.x, 1000 * (float)dir.y };    // 1000 stands for fuym because if not the spaceship doesnt fly
+		bhVec2 momentum = { 1000 * (float)dir.x, 1000 * (float)dir.y };    // 1000 is the force applied to the spaceship
 		body->AddMomentum(bhVec2(PIXEL_TO_METERS(momentum.x * dt), PIXEL_TO_METERS(momentum.y * dt)));
 			
 		fuel -= (1.2f * dt);
@@ -346,10 +345,10 @@ void Spaceship::HandleInput(float dt)
 		}
 
 		double angle = body->GetBodyAngle();
-		bhVec2 mom = bhVec2(cos(angle - 90 * M_PI / 180), sin(angle - 90 * M_PI / 180));
+		bhVec2 dir = bhVec2(cos(angle - 90 * M_PI / 180), sin(angle - 90 * M_PI / 180));
 			
-		bhVec2 f = { (float)mom.x * 1000, (float)mom.y * 1000 };
-		body->AddMomentumWithForce(bhVec2(PIXEL_TO_METERS(f.x * dt), PIXEL_TO_METERS(f.y * dt)));
+		bhVec2 f = { (float)dir.x * 3000 * dt, (float)dir.y * 3000 * dt}; // 3000 is the force applied to the spaceship
+		body->AddMomentumWithForce(bhVec2(PIXEL_TO_METERS(f.x), PIXEL_TO_METERS(f.y)));
 
 		fuel -= (1.2f * dt);
 	}
