@@ -122,12 +122,13 @@ update_status Spaceship::Update(float dt, AsteroidManager* asteroid, AstronautMa
 		HandleInput(dt);
 
 		if ((app->physics->GetWorld()->Intersection(body, scene->earth) || app->physics->GetWorld()->Intersection(body, scene->moon)) &&
-			(fabs(body->GetLinearVelocity().y) > 5.0f || fabs(body->GetLinearVelocity().x) > 5.0f))
+			(fabs(body->GetLinearVelocity().y) > 0.5f || fabs(body->GetLinearVelocity().x) > 0.5f))
 		{
 			Dead();
 		}
 
-		if (app->physics->GetWorld()->Intersection(body, scene->moon) && fabs(body->GetLinearVelocity().y) < 5.0f)
+		if (app->physics->GetWorld()->Intersection(body, scene->moon) && (fabs(body->GetLinearVelocity().y) < 0.5f
+			&& fabs(body->GetLinearVelocity().x) < 0.5f) && currentAnim == &idleAnim)
 		{
 			scene->arriveMoon = true;
 		}
@@ -229,7 +230,9 @@ bool Spaceship::CleanUp()
 {
 	app->tex->UnLoad(texture);
 	app->tex->UnLoad(scoreTexture);
+	app->tex->UnLoad(missileTexture);
 	app->physics->DestroyBody(body);
+	app->fonts->UnLoad(fontsIndex);
 
 	if (missiles.count() > 0) missiles.clear();
 

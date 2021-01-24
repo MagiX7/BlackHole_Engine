@@ -4,6 +4,7 @@
 #include "SceneGameplay.h"
 #include "SceneTitle.h"
 #include "SceneDead.h"
+#include "SceneWin.h"
 
 #define FADEOUT_TRANSITION_SPEED	2.0f
 #define FADEIN_TRANSITION_SPEED		2.0f
@@ -122,6 +123,7 @@ update_status SceneManager::Update(float dt)
 		case SceneType::INTRO: next = new SceneTitle(); break;
 		case SceneType::GAMEPLAY: next = new SceneGameplay(app); break;
 		case SceneType::ENDING: next = new SceneDead(); break;
+		case SceneType::WIN: next = new SceneWin(); break;
 		default: break;
 		}
 

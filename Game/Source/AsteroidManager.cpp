@@ -116,6 +116,7 @@ bool AsteroidManager::CheckCollision(bhBody* body, Physics* physics)
 	{
 		if (physics->GetWorld()->Intersection(body, item->data->GetBody()))
 		{
+			if (body->GetName() == "missile") DestroyAsteroid(item->data);
 			return true;
 		}
 		item = item->next;

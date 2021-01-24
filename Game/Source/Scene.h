@@ -6,7 +6,8 @@ enum class SceneType
 {
 	INTRO,
 	GAMEPLAY,
-	ENDING
+	ENDING,
+	WIN
 };
 
 class Texture;

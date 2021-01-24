@@ -25,6 +25,7 @@ SceneDead::~SceneDead()
 
 bool SceneDead::Load(Texture* tex)
 {
+	LOG("Loading Dead Scene");
 	bg = tex->Load("Assets/Textures/lose.png");
 	textureFire = tex->Load("Assets/Textures/Fires/fire2.png");
 
@@ -37,11 +38,7 @@ update_status SceneDead::Update(Input* input, float dt)
 
 	animFire.speed = 300.0f * dt;
 
-	if (input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
-		TransitionToScene(SceneType::INTRO);
-
-	if (input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
-		ret = update_status::UPDATE_STOP;
+	if (input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) TransitionToScene(SceneType::INTRO);
 
 	animFire.Update(dt);
 
@@ -58,8 +55,10 @@ update_status SceneDead::Draw(Render* ren)
 	return update_status::UPDATE_CONTINUE;
 }
 
-bool SceneDead::UnLoad(Texture* tex)
+bool SceneDead::Unload(Texture* tex)
 {
+	LOG("Unloading Dead Scene");
+	
 	tex->UnLoad(bg);
 	tex->UnLoad(textureFire);
 

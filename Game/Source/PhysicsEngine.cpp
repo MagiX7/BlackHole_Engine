@@ -12,6 +12,21 @@ PhysicsEngine::~PhysicsEngine()
 {
 }
 
+bool PhysicsEngine::CleanUp()
+{
+	p2List_item<bhBody*>* item = bodyList.getFirst();
+
+	while (item != nullptr)
+	{
+		DeleteBody(item->data);
+		item = item->next;
+	}
+
+	bodyList.clear();
+
+	return true;
+}
+
 bhVec2 PhysicsEngine::ForceGravity(float gravity, float mass1, float mass2, float distance, bhVec2 direction)
 {
 	bhVec2 forceGravity;
@@ -35,18 +50,17 @@ void PhysicsEngine::ForceGravity(bhBody* body1)
 		float b = gravity;
 		float m = (gravity) / PIXEL_TO_METERS(5000);
 		float forceGravity = m * body1->GetPosition().y + b;
-		bhVec2 drag = bhVec2(0, 0);
+		//bhVec2 drag = bhVec2(0, 0);
 
-		if (body1->GetPosition().y > PIXEL_TO_METERS(-3000))
-		{
-			drag = AeroDrag(body1);
-			float n = drag.y;
-			float m = (drag.y) / PIXEL_TO_METERS(3000);
-			float dragForce = m * body1->GetPosition().y + n;
-			drag.y = dragForce;
-		}
-		body1->AddForce(bhVec2(0, forceGravity + drag.y));
-
+		//if (body1.GetPosition().y > PIXEL_TO_METERS(-3000))
+		//{
+		//	drag = AeroDrag(&body1);
+		//	float n = drag.y;
+		//	float m = (drag.y) / PIXEL_TO_METERS(3000);
+		//	float dragForce = m * body1.GetPosition().y + n;
+		//	drag.y = dragForce;
+		//}
+		body1->AddForce(bhVec2(0, forceGravity));
 		//LOG("FORCE GRAVITY %f", forceGravity);
 		//LOG("DRAG FORCE %f", drag.y);
 	}
@@ -64,7 +78,7 @@ void PhysicsEngine::ForceGravity(bhBody* body1)
 	else if (body1->GetPosition().y < PIXEL_TO_METERS(-9001) && body1->GetPosition().y >= PIXEL_TO_METERS(-13000))
 	{
 		//LOG("ON THIRD IF=====================")
-		gravity = -7.08f;
+		gravity = -1.65f;
 		float b = gravity;
 		float m = (gravity) / PIXEL_TO_METERS(9000-13000);
 		float forceGravity = m * body1->GetPosition().y + b;
@@ -72,10 +86,10 @@ void PhysicsEngine::ForceGravity(bhBody* body1)
 		body1->AddForce(bhVec2(0, forceGravity));
 		LOG("%f", forceGravity);
 	}
-	else
-	{
-		//LOG("NO IF==========================")
-	}
+	//else
+	//{
+	//	//LOG("NO IF==========================")
+	//}
 }
 
 bhVec2 PhysicsEngine::Gravity()
@@ -86,8 +100,8 @@ bhVec2 PhysicsEngine::Gravity()
 bhVec2 PhysicsEngine::AeroDrag(bhBody* b)
 {
 	bhVec2 dragVec = { 0,0 };
-	//if (b->GetPosition().y > PIXEL_TO_METERS(-800))
-	//{
+	if (b->GetPosition().y > PIXEL_TO_METERS(-3000))
+	{
 		// Drag coefficient
 		float dragCoef = 7.0f;
 
@@ -106,7 +120,15 @@ bhVec2 PhysicsEngine::AeroDrag(bhBody* b)
 		bhVec2 direction = b->GetLinearVelocity().Normalize().Negate();
 
 		dragVec = direction * forceDrag;
-	//}
+
+		// The following lines make the drag force gradual
+		float n = dragVec.y;
+		float m = (dragVec.y) / PIXEL_TO_METERS(3000);
+		float dragForce = m * b->GetPosition().y + n;
+		dragVec.y = dragForce;
+
+		b->AddForce(bhVec2(0, dragVec.y));
+	}
 
 	return dragVec;
 }
@@ -309,6 +331,7 @@ void PhysicsEngine::Step(float dt)
 			item->data->SetAcceleration(bhVec2(0,0));
 			item->data->ResetForce();
 			ForceGravity(item->data);
+			AeroDrag(item->data);
 			HydroBuoy(item->data);
 			HydroDrag(item->data);
 			WaterPressure(item->data);

@@ -20,6 +20,9 @@ SceneGameplay::~SceneGameplay()
 
 bool SceneGameplay::Load(Texture* tex)
 {
+	spaceship = new Spaceship(app, this);
+	spaceship->Start();
+
 	earth = app->physics->CreateBody("earth", BodyType::STATIC);
 	earth->SetRadius(PIXEL_TO_METERS(1000));
 	int x = SCREEN_WIDTH / 2;
@@ -27,8 +30,6 @@ bool SceneGameplay::Load(Texture* tex)
 	earth->SetPosition(bhVec2(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y)));
 	earth->SetActive(true);
 
-	spaceship = new Spaceship(app, this);
-	spaceship->Start();
 
 	moon = app->physics->CreateBody("moon", BodyType::STATIC);
 	moon->SetRadius(PIXEL_TO_METERS(800));
@@ -69,7 +70,7 @@ bool SceneGameplay::Load(Texture* tex)
 
 	app->audio->PlayMusic("Assets/Audio/earth_scene.ogg");
 
-	app->render->camera.y = 400;
+	app->render->camera.y = 3412;
 	arriveMoon = false;
 
 	return true;
@@ -104,12 +105,15 @@ update_status SceneGameplay::Update(Input* input, float dt)
 
 	if (!spaceship->GetBody()->IsActive()) TransitionToScene(SceneType::ENDING);
 
+	if (arriveMoon) TransitionToScene(SceneType::WIN);
+
 	if (app->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN) TransitionToScene(SceneType::ENDING);
 
-	if (arriveMoon == true && app->physics->GetWorld()->Intersection(spaceship->GetBody(), earth))
-	{
-		TransitionToScene(SceneType::ENDING);
-	}
+	//if ((fabs(spaceship->GetBody()->GetLinearVelocity().y) > 0.5f && fabs(spaceship->GetBody()->GetLinearVelocity().x) > 0.5f) 
+	//	&& app->physics->GetWorld()->Intersection(spaceship->GetBody(), earth))
+	//{
+	//	TransitionToScene(SceneType::ENDING);
+	//}
 
 	// Camera ========================================
 
@@ -155,8 +159,13 @@ bool SceneGameplay::Unload(Texture* tex)
 	bool ret = true;
 	LOG("Unloading Gameplay Scene");
 
+	tex->UnLoad(bgTop);
+	tex->UnLoad(bgBottom);
+
 	ret = astronautManager->CleanUp(tex);
 	ret = asteroidManager->CleanUp(tex);
+	spaceship->CleanUp();
+	app->physics->GetWorld()->CleanUp();
 	
 	delete earth;
 	delete moon;

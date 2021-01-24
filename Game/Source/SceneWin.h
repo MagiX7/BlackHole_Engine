@@ -8,11 +8,11 @@ enum class update_status;
 
 class SDL_Texture;
 
-class SceneDead : public Scene
+class SceneWin : public Scene
 {
-public: 
-	SceneDead();
-	virtual ~SceneDead();
+public:
+	SceneWin();
+	virtual ~SceneWin();
 
 	bool Load(Texture* tex) override;
 	update_status Update(Input* input, float dt) override;
@@ -22,7 +22,4 @@ public:
 private:
 
 	SDL_Texture* bg;
-	SDL_Texture* textureFire;
-
-	Animation animFire;
 };

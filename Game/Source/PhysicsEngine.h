@@ -13,6 +13,8 @@ public:
 	PhysicsEngine();
 	~PhysicsEngine();
 
+	bool CleanUp();
+
 	bhVec2 ForceGravity(float gravity, float mass1, float mass2, float distance, bhVec2 direction);
 	void ForceGravity(bhBody* body1);
 
