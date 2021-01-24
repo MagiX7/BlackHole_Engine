@@ -9,6 +9,7 @@
 #include "SceneGameplay.h"
 
 #define MISSILE_SPEED 5
+#define MISSILE_MAX_DISTANCE PIXEL_TO_METERS(2000)
 
 Spaceship::Spaceship(App* parent, SceneGameplay* gameplay)
 {
@@ -175,6 +176,11 @@ update_status Spaceship::Update(float dt, AsteroidManager* asteroid, AstronautMa
 		{
 			item->data->animMine.speed = 200 * dt;
 			item->data->animMine.Update(dt);
+			if (item->data->LifeTime())
+			{
+				app->physics->GetWorld()->DeleteBody(item->data->body);
+				missiles.del(item);
+			}
 			item = item->next;
 		}
 	}
@@ -254,6 +260,7 @@ void Spaceship::CreateMissile()
 
 	missile->body->SetPosition(x, y);
 	missile->direction = { (float)cos((body->GetBodyAngle() - PI / 2)), (float)sin((body->GetBodyAngle() - PI / 2)) };
+	missile->spawnPosition = { x,y };
 
 	float dirNorm = sqrt(missile->direction.x * missile->direction.x + missile->direction.y * missile->direction.y);
 	missile->direction.x /= dirNorm;
@@ -387,4 +394,17 @@ void Spaceship::AddAmmo(int a)
 float Spaceship::GetFuel()
 {
 	return fuel;
+}
+
+bool Missile::LifeTime()
+{
+	if (this->body->GetPosition().x > (this->spawnPosition.x + (float)MISSILE_MAX_DISTANCE) ||
+		this->body->GetPosition().x < (this->spawnPosition.x - (float)MISSILE_MAX_DISTANCE) ||
+		this->body->GetPosition().y > (this->spawnPosition.y + (float)MISSILE_MAX_DISTANCE) ||
+		this->body->GetPosition().y < (this->spawnPosition.y - (float)MISSILE_MAX_DISTANCE)
+		)
+	{		
+		return true;
+	}
+	return false;
 }
