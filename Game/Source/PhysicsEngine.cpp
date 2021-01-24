@@ -24,28 +24,28 @@ bhVec2 PhysicsEngine::ForceGravity(float gravity, float mass1, float mass2, floa
 	return forceGravity;
 }
 
-void PhysicsEngine::ForceGravity(bhBody& body1)
+void PhysicsEngine::ForceGravity(bhBody* body1)
 {
 	float gravity = 0.0f;
 
-	if (body1.GetPosition().y > PIXEL_TO_METERS(-5000) && body1.GetPosition().y <= PIXEL_TO_METERS(250))
+	if (body1->GetPosition().y > PIXEL_TO_METERS(-5000) && body1->GetPosition().y <= PIXEL_TO_METERS(250))
 	{
 		//LOG("ON FIRST IF=====================");
 		gravity = 10.0f;
 		float b = gravity;
 		float m = (gravity) / PIXEL_TO_METERS(5000);
-		float forceGravity = m * body1.GetPosition().y + b;
+		float forceGravity = m * body1->GetPosition().y + b;
 		bhVec2 drag = bhVec2(0, 0);
 
-		if (body1.GetPosition().y > PIXEL_TO_METERS(-3000))
+		if (body1->GetPosition().y > PIXEL_TO_METERS(-3000))
 		{
-			drag = AeroDrag(&body1);
+			drag = AeroDrag(body1);
 			float n = drag.y;
 			float m = (drag.y) / PIXEL_TO_METERS(3000);
-			float dragForce = m * body1.GetPosition().y + n;
+			float dragForce = m * body1->GetPosition().y + n;
 			drag.y = dragForce;
 		}
-		body1.AddForce(bhVec2(0, forceGravity + drag.y));
+		body1->AddForce(bhVec2(0, forceGravity + drag.y));
 
 		//LOG("FORCE GRAVITY %f", forceGravity);
 		//LOG("DRAG FORCE %f", drag.y);
@@ -61,15 +61,15 @@ void PhysicsEngine::ForceGravity(bhBody& body1)
 	//	body1.AddForce(bhVec2(0, forceGravity));
 	//	//LOG("%f", forceGravity);
 	//}
-	else if (body1.GetPosition().y < PIXEL_TO_METERS(-9001) && body1.GetPosition().y >= PIXEL_TO_METERS(-13000))
+	else if (body1->GetPosition().y < PIXEL_TO_METERS(-9001) && body1->GetPosition().y >= PIXEL_TO_METERS(-13000))
 	{
 		//LOG("ON THIRD IF=====================")
 		gravity = -7.08f;
 		float b = gravity;
 		float m = (gravity) / PIXEL_TO_METERS(9000-13000);
-		float forceGravity = m * body1.GetPosition().y + b;
+		float forceGravity = m * body1->GetPosition().y + b;
 
-		body1.AddForce(bhVec2(0, forceGravity));
+		body1->AddForce(bhVec2(0, forceGravity));
 		LOG("%f", forceGravity);
 	}
 	else
@@ -247,8 +247,6 @@ bhVec2 PhysicsEngine::HydroBuoy(bhBody* b)
 
 			// Finally we add all the forces we need, in this case, we need the hydro drag force, buoyancy.
 			b->AddForce(hydroBuoyForce);
-			bhVec2 hydroDragForce = HydroDrag(b);
-			b->AddForce(hydroDragForce);
 		}
 		else
 		{
@@ -262,8 +260,6 @@ bhVec2 PhysicsEngine::HydroBuoy(bhBody* b)
 			hydroBuoyForce = direction * forceBuoyancy;
 
 			b->AddForce(hydroBuoyForce);
-			bhVec2 hydroDragForce = HydroDrag(b);
-			b->AddForce(hydroDragForce);
 		}
 	}
 
@@ -272,22 +268,33 @@ bhVec2 PhysicsEngine::HydroBuoy(bhBody* b)
 
 bhVec2 PhysicsEngine::HydroDrag(bhBody* b)
 {
-	// Velocity friction coefficient
-	float velocityCoef = 6.0f;
+	// Variable that stores the water level that we want, for comfort
+	bhVec2 waterLevel = { 0,PIXEL_TO_METERS(-800) };
 
-	// Current velocity of the object
-	float velocity = b->GetLinearVelocity().GetNorm();
+	bhVec2 hydroDragForceVec = { 0,0 };
 
-	// Calculate drag force
-	float forceDrag = velocityCoef * velocity;
-	
-	// We get the direction of the body itself (Negate it, because drag always goes backwards from the velocity)
-	bhVec2 direction = b->GetLinearVelocity().Normalize().Negate();
+	// Check if the body is under water
+	if (b->GetPosition().y + b->GetBodyRadius() >= waterLevel.y)
+	{
+		// Velocity friction coefficient
+		float velocityCoef = 6.0f;
 
-	// Multiply the force itself to the direction already calculated in the linea bove
-	bhVec2 dragVec = direction * forceDrag;
+		// Current velocity of the object
+		float velocity = b->GetLinearVelocity().GetNorm();
 
-	return dragVec;
+		// Calculate drag force
+		float forceDrag = velocityCoef * velocity;
+
+		// We get the direction of the body itself (Negate it, because drag always goes backwards from the velocity)
+		bhVec2 direction = b->GetLinearVelocity().Normalize().Negate();
+
+		// Multiply the force itself to the direction already calculated in the linea bove
+		hydroDragForceVec = direction * forceDrag;
+
+		b->AddForce(hydroDragForceVec);
+	}
+
+	return hydroDragForceVec;
 }
 
 void PhysicsEngine::Step(float dt)
@@ -301,8 +308,9 @@ void PhysicsEngine::Step(float dt)
 		{
 			item->data->SetAcceleration(bhVec2(0,0));
 			item->data->ResetForce();
-			ForceGravity(*item->data);
+			ForceGravity(item->data);
 			HydroBuoy(item->data);
+			HydroDrag(item->data);
 			WaterPressure(item->data);
 			item->data->ApplyNewtonSecondLaw();
 			Integrator(item->data->GetPosition(), item->data->GetLinearVelocity(), item->data->GetAcceleration(), dt);
