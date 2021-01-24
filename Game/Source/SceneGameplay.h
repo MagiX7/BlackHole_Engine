@@ -24,7 +24,7 @@ public:
 
 
 public:
-	bhBody* earth;
+	//bhBody* earth;
 	bhBody* moon;
 
 	Spaceship* spaceship;
@@ -39,4 +39,5 @@ public:
 	int waterDropFx;
 	bool waterDropPlayOnce;
 	bool arriveMoon;
+	bool arriveWater;
 };

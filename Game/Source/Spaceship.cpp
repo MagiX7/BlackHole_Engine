@@ -70,12 +70,12 @@ bool Spaceship::Start()
 {
 	body = app->physics->CreateBody("spaceship", BodyType::DYNAMIC);
 	
-	body->SetPosition(bhVec2(PIXEL_TO_METERS(500), PIXEL_TO_METERS(-3000)));
+	body->SetPosition(bhVec2(PIXEL_TO_METERS(500), PIXEL_TO_METERS(-12051)));
 	body->SetLinearVelocity(bhVec2(PIXEL_TO_METERS(0), PIXEL_TO_METERS(0)));
 	body->SetMass(10);
 	body->SetRadius(PIXEL_TO_METERS(18));
 	//body->SetMaxLinearVelocity(bhVec2(PIXEL_TO_METERS(500), PIXEL_TO_METERS(500)));
-	body->SetBodyAngle(0);
+	body->SetBodyAngle(-3.17);
 
 	fuel = 100.0f;
 	health = 100;
@@ -121,14 +121,14 @@ update_status Spaceship::Update(float dt, AsteroidManager* asteroid, AstronautMa
 	{
 		HandleInput(dt);
 
-		if ((app->physics->GetWorld()->Intersection(body, scene->earth) || app->physics->GetWorld()->Intersection(body, scene->moon)) &&
+		if ((/*app->physics->GetWorld()->Intersection(body, scene->earth) ||*/ app->physics->GetWorld()->Intersection(body, scene->moon)) &&
 			(fabs(body->GetLinearVelocity().y) > 0.5f || fabs(body->GetLinearVelocity().x) > 0.5f))
 		{
 			Dead();
 		}
 
 		if (app->physics->GetWorld()->Intersection(body, scene->moon) && (fabs(body->GetLinearVelocity().y) < 0.5f
-			&& fabs(body->GetLinearVelocity().x) < 0.5f) && currentAnim == &idleAnim)
+			&& fabs(body->GetLinearVelocity().x) < 0.25f) && currentAnim == &idleAnim && scene->arriveWater == true)
 		{
 			scene->arriveMoon = true;
 		}
@@ -318,6 +318,8 @@ void Spaceship::HandleInput(float dt)
 			
 		fuel -= (1.2f * dt);
 	}
+	else if (fuel <= 0 && currentAnim != &flyAnim)
+		currentAnim = &flyAnim;
 
 	if (app->input->GetKey(SDL_SCANCODE_W) == KEY_UP)
 	{

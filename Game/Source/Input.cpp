@@ -85,10 +85,43 @@ update_status Input::PreUpdate()
 
 	SDL_Event e;
 
-	//switch (SDL_PollEvent(&e))
-	//{
-	//	case 
-	//}
+	while (SDL_PollEvent(&e) != 0)
+	{
+		switch (e.type)
+		{
+		case SDL_QUIT:
+			windowEvents[WE_QUIT] = true;
+			return update_status::UPDATE_STOP;
+			break;
+		case SDL_WINDOWEVENT:
+			switch (e.window.event)
+			{
+				//case SDL_WINDOWEVENT_LEAVE:
+			case SDL_WINDOWEVENT_HIDDEN:
+			case SDL_WINDOWEVENT_MINIMIZED:
+			case SDL_WINDOWEVENT_FOCUS_LOST:
+				windowEvents[WE_HIDE] = true;
+				break;
+
+				//case SDL_WINDOWEVENT_ENTER:
+			case SDL_WINDOWEVENT_SHOWN:
+			case SDL_WINDOWEVENT_FOCUS_GAINED:
+			case SDL_WINDOWEVENT_MAXIMIZED:
+			case SDL_WINDOWEVENT_RESTORED:
+				windowEvents[WE_SHOW] = true;
+				break;
+			}
+			break;
+		case SDL_MOUSEBUTTONDOWN:
+			mouse_buttons[e.button.button - 1] = KEY_DOWN;
+			//LOG("Mouse button %d down", event.button.button-1);
+			break;
+		case SDL_MOUSEBUTTONUP:
+			mouse_buttons[e.button.button - 1] = KEY_UP;
+			//LOG("Mouse button %d up", event.button.button-1);
+			break;
+		}
+	}
 
 	return update_status::UPDATE_CONTINUE;
 }

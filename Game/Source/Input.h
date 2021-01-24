@@ -5,6 +5,14 @@
 #define MAX_MOUSE_BUTTONS 5
 #define MAX_KEYS 300
 
+enum EventWindow
+{
+	WE_QUIT = 0,
+	WE_HIDE = 1,
+	WE_SHOW = 2,
+	WE_COUNT
+};
+
 enum KEY_STATE
 {
 	KEY_IDLE = 0,
@@ -46,6 +54,7 @@ public:
 	}
 
 private:
+	bool windowEvents[WE_COUNT];
 	KEY_STATE* keyboard;
 	KEY_STATE mouse_buttons[MAX_MOUSE_BUTTONS];
 	int mouse_x;

@@ -32,7 +32,7 @@ bool AsteroidManager::Update(float dt)
 	while (item != nullptr)
 	{
 		item->data->Update(dt);
-
+		if (item->data->dieAnim.HasFinished()) asteroidList.del(item);
 		item = item->next;
 	}
 
@@ -46,7 +46,7 @@ void AsteroidManager::Draw(Render* render)
 	while (item != nullptr)
 	{
 		float rad = METERS_TO_PIXELS(item->data->GetBody()->GetBodyRadius());
-		render->DrawTexture(item->data->texture, METERS_TO_PIXELS(item->data->GetBody()->GetPosition().x - rad), METERS_TO_PIXELS(item->data->GetBody()->GetPosition().y - rad), NULL);
+		render->DrawTexture(item->data->texture, METERS_TO_PIXELS(item->data->GetBody()->GetPosition().x - rad), METERS_TO_PIXELS(item->data->GetBody()->GetPosition().y - rad), &item->data->dieAnim.GetCurrentFrame());
 		render->DrawCircle(METERS_TO_PIXELS(item->data->GetBody()->GetPosition().x), METERS_TO_PIXELS(item->data->GetBody()->GetPosition().y), rad, 255, 0, 0);
 
 		item = item->next;
@@ -97,7 +97,6 @@ void AsteroidManager::DestroyAsteroid(Asteroid* ast, Physics* physics)
 		{
 			physics->DestroyBody(item->data->GetBody());
 			physics->GetWorld()->DeleteBody(item->data->GetBody());
-			asteroidList.del(item);
 			break;
 		}
 
@@ -118,7 +117,11 @@ bool AsteroidManager::CheckCollision(bhBody* body, Physics* physics)
 	{
 		if (physics->GetWorld()->Intersection(body, item->data->GetBody()))
 		{
-			if (body->GetName() == "missile") DestroyAsteroid(item->data, physics);
+			if (body->GetName() == "missile")
+			{
+				DestroyAsteroid(item->data, physics);
+				item->data->die = true;
+			}
 			return true;
 		}
 		item = item->next;

@@ -3,8 +3,18 @@
 #include "Asteroid.h"
 #include "Physics.h"
 
+#include "Animation.h"
+
 Asteroid::Asteroid()
 {
+	dieAnim.PushBack({ 0,0,40,40 });
+	dieAnim.PushBack({ 40,0,40,40 });
+	dieAnim.PushBack({ 80,0,40,40 });
+	dieAnim.PushBack({ 120,0,40,40 });
+	dieAnim.PushBack({ 160,0,40,40 });
+
+	dieAnim.loop = false;
+	dieAnim.speed = 5.0f;
 }
 
 Asteroid::~Asteroid()
@@ -24,6 +34,8 @@ bool Asteroid::Update(float dt)
 		body->SetLinearVelocity(-body->GetLinearVelocity().x, body->GetLinearVelocity().y);
 
 	body->SetLinearVelocity(body->GetLinearVelocity().x, body->GetLinearVelocity().y);
+
+	if (die) dieAnim.Update(dt);
 
 	return true;
 }

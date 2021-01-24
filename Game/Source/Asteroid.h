@@ -3,7 +3,9 @@
 #include <math.h>
 #include "bhBody.h"
 #include "bhVec2.h"
+#include "Animation.h"
 
+class Animation;
 class SDL_Texture;
 
 class Asteroid
@@ -25,6 +27,9 @@ public:
 
 	SDL_Texture* texture;
 
+	Animation dieAnim;
+
+	bool die;
 private:
 
 	bhBody* body;

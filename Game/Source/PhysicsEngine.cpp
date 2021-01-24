@@ -165,7 +165,7 @@ bhVec2 PhysicsEngine::WaterPressure(bhBody* b)
 {
 	bhVec2 forcePressure = { 0,0 };
 	// Variable that stores the water level that we want, for comfort
-	bhVec2 waterLevel = { 0,PIXEL_TO_METERS(-800) };
+	bhVec2 waterLevel = { 0,PIXEL_TO_METERS(248) };
 
 	// First we have to check if the body is starting to touch the water level
 	if (b->GetPosition().y + b->GetBodyRadius() >= waterLevel.y)
@@ -230,7 +230,7 @@ bhVec2 PhysicsEngine::HydroBuoy(bhBody* b)
 	bhVec2 hydroBuoyForce = { 0,0 };
 
 	// Variable that stores the water level that we want, for comfort
-	bhVec2 waterLevel = { 0,PIXEL_TO_METERS(-800) };
+	bhVec2 waterLevel = { 0,PIXEL_TO_METERS(248) };
 
 	// Store gravity and density in variables for better understanding
 	float gravity = 10.0f;
@@ -291,7 +291,7 @@ bhVec2 PhysicsEngine::HydroBuoy(bhBody* b)
 bhVec2 PhysicsEngine::HydroDrag(bhBody* b)
 {
 	// Variable that stores the water level that we want, for comfort
-	bhVec2 waterLevel = { 0,PIXEL_TO_METERS(-800) };
+	bhVec2 waterLevel = { 0,PIXEL_TO_METERS(248) };
 
 	bhVec2 hydroDragForceVec = { 0,0 };
 
