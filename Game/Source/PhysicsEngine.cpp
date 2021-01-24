@@ -208,7 +208,7 @@ bhVec2 PhysicsEngine::WaterPressure(bhBody* b)
 			// All the statements below are the same like the ones above, but applied to the other angle
 			float areaSummerged = ((pow(b->GetBodyRadius(), 2.0f) / 2) * (angle - sin(angle)));
 
-			float pressure = (b->GetPosition().y - waterLevel.y) * 2.0f;
+			float pressure = (b->GetPosition().y - waterLevel.y) * 1.15f;
 
 			float areaPressure = pressure * areaSummerged / 2;
 
@@ -235,7 +235,7 @@ bhVec2 PhysicsEngine::HydroBuoy(bhBody* b)
 	// Store gravity and density in variables for better understanding
 	float gravity = 10.0f;
 
-	float density = 4.0f;
+	float density = 3.0f;
 
 	// First we have to check if the body is starting to touch the water level
 	if (b->GetPosition().y + b->GetBodyRadius() >= waterLevel.y)

@@ -94,8 +94,10 @@ void AstronautManager::DeleteAstronaut(Astronaut* astronaut, Physics* physics)
 		if (item->data == astronaut)
 		{
 			physics->DestroyBody(item->data->GetBody());
+			physics->GetWorld()->DeleteBody(item->data->GetBody());
 			delete item->data;
 			astronautsList.del(item);
+			break;
 		}
 
 		item = item->next;
@@ -112,8 +114,10 @@ void AstronautManager::DeleteAstronaut(bhBody* astronaut, Physics* physics)
 		if (item->data->GetBody() == astronaut)
 		{
 			physics->DestroyBody(item->data->GetBody());
+			physics->GetWorld()->DeleteBody(item->data->GetBody());
 			delete item->data;
 			astronautsList.del(item);
+			break;
 		}
 
 		item = item->next;

@@ -19,7 +19,7 @@ public:
 	bool CleanUp(Texture* tex);
 
 	Asteroid* CreateAsteroid(int radius, bhVec2 position, Physics* physics);
-	void DestroyAsteroid(Asteroid* ast);
+	void DestroyAsteroid(Asteroid* ast, Physics* physics);
 	void SetTexture(Texture* tex);
 
 	bool CheckCollision(bhBody* body, Physics* physics);

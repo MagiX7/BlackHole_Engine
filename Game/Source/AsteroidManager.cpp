@@ -87,7 +87,7 @@ Asteroid* AsteroidManager::CreateAsteroid(int radius, bhVec2 position, Physics* 
 	return asteroid;
 }
 
-void AsteroidManager::DestroyAsteroid(Asteroid* ast)
+void AsteroidManager::DestroyAsteroid(Asteroid* ast, Physics* physics)
 {
 	p2List_item<Asteroid*>* item = asteroidList.getFirst();
 
@@ -95,6 +95,8 @@ void AsteroidManager::DestroyAsteroid(Asteroid* ast)
 	{
 		if (item->data == ast)
 		{
+			physics->DestroyBody(item->data->GetBody());
+			physics->GetWorld()->DeleteBody(item->data->GetBody());
 			asteroidList.del(item);
 			break;
 		}
@@ -116,7 +118,7 @@ bool AsteroidManager::CheckCollision(bhBody* body, Physics* physics)
 	{
 		if (physics->GetWorld()->Intersection(body, item->data->GetBody()))
 		{
-			if (body->GetName() == "missile") DestroyAsteroid(item->data);
+			if (body->GetName() == "missile") DestroyAsteroid(item->data, physics);
 			return true;
 		}
 		item = item->next;
